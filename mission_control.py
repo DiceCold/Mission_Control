@@ -5,6 +5,7 @@ import os
 import copy
 
 
+
 startup = True
 
 if startup == True: #load Data
@@ -49,91 +50,23 @@ if startup == True: #load Data
                     self.threat_level = threat_level
                     self.hazards = hazards
                     self.active = active
-        class jet
-            def __init__(self, name, target, pos_x, pos_y, momentum_x, momentum_y, surf, rect)
+        class jet:
+            def __init__(self, name, target, pos_x, pos_y, momentum_x, momentum_y, surf, rect):
                 self.name = name
                 self.target = target
                 self.pos_x = pos_x
                 self.pos_y = pos_y
                 self.momentum_x = momentum_x
                 self.momentum_y = momentum_y
-                self.surf
-                self.rect
-    if startup == True: #load Weapons
-        powersword = weapon("Powersword", 3, "melee", 100)
-        burst_cannon = weapon("Burst cannon", 3, "Close", 200)
-        beam_cannon = weapon("beam cannon", 3, "Close", 200)
-        majestic_beam_cannon = copy.copy(beam_cannon)
-    if startup == True: #load shields
-        light_shield = shields("Light shields", 18, True)
-        majestic_shield1 = copy.copy(light_shield)
-        majestic_shield2 = copy.copy(light_shield)
-        majestic_shield1.name = "Primary shield"
-        majestic_shield2.name = "Secondary shield"
-    if startup == True: #load Battlesuits
-        Majestic = battlesuit("Majestic", 3, "Quick", [majestic_shield1, majestic_shield2], majestic_beam_cannon, False, False)
-        Leviathan = battlesuit("Leviathan", 4, "Slow", light_shield, beam_cannon, False, False)
-    if startup == True: #load pilots
-        rose = pilot("Intrepid Rose", Majestic, False, True, "Void")
-        rose_flyer = jet("Intrepid Rose", unassigned_flyer, 0, 0, 0, 0, copy.deepcopy(jet_surf),copy.deepcopy(jet_rect))
-        nighthawk = pilot("Nighthawk", Majestic, False, True, "Void")
-        nighthawk_flyer = jet("Nighthawk", unassigned_flyer, 0, 0, 0, 0, copy.deepcopy(jet_surf),copy.deepcopy(jet_rect))
-        scorpion = pilot("Scorpion", Majestic, False, True, "Void")
-        scorpion_flyer = jet("Scorpion", unassigned_flyer, 0, 0, 0, 0, copy.deepcopy(jet_surf),copy.deepcopy(jet_rect))
-        azure = pilot("Azure Kite", Majestic, False, True, "Void")
-        azure_flyer = jet("Azure Kite", unassigned_flyer, 0, 0, 0, 0, copy.deepcopy(jet_surf),copy.deepcopy(jet_rect))
-        lightbringer = pilot("Lightbringer", Majestic, False, True, "Void")
-        lightbringer_flyer = jet("Lightbringer", unassigned_flyer, 0, 0, 0, 0, copy.deepcopy(jet_surf),copy.deepcopy(jet_rect))
-        unassigned = pilot("unassigned", Majestic, False, True, "Void")
-        unassigned_flyer = jet("unassigned", unassigned_flyer, 0, 0, 0, 0, copy.deepcopy(jet_surf),copy.deepcopy(jet_rect))
-        radio_flyer = jet("unassigned", unassigned_flyer, 0, 0, 0, 0, copy.deepcopy(jet_surf),copy.deepcopy(jet_rect))
-    if startup == True: #load locations
-        current_location = "Void"
-        Crashsite = location("Crashsite", [600,400], "High danger", ["killbots"])
-        Bayport = location("Bayport", "Close", "Low danger", [])
-        Resource_Types = ["Scrap", "Drone Constructors", "Fuel Rods", "Credits"]
-        City = "Bayport City"
-        Zone_list = ["spaceport", "mineral extractor", "residential housing", "broadcast tower", "entertainment stadium", "standard template constructor", "shipyard", "medical facility", "research lab", "greenhouses", "supply depot", "armory", "desalination plant", "shopping center", "crematorium", "schools", "university", "data archives", "public transit hub"]#load locations#load locations
-        if current_location == "Void":
-                if City == "Bayport City":
-                    n = random.randint(0,15)
-                    current_location = Zone_list[n]
-        Distance_From_City = 0
-    if startup == True: #load missions
-        mission_active = False
-        mission_1 = mission("Train Robbery", Crashsite, 1, ["Raiders"], False)
-        hazards = []
-    if startup == True: #load Other
-        danger_level = "Low"
-        attacker = unassigned
-        defender = unassigned
-        pilot_selected = unassigned
+                self.surf = surf
+                self.rect = rect
+    if startup == True: #load Images
         screen_width = 1920
         screen_height = 1080
+        centerpoint = ((screen_width)/2, (screen_height)/2)
         pygame.init()
         screen = pygame.display.set_mode((screen_width,screen_height))
         pygame.display.set_caption("mission_control")
-        clock = pygame.time.Clock()
-        test_font = pygame.font.Font("font/Pixeltype.ttf", 50)
-        game_active = True
-        map_active = False
-        pause = False
-        mission_1_active = False
-        pilot_select = False
-        mission_1_dialogue = 0
-        draw_mission_page = False
-        global target
-        target = unassigned
-        global hit_successful
-        hit_successful = False
-        global hit_roll
-        hit_roll = 0
-        global difficulty
-        difficulty = 10
-        interface_screen = False
-        invuln_timer = 0
-        #Skills = [perception, mobility, armor, weapons, science, social, engineering]   
-    if startup == True: #load Images
         interface_screen_back_surf = pygame.image.load('art_assets/interface/interface_back_75.png').convert_alpha()
         interface_screen_back_rect = interface_screen_back_surf.get_rect(center = (screen_width/2,screen_height/2))
         green_filter_surf = pygame.image.load('art_assets/interface/green_filter.png').convert_alpha()
@@ -162,18 +95,15 @@ if startup == True: #load Data
         intrepid_rose_pilot_rect = intrepid_rose_pilot_surf.get_rect(topleft = (1350,300))
         lightbringer_pilot_surf = pygame.image.load('art_assets/pilots/lightbringer_standing_default_75.png').convert_alpha()
         lightbringer_pilot_rect = lightbringer_pilot_surf.get_rect(topleft = (1350,300))
-        jet_surf = pygame.image.load('art_assets/pilots/red_dot_icon.png').convert_alpha()
-        jet_surf = pygame.transform.scale(jet_surf, (10,10))
-        jet_rect = jet_surf.get_rect(center = (jet_pos_x, jet_pos_y))
-        pilot1_surf = pygame.image.load('art_assets/pilots/red_dot_icon.png').convert_alpha()
-        pilot1_surf = pygame.transform.scale(jet_surf, (10,10))
-        pilot1_rect = jet_surf.get_rect(center = (800, 800))
-        jet2_surf = pygame.image.load('art_assets/pilots/blue_dot_icon.png').convert_alpha()
-        jet2_surf = pygame.transform.scale(jet2_surf, (10,10))
-        jet2_rect = jet2_surf.get_rect(center = (jet2_pos_x, jet2_pos_y))
+        jet_red_surf = pygame.image.load('art_assets/pilots/red_dot_icon.png').convert_alpha()
+        jet_red_surf = pygame.transform.scale(jet_red_surf, (10,10))
+        jet_red_rect = jet_red_surf.get_rect(center = (0,0))
+        jet_blue_surf = pygame.image.load('art_assets/pilots/blue_dot_icon.png').convert_alpha()
+        jet_blue_surf = pygame.transform.scale(jet_blue_surf, (10,10))
+        jet_blue_rect = jet_blue_surf.get_rect(center = (900,900))
         radio_surf = pygame.image.load('art_assets/interface/radio.png').convert_alpha()
         radio_surf = pygame.transform.scale(radio_surf, (40,40))
-        radio_rect = radio_surf.get_rect(center = (radio_pos_x, radio_pos_y))
+        radio_rect = radio_surf.get_rect(center = (800,500))
         pilot_list_name_nighthawk_surf = pygame.image.load('art_assets/interface/pilot_list_name_nighthawk_75.png').convert_alpha()
         pilot_list_name_intrepid_rose_surf = pygame.image.load('art_assets/interface/pilot_list_name_intrepid_rose_75.png').convert_alpha()
         pilot_list_name_lightbringer_surf = pygame.image.load('art_assets/interface/pilot_list_name_lightbringer_75.png').convert_alpha()
@@ -183,7 +113,77 @@ if startup == True: #load Data
         pilot_list_name_lightbringer_rect = pilot_list_name_lightbringer_surf.get_rect(topleft = (1300,475))
         text_continue_button_surf = pygame.image.load('art_assets/interface/text_continue_75.png').convert_alpha()
         text_continue_button_rect = text_continue_button_surf.get_rect(topleft = (300,200))
-
+    if startup == True: #load Weapons
+        powersword = weapon("Powersword", 3, "melee", 100)
+        burst_cannon = weapon("Burst cannon", 3, "Close", 200)
+        beam_cannon = weapon("beam cannon", 3, "Close", 200)
+        majestic_beam_cannon = copy.copy(beam_cannon)
+    if startup == True: #load shields
+        light_shield = shields("Light shields", 18, True)
+        majestic_shield1 = copy.copy(light_shield)
+        majestic_shield2 = copy.copy(light_shield)
+        majestic_shield1.name = "Primary shield"
+        majestic_shield2.name = "Secondary shield"
+    if startup == True: #load Battlesuits
+        Majestic = battlesuit("Majestic", 3, "Quick", [majestic_shield1, majestic_shield2], majestic_beam_cannon, False, False)
+        Leviathan = battlesuit("Leviathan", 4, "Slow", light_shield, beam_cannon, False, False)
+    if startup == True: #load pilots
+        unassigned_flyer = jet("unassigned", "unassigned flyer", 0, 0, 0, 0, copy.copy(jet_red_surf),copy.copy(jet_red_rect))
+        rose = pilot("Intrepid Rose", Majestic, False, True, "Void")
+        rose_flyer = jet("Intrepid Rose", unassigned_flyer, 300, 300, 0, 0, jet_blue_surf, jet_blue_rect)
+        nighthawk = pilot("Nighthawk", Majestic, False, True, "Void")
+        nighthawk_flyer = jet("Nighthawk", unassigned_flyer, 450, 800, 0, 0, copy.copy(jet_red_surf),copy.copy(jet_red_rect))
+        scorpion = pilot("Scorpion", Majestic, False, True, "Void")
+        scorpion_flyer = jet("Scorpion", unassigned_flyer, 0, 0, 0, 0, copy.copy(jet_red_surf),copy.copy(jet_red_rect))
+        azure = pilot("Azure Kite", Majestic, False, True, "Void")
+        azure_flyer = jet("Azure Kite", unassigned_flyer, 600, 200, 0, 0, copy.copy(jet_red_surf),copy.copy(jet_red_rect))
+        lightbringer = pilot("Lightbringer", Majestic, False, True, "Void")
+        lightbringer_flyer = jet("Lightbringer", unassigned_flyer, 0, 0, 0, 0, copy.copy(jet_red_surf),copy.copy(jet_red_rect))
+        unassigned = pilot("unassigned", Majestic, False, True, "Void")
+        radio_flyer = jet("unassigned", unassigned_flyer, 800, 500, 0, 0, copy.copy(radio_surf),copy.copy(radio_rect))
+    if startup == True: #load locations
+        current_location = "Void"
+        Crashsite = location("Crashsite", [600,400], "High danger", ["killbots"])
+        Bayport = location("Bayport", "Close", "Low danger", [])
+        Resource_Types = ["Scrap", "Drone Constructors", "Fuel Rods", "Credits"]
+        City = "Bayport City"
+        Zone_list = ["spaceport", "mineral extractor", "residential housing", "broadcast tower", "entertainment stadium", "standard template constructor", "shipyard", "medical facility", "research lab", "greenhouses", "supply depot", "armory", "desalination plant", "shopping center", "crematorium", "schools", "university", "data archives", "public transit hub"]#load locations#load locations
+        if current_location == "Void":
+                if City == "Bayport City":
+                    n = random.randint(0,15)
+                    current_location = Zone_list[n]
+        Distance_From_City = 0
+    if startup == True: #load missions
+        mission_active = False
+        mission_1 = mission("Train Robbery", Crashsite, 1, ["Raiders"], False)
+        hazards = []
+    if startup == True: #load Other
+        danger_level = "Low"
+        attacker = unassigned
+        defender = unassigned
+        pilot_selected = unassigned
+        clock = pygame.time.Clock()
+        test_font = pygame.font.Font("font/Pixeltype.ttf", 50)
+        game_active = True
+        map_active = False
+        pause = False
+        mission_1_active = False
+        pilot_select = False
+        mission_1_dialogue = 0
+        mission_page = False
+        global target
+        target = unassigned
+        global hit_successful
+        hit_successful = False
+        global hit_roll
+        hit_roll = 0
+        global difficulty
+        difficulty = 10
+        interface_screen = False
+        invuln_timer = 0
+        continue_button = False
+        d6 = random.randint(0,6)
+        #Skills = [perception, mobility, armor, weapons, science, social, engineering]   
     if startup == True: #load Air Battle
         dogfight_screen = False
         target = unassigned_flyer
@@ -199,7 +199,8 @@ if startup == True: #load Data
         mission_1_intrepid_rose_dialogue_1_rect = mission_1_intrepid_rose_dialogue_1_surf.get_rect(topleft = (300,275))
         mission_1_lightbringer_dialogue_1_surf = pygame.image.load('art_assets/Story/mission_1_lightbringer_dialogue.png').convert_alpha()
         mission_1_lightbringer_dialogue_1_rect = mission_1_lightbringer_dialogue_1_surf.get_rect(topleft = (300,275))
-        screen.blit(planet_surf,(0,0))
+        jet = unassigned_flyer
+        radio_flyer.rect = radio_flyer.surf.get_rect(center = (radio_flyer.pos_x, radio_flyer.pos_y))
     if startup == True: #End startup
         startup = False
  
@@ -215,9 +216,12 @@ def draw_interface_screen_back():
     if interface_screen == True:
         screen.blit(interface_screen_back_surf,(interface_screen_back_rect))
 def draw_interface_screen_front():
-    screen.blit(green_filter_surf,(green_filter_rect))
-    screen.blit(interface_frame_surf,(interface_frame_rect))
-    screen.blit(x_button_surf,(x_button_rect))
+    if interface_screen == True:
+        screen.blit(green_filter_surf,(green_filter_rect))
+        screen.blit(interface_frame_surf,(interface_frame_rect))
+        screen.blit(x_button_surf,(x_button_rect))
+    if continue_button == True:
+        screen.blit(text_continue_button_surf,(text_continue_button_rect))
 def draw_map_screen():    
     if map_active == True: #Show map + mission icons
         screen.blit(map_surf,(map_rect))
@@ -232,7 +236,6 @@ def draw_mission_page():
     if mission_1_dialogue == 3:
         screen.blit(mission_1_lightbringer_dialogue_1_surf,(mission_1_lightbringer_dialogue_1_rect))
         screen.blit(lightbringer_pilot_surf,(lightbringer_pilot_rect))
-    screen.blit(text_continue_button_surf,(text_continue_button_rect))
 def draw_pilot_select():
     if pilot_select == True:
         screen.blit(mission_screen_pilot_list_Right_surf,(mission_screen_pilot_list_Right_rect))
@@ -243,11 +246,22 @@ def draw_dogfight_screen():
     if dogfight_screen == True: #Aerial combat
         screen.blit(map_surf,(map_rect))
         screen.blit(radio_surf,(radio_rect))
-        screen.blit(jet_surf,(jet_rect))
-        screen.blit(jet2_surf,(jet2_rect))
+        # screen.blit(jet_red_surf,(jet_red_rect))
+def draw_jet():
+    global jet
+    if dogfight_screen == True:
+        screen.blit(jet.surf,(jet.rect))
+        screen.blit(jet_blue_surf, (jet_blue_rect))
+        print(jet_blue_rect.x, jet_blue_rect.y)
+        print(jet.rect.x, jet.rect.y)
+def draw_pause_screen():
+    if pause == True: #Show Pause screen
+            screen.blit(pause_menu_surf, (0,0))
+            screen.blit(quit_button_surf, (0,540))
+
 def save_game():
     savegame = open("mission_control/savegame.txt", "w")
-    savegame.write(str(rose.name) + " piloting: battlesuit " + str(rose.battlesuit.name) + " " + str(Roll_to_hit_outcome))
+    savegame.write(str(rose.name) + " piloting: battlesuit " + str(rose.battlesuit.name) + " " + str(roll_to_hit_outcome))
     savegame.close()
     savegame = open("Documents/Python_Exploration/mission_control/savegame.txt", "r")
     print(savegame.read())
@@ -264,21 +278,21 @@ def roll_to_hit():
         print("Miss")
 def register_hit():
     global hit_successful
-    global Target
+    global target
     if hit_successful == True:
-        if combat_pilot_1.shields_up == True:
-            combat_pilot_1.shields_up = False
+        if target.battlsuit.shields_up == True:
+            target.battlesuit.shields_up = False
             hit_successful = False
         else:
-            if combat_pilot_1.battlesuit_damaged == False:
-                combat_pilot_1.battlesuit_damaged = True
+            if target.battlsuit.battlesuit_damaged == False:
+                target.battlsuit.battlesuit_damaged = True
                 hit_successful = False
             else: 
-                if combat_pilot_1.battlesuit_heavilly_damaged == False:
-                    combat_pilot_1.battlesuit_heavilly_damaged = True
+                if target.battlsuit.battlesuit_heavilly_damaged == False:
+                    target.battlsuit.battlesuit_heavilly_damaged = True
                     hit_successful = False
                 else:
-                    combat_pilot_1.injured = True
+                    target.injured = True
                     hit_successful = False
         # print("shields On: " + str(Shadowstalker_shields))
         # print("Armor Damaged: " + str(Shadowstalker_Armor_Damaged))
@@ -290,53 +304,103 @@ def register_hit():
         print("Battlesuit is damaged!")
     if combat_pilot_1.battlesuit_heavilly_damaged == True:
         print("!!! pilot IN DANGER !!!")
-
+def jet_targeting_distance():
+    global jet_target_distance_x
+    global jet_target_distance_y
+    global jet
+    global target
+    jet_target_distance_x = jet.pos_x - target.pos_x
+    jet_target_distance_y = jet.pos_y - target.pos_y
 def jet_maneuver():
     #change velocity
+    global jet_target_distance_x
+    global jet_target_distance_y
+    global jet
+    global jet_red_rect
+    global jet_red_surf
+    global jet_blue_surf
+    global jet_blue_rect
     if jet_target_distance_x >= 0:
         jet.momentum_x -= 0.01
         jet.momentum_x -= 0.0002*jet_target_distance_x
     else:
         jet.momentum_x += 0.01
         jet.momentum_x += 0.0002*abs(jet_target_distance_x) 
-    if jet_target1_distance_y >= 0:
+    if jet_target_distance_y >= 0:
         jet.momentum_y -= 0.01
         jet.momentum_y -= 0.001*jet_target_distance_y
     else:
         jet.momentum_y += 0.001*abs(jet_target_distance_y)
         jet.momentum_y += 0.01
     #speed limit
-    if jet.momentum_x > 10: #speed limit
-                jet2_momentum_x = 10
-            if jet2_momentum_y >10:
-                jet2_momentum_y = 10
-            if jet2_momentum_x < -10:
-                jet2_momentum_x = -10
-            if jet2_momentum_y < -10:
-                jet2_momentum_y = -10
-    if jet.momentum_x > -2 and jet.momentum_x < 2: #Speed Boost
-        jet.momentum_x = jet.momentum_x*1.05
-        jet.momentum_x = jet.momentum_x*1.05
+    if abs(jet.momentum_x) > 10: #speed limit
+        jet.momentum_x *= 0.9
+    if abs(jet.momentum_y) >10:
+        jet.momentum_y *= 0.9
+    if abs(jet.momentum_x) < 2 and abs(jet.momentum_y) < 2: #Speed Boost
+        jet.momentum_x *= 1.1
+        jet.momentum_y *= 1.1
     #update positions
     jet.pos_y = (jet.pos_y + jet.momentum_y*0.1)
     jet.pos_x = (jet.pos_x + jet.momentum_x*0.1)
+    jet.rect = jet.surf.get_rect(center = (int(jet.pos_x), int(jet.pos_y)))
+# def jet_attack():
+#     global jet
+#     global target
+#     global invuln_timer
+#     global hit_successful
+#     if abs(jet_target_distance_x) < 30 and abs(jet_target_distance_y) <30:
+#         pygame.draw.line(screen, (200,0,0), (jet.pos_x,jet.pos_y), (target.pos_x,target.pos_y), 5)
+#         print("Target Acquired")
+#         if invuln_timer > 200:
+#             roll_to_hit()
+#             invuln_timer = 0
+#         if hit_successful == True:
+#             register_hit()
+#             print(invuln_timer) 
+#     jet_targeting_distance()
+#     if jet_target_distance_x >= 0:
+#         jet.momentum_x -= 0.01
+#         jet.momentum_x -= 0.0002*abs(jet_target_distance_x)
+#     else:
+#         jet.momentum_x += 0.01
+#         jet.momentum_x += 0.0002*abs(jet_target_distance_x) 
+#     if jet_target_distance_y >= 0:
+#         jet.momentum_y -= 0.01
+#         jet.momentum_y -= 0.001*abs(jet_target_distance_y)
+#     else:
+#         jet.momentum_y += 0.001*abs(jet_target_distance_y)
+#         jet.momentum_y += 0.01
+#     #speed limit
+#     if jet.momentum_x > 10: #speed limit
+#                 jet.momentum_x = 10
+#     if jet.momentum_y >10:
+#         jet.momentum_y = 10
+#     if jet.momentum_x < -10:
+#         jet.momentum_x = -10
+#     if jet.momentum_y < -10:
+#         jet.momentum_y = -10
+#     if jet.momentum_x > -2 and jet.momentum_x < 2: #Speed Boost
+#         jet.momentum_x = jet.momentum_x*1.05
+#         jet.momentum_x = jet.momentum_x*1.05
+#     #update positions
+#     jet.pos_y = (jet.pos_y + jet.momentum_y*0.1)
+#     jet.pos_x = (jet.pos_x + jet.momentum_x*0.1)
+#     jet.rect = jet.surf.get_rect(center = (jet.pos_x,jet.pos_y))
 
-
-
-
-def jet_targeting_distance():
-    jet_target_distance_x = jet.pos_x - target.pos_x
-    jet_target_distance_y = jet.pos_y - target.pos_y
-
+interface_screen = True
+dogfight_screen = True
 
 while True: #game Cycle
-    draw_interface_screen_back()
     draw_dashboard_screen()
+    draw_interface_screen_back()
     draw_mission_page()
     draw_map_screen()
     draw_pilot_select()
     draw_dogfight_screen()
+    draw_jet()
     draw_interface_screen_front()
+    draw_pause_screen()
     for event in pygame.event.get():
         if event.type == pygame.QUIT: #Quit
             pygame.quit()
@@ -346,30 +410,40 @@ while True: #game Cycle
                 if event.key == pygame.K_m:
                     if map_active == True:
                         map_active = False
+                        interface_screen = False
                     else:
                         map_active = True
+                        interface_screen = True
             if event.type == pygame.MOUSEBUTTONDOWN: #Click dashboard map for full map
                 if clickablemap_rect.collidepoint(event.pos):
-                    map_active = True
+                    if interface_screen == False:
+                        map_active = True
+                        interface_screen = True
             if event.type == pygame.MOUSEBUTTONDOWN: #Click mission icon 1
                 if mission_icon_1_rect.collidepoint(event.pos) and mission_1_active == False:
                     map_active = False
-                    draw_mission_page = True
+                    interface_screen = True
+                    mission_page = True
                     mission_1_dialogue = 1
                     mission_1_active = True
+                    continue_button = True
             if event.type == pygame.MOUSEBUTTONDOWN: #continue to pilot select
                 if text_continue_button_rect.collidepoint(event.pos) and mission_1_active == True:
                     mission_1_dialogue = 0
                     pilot_select = True
+                    interface_screen = True
                     map_active = False
+                    continue_button = True
             if event.type == pygame.MOUSEBUTTONDOWN: #Start dogfight
                 if text_continue_button_rect.collidepoint(event.pos) and mission_1_active == True:
                     if pilot_selected == rose:
                         mission_1_dialogue = 0
                         pilot_select = False
                         map_active = False
-                        draw_mission_page = False
+                        mission_page = False
                         dogfight_screen = True
+                        interface_screen = True
+                        continue_button = False
             if pilot_select == True:
                 if event.type == pygame.MOUSEBUTTONDOWN: #select a pilot
                     # if pilot_list_name_nighthawk_rect.collidepoint(event.pos) and pilot_select == True:
@@ -385,21 +459,21 @@ while True: #game Cycle
                         mission_1_dialogue = 3
             if event.type == pygame.MOUSEBUTTONDOWN: #Close window
                 if x_button_rect.collidepoint(event.pos):
-                    if draw_mission_page == True:
-                        draw_mission_page = False
+                    interface_screen = False
+                    continue_button = False
+                    mission_page = False
+                    if mission_page == True:
                         mission_1_dialogue = 0
                         mission_1_active = False
                         map_active = False
                     if mission_1_dialogue == 1:
                         mission_1_dialogue = 0
                         mission_1_active = False
-                        draw_mission_page = False
                         map_active = False
                     if pilot_select == True:
                         pilot_select = False
                         mission_1_active = False
                         map_active = False
-                        draw_mission_page = False
                     if map_active == True:
                         map_active = False
                     if dogfight_screen == True:
@@ -417,57 +491,41 @@ while True: #game Cycle
                         exit()
 
     if dogfight_screen == True: #Aerial combat
+        rose_flyer.target = radio_flyer
         invuln_timer += 1
-        #placeholder
-        jet = nighthawk_flyer
-        target = radio_flyer
-        jet_maneuver()
         jet = rose_flyer
-        target = nighthawk_flyer
+        target = radio_flyer
+        jet_targeting_distance()
         jet_maneuver()
-        
-        if dogfight_screen == True: #control velocity
-            #Speed limit
-            
-            #jet1 movement target
+        draw_jet()
+        # jet = nighthawk_flyer
+        # target = rose_flyer
+        # jet_targeting_distance()
+        # jet_maneuver()
+        # draw_jet()
+        # jet = lightbringer_flyer
+        # target = rose_flyer
+        # jet_targeting_distance()
+        # jet_maneuver()
+        # draw_jet()
+        # jet = azure_flyer
+        # target = rose_flyer
+        # jet_targeting_distance()
+        # jet_maneuver()
+        # draw_jet()
 
-            
-            #jet2 movement target
-            if jet2_target1_distance_x >= 0:
-                jet2_momentum_x -= 0.001*abs(jet2_target1_distance_x)
-                jet2_momentum_x -= 0.01
-            else:
-                jet2_momentum_x += 0.001*abs(jet2_target1_distance_x)
-                jet2_momentum_x += 0.01
-            if jet2_target2_distance_y >= 0:
-                jet2_momentum_y -= 0.001*abs(jet2_radio_Distance_y)
-                jet2_momentum_y -= 0.01
-            else:
-                jet2_momentum_y += 0.001*abs(jet2_radio_Distance_y)
-                jet2_momentum_y += 0.01
-            #jet2 attack target
-            if abs(jet2_target1_distance_x) < 30 and abs(jet2_target1_distance_y) <30:
-                pygame.draw.line(screen, (200,0,0), (jet2_pos_x,jet2_pos_y), (jet_pos_x,jet_pos_y), 5)
-                print("Target Acquired")
-                if invuln_timer > 200:
-                    Roll_to_hit()
-                    invuln_timer = 0
-                if hit_successful == True:
-                    register_hit()
-                    print(invuln_timer)
-            
-        # if jet_rect.collidepoint(jet2_rect.x, jet2_rect.y): #Detect Melee Contact
+
+
+        # if jet_red_rect.collidepoint(jet_red_rect.x, jet_red_rect.y): #Detect Melee Contact
         #     if invuln_timer > 200:
         #         print("Contact")
-        #         Roll_to_hit()
+        #         roll_to_hit()
         #         register_hit()
         #         print(invuln_timer)
-        #         jet2_momentum_y = jet2_momentum_y * 2
+        #         jet_momentum_y = jet_momentum_y * 2
         #         invuln_timer = 0
 
-    if pause == True: #Show Pause screen
-            screen.blit(pause_menu_surf, (0,0))
-            screen.blit(quit_button_surf, (0,540))
+
 
     pygame.display.update()
     clock.tick(60)
