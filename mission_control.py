@@ -3,7 +3,16 @@ import random
 from sys import exit
 import os
 import copy
+import sprite_code
+import draw_screen
+# from draw_screen import *
+# from draw_screen import draw_map_screen
+import map_scroll
+# from map_scroll import load_map_scroll_sprites
+import jets
 
+
+#Skills = [perception, mobility, armor, weapons, science, social, engineering]   
 
 
 startup = True
@@ -70,7 +79,7 @@ if startup == True: #load Data
         green_filter_rect = green_filter_surf.get_rect(center = (screen_width/2,screen_height/2))
         interface_frame_surf = pygame.image.load('graphics/interface/white_frame_75.png').convert_alpha()
         interface_frame_rect = interface_frame_surf.get_rect(center = (screen_width/2,screen_height/2))    
-        map_surf = pygame.image.load('graphics/interface/basic_map_75.png').convert_alpha()
+        map_surf = pygame.image.load('graphics/interface/shield_blank.png').convert_alpha()
         map_rect = map_surf.get_rect(center = (screen_width/2,screen_height/2))
         pause_menu_surf = pygame.image.load('graphics/interface/pause_menu.png').convert()
         pause_menu_rect = pause_menu_surf.get_rect(topleft = (0,0))
@@ -98,7 +107,7 @@ if startup == True: #load Data
         jet_blue_surf = pygame.image.load('graphics/pilots/blue_dot_icon.png').convert_alpha()
         jet_blue_surf = pygame.transform.scale(jet_blue_surf, (10,10))
         jet_blue_rect = jet_blue_surf.get_rect(center = (900,900))
-        radio_surf = pygame.image.load('graphics/interface/radio.png').convert_alpha()
+        radio_surf = pygame.image.load('graphics/interface/shield_blank.png').convert_alpha()
         radio_surf = pygame.transform.scale(radio_surf, (40,40))
         radio_rect = radio_surf.get_rect(center = (800,500))
         pilot_list_name_nighthawk_surf = pygame.image.load('graphics/interface/pilot_list_name_nighthawk_75.png').convert_alpha()
@@ -110,6 +119,13 @@ if startup == True: #load Data
         pilot_list_name_lightbringer_rect = pilot_list_name_lightbringer_surf.get_rect(topleft = (1300,475))
         text_continue_button_surf = pygame.image.load('graphics/interface/text_continue_75.png').convert_alpha()
         text_continue_button_rect = text_continue_button_surf.get_rect(topleft = (300,200))
+    if startup == True: #load sprite groups
+        buttons_group = pygame.sprite.Group()   
+        health_icon_group = pygame.sprite.Group()
+        pilot_names_group = pygame.sprite.Group()
+        target_names_group = pygame.sprite.Group()
+        lock_icon_group = pygame.sprite.Group()
+        map_tile_group  = pygame.sprite.Group()
     if startup == True: #load Weapons
         powersword = weapon("Powersword", 3, "melee", 100)
         burst_cannon = weapon("Burst cannon", 3, "Close", 200)
@@ -155,7 +171,7 @@ if startup == True: #load Data
         defender = unassigned
         pilot_selected = unassigned
         clock = pygame.time.Clock()
-        test_font = pygame.font.Font("font/Pixeltype.ttf", 50)
+        text_font = pygame.font.Font("font/Pixeltype.ttf", 50)
         game_active = True
         map_active = False
         pause = False
@@ -175,17 +191,7 @@ if startup == True: #load Data
         invuln_timer = 0
         continue_button = False
         d6 = random.randint(0,6)
-        #Skills = [perception, mobility, armor, weapons, science, social, engineering]   
-    if startup == True: #load Air Battle
-        dogfight_screen = False
-        target = radio_tower.battlesuit
-        nighthawk.battlesuit.pos_y = random.randint(0,500)
-        lightbringer.battlesuit.pos_y = random.randint(0,500)
-        azure.battlesuit.pos_y = random.randint(0,500)
-        rose.battlesuit.surf = copy.copy(jet_blue_surf)
-        target_hostile = True
-
-    if startup == True: #load mission 1
+    if startup == True: #load dogfight mission 1
         mission_screen_text_1_surf = pygame.image.load('graphics/Story/mission_text_1.png').convert_alpha()
         mission_screen_text_1_rect = mission_screen_text_1_surf.get_rect(center = (screen_width/2,screen_height/2))
         mission_screen_pilot_list_Right_surf = pygame.image.load('graphics/interface/mission_pilot_list_Right_75.png').convert_alpha()
@@ -197,167 +203,58 @@ if startup == True: #load Data
         mission_1_lightbringer_dialogue_1_surf = pygame.image.load('graphics/Story/mission_1_lightbringer_dialogue.png').convert_alpha()
         mission_1_lightbringer_dialogue_1_rect = mission_1_lightbringer_dialogue_1_surf.get_rect(topleft = (300,275))
         jet = unassigned.battlesuit
+        dogfight_screen = False
+        target = radio_tower.battlesuit
+        nighthawk.battlesuit.pos_y = random.randint(0,500)
+        lightbringer.battlesuit.pos_y = random.randint(0,500)
+        azure.battlesuit.pos_y = random.randint(0,500)
+        rose.battlesuit.surf = copy.copy(jet_blue_surf)
+        target_hostile = True
     if startup == True: #End startup
         startup = False
  
 #Actions
 
-def draw_dashboard_screen():
-    if game_active == True:    
-        screen.blit(planet_surf,(0,0))
-        screen.blit(dashboard_surf,(0,0))
-        screen.blit(clickablemap_surf,(0,0))
-    else: screen.fill('black')
-def draw_interface_screen_back():
-    if interface_screen == True:
-        screen.blit(interface_screen_back_surf,(interface_screen_back_rect))
-def draw_interface_screen_front():
-    if interface_screen == True:
-        screen.blit(green_filter_surf,(green_filter_rect))
-        screen.blit(interface_frame_surf,(interface_frame_rect))
-        screen.blit(x_button_surf,(x_button_rect))
-    if continue_button == True:
-        screen.blit(text_continue_button_surf,(text_continue_button_rect))
-def draw_map_screen():    
-    if map_active == True: #Show map + mission icons
-        screen.blit(map_surf,(map_rect))
-        screen.blit(mission_icon_1_surf,(mission_icon_1_rect))
-def draw_mission_page():
-    if mission_1_dialogue == 1:
-        screen.blit(mission_1_nighthawk_dialogue_1_surf,(mission_1_nighthawk_dialogue_1_rect))
-        screen.blit(nighthawk_pilot_surf,(nighthawk_pilot_rect))
-    if mission_1_dialogue == 2:
-        screen.blit(mission_1_intrepid_rose_dialogue_1_surf,(mission_1_intrepid_rose_dialogue_1_rect))
-        screen.blit(intrepid_rose_pilot_surf,(intrepid_rose_pilot_rect))
-    if mission_1_dialogue == 3:
-        screen.blit(mission_1_lightbringer_dialogue_1_surf,(mission_1_lightbringer_dialogue_1_rect))
-        screen.blit(lightbringer_pilot_surf,(lightbringer_pilot_rect))
-def draw_pilot_select():
-    if pilot_select == True:
-        screen.blit(mission_screen_pilot_list_Right_surf,(mission_screen_pilot_list_Right_rect))
-        screen.blit(pilot_list_name_nighthawk_surf,(pilot_list_name_nighthawk_rect))
-        screen.blit(pilot_list_name_intrepid_rose_surf,(pilot_list_name_intrepid_rose_rect))
-        screen.blit(pilot_list_name_lightbringer_surf,(pilot_list_name_lightbringer_rect))
-def draw_dogfight_screen():
-    if dogfight_screen == True: #Aerial combat
-        screen.blit(map_surf,(map_rect))
-        screen.blit(radio_surf,(radio_rect))
-def draw_jet():
-    global jet
-    if dogfight_screen == True:
-        screen.blit(jet.surf,(jet.rect))
-def draw_pause_screen():
-    if pause == True: #Show Pause screen
-            screen.blit(pause_menu_surf, (0,0))
-            screen.blit(quit_button_surf, (0,540))
+
 def save_game():
     savegame = open("mission_control/savegame.txt", "w")
     savegame.write(str(rose.name) + " piloting: battlesuit " + str(rose.battlesuit.name) + " " + str(roll_to_hit_outcome))
     savegame.close()
     savegame = open("Documents/Python_Exploration/mission_control/savegame.txt", "r")
     print(savegame.read())
-def roll_to_hit():
-    global hit_roll
-    global hit_successful
-    global attacker
-    hit_roll = random.randint(1,20)
-    if hit_roll > difficulty:
-        hit_successful = True
-        print("hit")
-    else: 
-        hit_successful = False
-        print("Miss")
-def register_hit():
-    global hit_successful
-    global target
-    print(target.name)
-    if hit_successful == True:
-        if target.shields == True:
-            target.shields = False
-            hit_successful = False
-        else:
-            if target.battlesuit_damaged == False:
-                target.battlesuit_damaged = True
-                hit_successful = False
-            else: 
-                if target.battlesuit_heavilly_damaged == False:
-                    target.battlesuit_heavilly_damaged = True
-                    hit_successful = False
-                else:
-                    target.injured = True
-                    hit_successful = False
-def jet_targeting_distance():
-    global jet_target_distance_x
-    global jet_target_distance_y
-    global jet
-    global target
-    jet_target_distance_x = jet.pos_x - target.pos_x
-    jet_target_distance_y = jet.pos_y - target.pos_y
-def jet_maneuver():
-    #change velocity
-    global jet_target_distance_x
-    global jet_target_distance_y
-    global jet
-    global jet_red_rect
-    global jet_red_surf
-    global jet_blue_surf
-    global jet_blue_rect
-    if jet.battlesuit_damaged == True:
-        jet.momentum_x += 0.01*jet_target_distance_x
-    if jet_target_distance_x >= 0:
-        jet.momentum_x -= 0.01
-        jet.momentum_x -= 0.002*jet_target_distance_x
-    else:
-        jet.momentum_x += 0.01
-        jet.momentum_x += 0.002*abs(jet_target_distance_x) 
-    if jet_target_distance_y >= 0:
-        jet.momentum_y -= 0.001
-        jet.momentum_y -= 0.01*jet_target_distance_y
-    else:
-        jet.momentum_y += 0.002*abs(jet_target_distance_y)
-        jet.momentum_y += 0.01
-    #speed limit
-    if abs(jet.momentum_x) > 10: #speed limit
-        jet.momentum_x *= 0.9
-    if abs(jet.momentum_y) >10:
-        jet.momentum_y *= 0.9
-    if abs(jet.momentum_x) < 2 and abs(jet.momentum_y) < 2: #Speed Boost
-        jet.momentum_x *= 1.1
-        jet.momentum_y *= 1.1
-    #update positions
-    jet.pos_y = (jet.pos_y + jet.momentum_y*0.1)
-    jet.pos_x = (jet.pos_x + jet.momentum_x*0.1)
-    jet.rect = jet.surf.get_rect(center = (int(jet.pos_x), int(jet.pos_y)))
-def jet_attack():
-    global jet
-    global target
-    global invuln_timer
-    global hit_successful
-    if target_hostile == True:
-        if abs(jet_target_distance_x) < 30 and abs(jet_target_distance_y) <30:
-            pygame.draw.line(screen, (200,0,0), (jet.pos_x,jet.pos_y), (target.pos_x,target.pos_y), 5)
-            if invuln_timer > 200:
-                roll_to_hit()
-                invuln_timer = 0
-            if hit_successful == True:
-                register_hit()
-def jet_sequence():
-    jet_targeting_distance()
-    jet_maneuver()
-    # jet_maneuver()
-    jet_attack()
-    draw_jet()
+
+map_tile_group  = pygame.sprite.Group()
+load_map_scroll_sprites()
+
+
+class Equipment_Slot(pygame.sprite.Sprite):
+    def __init__(self, slot):
+        if slot == 1:
+            super().__init__()
+            self.equipped = "Unassigned"
+            text_surf = text_font.render(f"{self.equipped}",False,(90,90,90))
+            self.image = text_surf
+            self.rect = self.image.get_rect(center = centerpoint)
+            print(self.equipped)
+    def update(self):
+        self.equipped = "Unassigned"
+        self.image = text_font.render(f"{self.equipped}",False,(90,90,90))
+
+equipment_group = pygame.sprite.Group()
+equipment_group.add(Equipment_Slot(1))
+
 
 while True: #game Cycle
     draw_dashboard_screen()
-    draw_interface_screen_back()
     draw_mission_page()
-    draw_map_screen()
+    map_tile_group.update()
+    map_tile_group.draw(screen)
     draw_pilot_select()
     draw_dogfight_screen()
     draw_jet()
-    draw_interface_screen_front()
     draw_pause_screen()
+    equipment_group.update()
+    equipment_group.draw(screen)
     for event in pygame.event.get():
         if event.type == pygame.QUIT: #Quit
             pygame.quit()
@@ -466,6 +363,12 @@ while True: #game Cycle
         jet = azure.battlesuit
         target = rose.battlesuit
         jet_sequence()
+    # map_active = True
+    if map_active == True:
+        draw_interface_screen_back()
+        draw_map_screen()
+        draw_interface_screen_front()
+        
 
 
 
