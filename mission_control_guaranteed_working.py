@@ -57,7 +57,8 @@ if startup == True: #load Data
                     self.threat_level = threat_level
                     self.hazards = hazards
                     self.active = active
-    if startup == True: #load Visuals
+
+    if startup == True: #load Images
         screen_width = 1920
         screen_height = 1080
         centerpoint = ((screen_width)/2, (screen_height)/2)
@@ -242,14 +243,17 @@ def draw_dogfight_screen():
     if dogfight_screen == True: #Aerial combat
         screen.blit(map_surf,(map_rect))
         screen.blit(radio_surf,(radio_rect))
+        # screen.blit(jet_red_surf,(jet_red_rect))
 def draw_jet():
     global jet
     if dogfight_screen == True:
         screen.blit(jet.surf,(jet.rect))
+
 def draw_pause_screen():
     if pause == True: #Show Pause screen
             screen.blit(pause_menu_surf, (0,0))
             screen.blit(quit_button_surf, (0,540))
+
 def save_game():
     savegame = open("mission_control/savegame.txt", "w")
     savegame.write(str(rose.name) + " piloting: battlesuit " + str(rose.battlesuit.name) + " " + str(roll_to_hit_outcome))
@@ -341,6 +345,7 @@ def jet_attack():
                 invuln_timer = 0
             if hit_successful == True:
                 register_hit()
+
 def jet_sequence():
     jet_targeting_distance()
     jet_maneuver()
@@ -348,6 +353,8 @@ def jet_sequence():
     jet_attack()
     draw_jet()
 
+dogfight_screen = True
+interface_screen = True
 while True: #game Cycle
     draw_dashboard_screen()
     draw_interface_screen_back()
