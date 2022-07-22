@@ -20,14 +20,89 @@ wide_row = [False,False,False,False,False]
 rose = "Intrepid Rose"
 unassigned = "Unassigned"
 pilot_target = [unassigned,rose]
-
 mission_text_rect = pygame.Rect((400, 500), (600, 900))
-
 pilot_names = ["Unassigned","Nighthawk","Lightbringer","Deadlift","Azure_Kite"]
-
 mission_briefing = "This is a mission briefing for testing the text wrapping function. Go to the forbidden forest and kill some vampires. BTW also bring me the head of a lion. Hopefully this should be enough to wrap a couple of times."
+global nameplate_locked
+nameplate_locked = False
+locked_row = 0
+# map_tile_quantity = 0
+
+# map_tile_1_surf = pygame.image.load('graphics/maps/grass_texture.png').convert_alpha()
+# map_tile_1_surf = pygame.transform.scale(map_tile_1_surf, (screen_width,screen_height))
+# map_tile_1_rect = map_tile_1_surf.get_rect(topleft = (0,0))
+   
+# map_tile_2_surf = pygame.image.load('graphics/maps/grass_texture.png').convert_alpha()
+# map_tile_2_surf = pygame.transform.scale(map_tile_2_surf, (screen_width,screen_height))
+# map_tile_2_rect = map_tile_2_surf.get_rect(topleft = (0,- screen_height))
+       
+#scroll
+
+# def scroll_background():
+    # screen.blit(map_tile_1_surf,(map_tile_1_rect))
+    # screen.blit(map_tile_2_surf,(map_tile_2_rect))
+    # map_tile_1_rect.top += scroll_velocity
+    # map_tile_2_rect.top += scroll_velocity
+    # if map_tile_1_rect.top >= screen_height:
+        # map_tile_1_rect.bottom = 0
+    # if map_tile_2_rect.top >= screen_height:
+        # map_tile_2_rect.bottom = 0
 
 
+
+class Lock_Icon(pygame.sprite.Sprite):
+    def __init__(self,type):
+        super().__init__()
+        global nameplate_quantity
+        global locked_row
+        global nameplate_locked
+        global pilot_target
+        if type == "lock":
+            lock_1 = pygame.image.load('graphics/interface/lock_icon_white.png').convert_alpha()
+            lock_1 = pygame.transform.scale(lock_1, (20,20))
+            lock_2= pygame.image.load('graphics/interface/shield_blank.png').convert_alpha()
+            lock_2 = pygame.transform.scale(lock_2, (20,20))
+            crosshair_3= pygame.image.load('graphics/interface/crosshair_red.png').convert_alpha()
+            crosshair_3 = pygame.transform.scale(crosshair_3, (40,40))
+            self.frames = [lock_1,lock_2,crosshair_3]
+            self.row_number = 0
+            self.cooldown = 1
+        self.animation_index = 1
+        self.row_number = locked_row
+        self.image = self.frames[self.animation_index]
+        self.rect = self.image.get_rect(midright = ((screen_width*0.8)-765,((screen_height*0.2)+(self.row_number*100))))
+    def check_locked(self):
+        if nameplate_locked == True: #and cooldown == 0:
+            self.animation_index = 0
+        else:
+            self.animation_index = 1
+    def rerect(self):
+        global locked_row
+        self.row_number = locked_row
+        self.rect.top = screen_height*0.2 + self.row_number*100 + 7
+    def destroy(self):
+        if nameplate_locked == False:
+            self.animation_index = 1
+            self.rect.top = screen_height*3
+            self.kill
+    def check_hidden(self):
+        if self.cooldown < 0:
+            self.cooldown = 0
+        if self.cooldown == 0:
+            self.animation_index = 1
+    def check_crosshair(self):
+        if pilot_target[0] == "Intrepid_Rose":
+            self.animation_index = 2
+        else: self.animation_index = 0
+    def update(self):
+        self.rerect()
+        # self.check_crosshair()
+        self.check_hidden()
+        self.rerect()
+        self.destroy()
+        self.cooldown -= 1
+        self.check_locked()
+        self.image = self.frames[self.animation_index]
 
 def drawText(surface, text, color, rect, font, aa=False, bkg=None):
     # rect = Rect(rect)
@@ -157,35 +232,26 @@ class Nameplates(pygame.sprite.Sprite):
     def __init__(self,type):
         super().__init__()
         global wide_row
+        global nameplate_locked
         if type == 'nameplate':
             nameplate_1 = pygame.image.load('graphics/interface/interface_panel_name.png').convert_alpha()
             nameplate_1 = pygame.transform.scale(nameplate_1, (400,100))
             nameplate_2 = pygame.image.load('graphics/interface/interface_panel_name_green.png').convert_alpha()
             nameplate_2 = pygame.transform.scale(nameplate_2, (800,100))
             self.frames = [nameplate_1,nameplate_2]
+            self.locked = False
+            self.size = "small"
         if type == "hazard":
             hazard_1 = pygame.image.load('graphics/interface/warning_yellow.png').convert_alpha()
             hazard_1 = pygame.transform.scale(hazard_1, (20,20))
             hazard_2 = pygame.image.load('graphics/interface/warning_red.png').convert_alpha()
             hazard_2 = pygame.transform.scale(hazard_2, (20,20))
             self.frames = [hazard_1,hazard_2]
+            self.locked = False
         self.animation_index = 0
         self.image = self.frames[self.animation_index]
-        self.rect = self.image.get_rect(midright = ((screen_width*0.8),((screen_height*0.2)+(nameplate_quantity*100))))
+        self.rect = self.image.get_rect(midright = ((screen_width*0.8),((screen_height*2)+(nameplate_quantity*100))))
         self.row_number = nameplate_quantity
-    def buttons_input(self):
-        keys = pygame.key.get_pressed()
-        global cooldown
-        # if keys[pygame.K_SPACE]:
-            # if cooldown == 0:
-                # if self.animation_index == 0:
-                    # self.animation_index = 1
-                    # self.rect.right = screen_width*0.8
-                # else:
-                    # self.animation_index = 0
-                    # self.rect.right = screen_width*0.8
-                # print(self.animation_index)
-                # cooldown = 20
     def destroy(self):
         if self.nameplate_quantity >= 5:
             self.kill()
@@ -199,18 +265,36 @@ class Nameplates(pygame.sprite.Sprite):
     def toggle_expand(self):
         global cooldown
         global pos
+        global nameplate_locked
+        global locked_row
+        if self.locked == True:
+                nameplate_locked = True
+                locked_row = self.row_number
         if event.type == pygame.MOUSEBUTTONDOWN: #Click
-            if self.rect.collidepoint(event.pos): #Toggle expand
-                if cooldown == 0:
-                    if self.animation_index == 0:
-                        self.animation_index = 1
-                        self.rect = pygame.Rect.inflate(self.rect, +400, 0)
-                        self.rect.right = screen_width*0.8
+           if cooldown == 0:
+                if self.rect.collidepoint(event.pos): #Toggle expand
+                    if self.locked == True:
+                        self.locked = False
+                        cooldown = 10
+                        nameplate_locked = False
                     else:
-                        self.animation_index = 0
-                        self.rect = pygame.Rect.inflate(self.rect, -400, 0)
-                        self.rect.right = screen_width*0.8
-                cooldown = 10
+                        if nameplate_locked == False:
+                            self.locked = True
+                            nameplate_locked = True
+                            cooldown = 10
+        if self.locked == False and nameplate_locked == False:
+            if self.rect.collidepoint(pygame.mouse.get_pos()):
+                if self.animation_index == 0:
+                    self.animation_index = 1
+                    self.rect = pygame.Rect.inflate(self.rect, +400, 0)
+                    self.rect.right = screen_width*0.8
+                    self.size = "large"
+            else:
+                if self.size == "large":
+                    self.animation_index = 0
+                    self.rect = pygame.Rect.inflate(self.rect, -400, 0)
+                    self.rect.right = screen_width*0.8
+                    self.size = "small"
     def update(self):
         self.toggle_expand()
         self.check_row_wide()
@@ -227,7 +311,7 @@ class Target_Options(pygame.sprite.Sprite):
         if type == 'nameplate':
             nameplate_1 = pygame.image.load('graphics/interface/interface_panel_name.png').convert_alpha()
             nameplate_1 = pygame.transform.scale(nameplate_1, (400,100))
-            nameplate_2 = pygame.image.load('graphics/interface/interface_panel_name_green.png').convert_alpha()
+            nameplate_2 = pygame.image.load('graphics/interface/interface_panel_name_red.png').convert_alpha()
             nameplate_2 = pygame.transform.scale(nameplate_2, (400,100))
             self.frames = [nameplate_1,nameplate_2]
         self.animation_index = 0
@@ -248,10 +332,23 @@ class Target_Options(pygame.sprite.Sprite):
         global pos
         global pilot_target
         if event.type == pygame.MOUSEBUTTONDOWN: #Click
-            if self.rect.collidepoint(event.pos): #Select target
-                pilot_target[0] = rose
-                self.animation_index = 1
-                cooldown = 10
+            if cooldown == 0:
+              if self.rect.collidepoint(event.pos): #Select target
+                    if pilot_target[0] == unassigned:
+                        pilot_target[0] = rose
+                        self.animation_index = 1
+                        cooldown = 10
+                    else:
+                        pilot_target[0] = unassigned
+                        self.animation_index = 0
+                        cooldown = 10
+        # if self.rect.collidepoint(pygame.mouse.get_pos()): #Select target
+            # pilot_target[0] = rose
+            # self.animation_index = 1
+                # cooldown = 10
+        # else:
+            # pilot_target[0] = unassigned
+            # self.animation_index = 0
     def update(self):
         self.destroy()
         self.become_target()
@@ -265,6 +362,8 @@ buttons_group = pygame.sprite.Group()
 health_icon_group = pygame.sprite.Group()
 pilot_names_group = pygame.sprite.Group()
 target_names_group = pygame.sprite.Group()
+lock_icon_group = pygame.sprite.Group()
+map_tile_group  = pygame.sprite.Group()
 
 def add_health_tracker():
     global nameplate_quantity
@@ -278,31 +377,5 @@ def add_health_tracker():
 add_health_tracker()
 target_names_group.add(Target_Options('nameplate'))
 
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            exit()
-    if game_active:
-        pos = pygame.mouse.get_pos()
-        if cooldown == 0:
-            # nameplate_quantity = len(buttons_group)
-            if nameplate_quantity < nameplate_quantity_max:
-                add_health_tracker()
-        cooldown -= 1
-        if cooldown <= 0:
-            cooldown = 0
-        screen.fill((0,0,0))
-        drawText(screen, mission_briefing, (64,64,64), mission_text_rect, text_font, False, None)
-        buttons_group.update()
-        buttons_group.draw(screen)
-        health_icon_group.update()
-        health_icon_group.draw(screen)
-        pilot_names_group.update()
-        pilot_names_group.draw(screen)
-        target_names_group.update()
-        target_names_group.draw(screen)
-    else:
-        screen.fill((0,0,0))
-    pygame.display.update()
-    clock.tick(60)
+game_active2 = False
+print(map_tile_group)

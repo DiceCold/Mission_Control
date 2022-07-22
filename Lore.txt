@@ -1,5 +1,5 @@
 lore
-
+ 
 Planet is Arcturus-3.
 Planet population was established by the now defunct company "MaxEdDal Ltd."
 Human settlement is spread over a chain of islands.
@@ -19,26 +19,18 @@ They need to work a certain number of days to afford cost of living.
 They own their own machines, but you have a small budget to pay them bonuses in the form of equipment.
 Cost of repairs is split between you and the pilots.
 You provide a central residence/office tower/base at the edge of the city but many reside off-site in the downtown or in more rural areas with a lower cost of living.
-
+ 
 Amount of money staff need to survive monthly = $10
 Cost to repair = $1/segment repaired.
 Average monthly repairs/pilot = $4
-
+ 
 *******************************************
-
+ 
 What are the core decisions of the game?
 1) How you equip pilots
 2) Who you choose to deploy
 3) How aggressive/cautious pilots should be
 4) Which pilots you prioritize building loyalty with
 5) Which pilots you hire/fire
-
+ 
 Goal is to have the player develop favored pilots and be concerned for their safety while relying on them to do dangerous tasks.
-
-
-Locations of relevance to the player:
-Battlesuit hanger (inventory of suits)
-Research lab (develop upgrades)
-Habitation building (inventory of pilots)
-Medical (Treat injured pilots)
-Repair docks (repair damaged suits)
