@@ -33,6 +33,25 @@ if startup == True: #load Data
                     self.momentum_y = momentum_y
                     self.surf = surf
                     self.rect = rect
+        class objective(pygame.sprite.Sprite):
+            def __init__(self,type,pos_x,pos_y):
+                super().__init__()
+                if type == "crate":
+                    crate_surf_1 = pygame.image.load('graphics/interface/supply_crate.png').convert_alpha()
+                    crate_surf_1 = pygame.transform.scale(crate_surf_1, (40,40))
+                    crate_surf_2 = pygame.image.load('graphics/interface/shield_blank.png').convert_alpha()
+                    crate_surf_2 = pygame.transform.scale(crate_surf_2, (40,40))
+                    self.frames = [crate_surf_1,crate_surf_2]
+                self.held = False
+                self.pos_x = pos_x
+                self.pos_y = pos_y
+                self.animation_index = 0
+                self.image = self.frames[self.animation_index]
+                self.rect = self.image.get_rect(center = (self.pos_x,self.pos_y))
+            def update(self):
+                self.image = self.frames[self.animation_index]
+                self.rect = self.image.get_rect(center = (self.pos_x,self.pos_y))
+
         class weapon:
             def __init__(self, name, attack, distance, cooldown):
                     self.name = name
@@ -176,15 +195,6 @@ if startup == True: #load Data
         continue_button = False
         d6 = random.randint(0,6)
         #Skills = [perception, mobility, armor, weapons, science, social, engineering]   
-    if startup == True: #load Air Battle
-        dogfight_screen = False
-        target = radio_tower.battlesuit
-        nighthawk.battlesuit.pos_y = random.randint(0,500)
-        lightbringer.battlesuit.pos_y = random.randint(0,500)
-        azure.battlesuit.pos_y = random.randint(0,500)
-        rose.battlesuit.surf = copy.copy(jet_blue_surf)
-        target_hostile = True
-
     if startup == True: #load mission 1
         mission_screen_text_1_surf = pygame.image.load('graphics/Story/mission_text_1.png').convert_alpha()
         mission_screen_text_1_rect = mission_screen_text_1_surf.get_rect(center = (screen_width/2,screen_height/2))
@@ -197,10 +207,20 @@ if startup == True: #load Data
         mission_1_lightbringer_dialogue_1_surf = pygame.image.load('graphics/Story/mission_1_lightbringer_dialogue.png').convert_alpha()
         mission_1_lightbringer_dialogue_1_rect = mission_1_lightbringer_dialogue_1_surf.get_rect(topleft = (300,275))
         jet = unassigned.battlesuit
+        dogfight_screen = False
+        target = radio_tower.battlesuit
+        nighthawk.battlesuit.pos_y = random.randint(0,500)
+        lightbringer.battlesuit.pos_y = random.randint(0,500)
+        azure.battlesuit.pos_y = random.randint(0,500)
+        rose.battlesuit.surf = copy.copy(jet_blue_surf)
+        target_hostile = True
     if startup == True: #End startup
         startup = False
  
 #Actions
+objective_group = pygame.sprite.Group()
+objective_group.add(objective("crate",400,300))
+objective_group.add(objective("crate",600,700))
 
 def draw_dashboard_screen():
     if game_active == True:    
@@ -356,6 +376,9 @@ while True: #game Cycle
     draw_pilot_select()
     draw_dogfight_screen()
     draw_jet()
+    if dogfight_screen == True:
+        objective_group.update()
+        objective_group.draw(screen)
     draw_interface_screen_front()
     draw_pause_screen()
     for event in pygame.event.get():
@@ -370,6 +393,13 @@ while True: #game Cycle
                         interface_screen = False
                     else:
                         map_active = True
+                        interface_screen = True
+                if event.key == pygame.K_b:
+                    if dogfight_screen == True:
+                        dogfight_screen = False
+                        interface_screen = False
+                    else:
+                        dogfight_screen = True
                         interface_screen = True
             if event.type == pygame.MOUSEBUTTONDOWN: #Click dashboard map for full map
                 if clickablemap_rect.collidepoint(event.pos):
@@ -450,7 +480,7 @@ while True: #game Cycle
     if dogfight_screen == True: #Aerial combat
         invuln_timer += 1
         jet = rose.battlesuit
-        target = radio_tower.battlesuit
+        target = objective_group()
         jet_sequence()
         jet = nighthawk.battlesuit
         if rose.battlesuit.battlesuit_damaged == False:
@@ -466,6 +496,7 @@ while True: #game Cycle
         jet = azure.battlesuit
         target = rose.battlesuit
         jet_sequence()
+        
 
 
 
@@ -483,3 +514,5 @@ while True: #game Cycle
     pygame.display.update()
     clock.tick(60)
 
+# student, scientist, soldier, entrepreneur, grifter, muscle, trickster, daredevil, lone wolf, veteran, scholar, successor,rebel, stalwart, idealist, cynic, crusader
+# historian, investigartor, sharpshooter, enforcer, 
