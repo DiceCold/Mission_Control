@@ -378,4 +378,3 @@ add_health_tracker()
 target_names_group.add(Target_Options('nameplate'))
 
 game_active2 = False
-print(map_tile_group)

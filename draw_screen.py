@@ -7,6 +7,7 @@ mission_1_dialogue = False
 pilot_select = False
 dogfight_screen = False
 continue_button = False
+pause = False
 
 
 #load visuals
@@ -103,7 +104,7 @@ def draw_dogfight_screen():
 def draw_jet():
     global jet
     if dogfight_screen == True:
-        screen.blit(jet.surf,(jet.rect))
+        screen.blit(jet.image,(jet.rect))
         
 def draw_pause_screen():
     if pause == True: #Show Pause screen

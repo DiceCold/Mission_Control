@@ -4,14 +4,123 @@ from sys import exit
 import os
 import copy
 import sprite_code
-import draw_screen
-# from draw_screen import *
-# from draw_screen import draw_map_screen
+from draw_screen import *
+from equipment import *
+from map_scroll import *
 import map_scroll
 # from map_scroll import load_map_scroll_sprites
-import jets
+from jets import *
 
 
+def jet_attack():
+    if jet.weapons[0].cooldown == 0:
+        if abs(jet_target_distance_x) < 30 and abs(jet_target_distance_y) <30:
+            find_target_angle()
+            jet_attack_visual()
+            roll_to_hit()
+            weapon_cooldown = 200
+
+def roll_to_hit():
+    global target
+    global hit_successful
+    hit_roll = random.randint(1,20) + weapon.accuracy
+    difficulty = target.mobility    
+    if hit_roll > difficulty:
+        print("Hit")
+        hit_successful = True
+        if target.shields == True:
+            target.shields = False
+        elif target.battlesuit_damaged == False:
+            target.battlesuit_damaged = True
+        elif target.battlesuit_heavilly_damaged == False:
+            target.battlesuit_heavilly_damaged = True
+        else:
+            target.injured = True
+    else: 
+        print("Miss")
+        hit_successful = False
+        
+def jet_targeting_distance():
+    global jet_target_distance_x
+    global jet_target_distance_y
+    global jet_target_distance_h
+    jet_target_distance_x = target.pos_x - jet.pos_x
+    jet_target_distance_y = target.pos_y - jet.pos_y
+    jet_target_distance_h = (jet_target_distance_x**2 + jet_target_distance_y**2)**(1/2)
+        
+def jet_maneuver():
+    #change velocity
+    global jet
+    global jet_target_distance_x
+    global jet_target_distance_y
+    # if jet.battlesuit_damaged == True:
+        # jet.momentum_x += 0.01*jet_target_distance_x
+    if jet_target_distance_x >= 0:
+        jet.momentum_x += 0.01
+        jet.momentum_x += 0.002*jet_target_distance_x
+    else:
+        jet.momentum_x -= 0.01
+        jet.momentum_x -= 0.002*abs(jet_target_distance_x) 
+    if jet_target_distance_y >= 0:
+        jet.momentum_y += 0.001
+        jet.momentum_y += 0.01*jet_target_distance_y
+    else:
+        jet.momentum_y -= 0.002*abs(jet_target_distance_y)
+        jet.momentum_y -= 0.01
+    #speed limit
+    if abs(jet.momentum_x) > 10:
+        jet.momentum_x *= 0.9
+    if abs(jet.momentum_y) >10:
+        jet.momentum_y *= 0.9
+    #update positions
+    jet.pos_y = (jet.pos_y + jet.momentum_y*0.1*jet.mobility)
+    jet.pos_x = (jet.pos_x + jet.momentum_x*0.1*jet.mobility)
+    jet.rect = jet.image.get_rect(center = (int(jet.pos_x), int(jet.pos_y)))
+    screen.blit(jet.image,(jet.rect))
+    
+class WeaponEffects(pygame.sprite.Sprite):
+    def __init__(self, type, rotation):
+        super().__init__()
+        if type == "laserbeam":
+            laser1 = pygame.image.load('graphics/laserbeam.png').convert_alpha()
+            laser1 = pygame.transform.scale(laser1, 5,5)
+            self.image = laser1
+        self.rect = self.image.get_rect(midbottom = (jet.pos_x, jet.pos_y))
+        self.rotation = rotation
+        self.image = pygame.transform.rotate(self.image,self.angle)
+        self.countdown = 60
+    def update(self):
+        length = (jet_target_distance_x**2 + jet_target_distance_y**2)**(1/2)
+        self.image = pygame.transform.scale(self.image, 5, length)
+        self.angle = find_target_angle() - self.angle
+        self.image = pygame.transform.rotate(self.image,self.angle)
+        self.countdown -= 1
+        if self.countdown <= 0:
+            self.kill
+        
+weapon_effect_group = pygame.sprite.Group()            
+    
+    
+def jet_attack_visual():
+    if target_hostile == True:
+            weapon_effect_group.add(WeaponEffects("laserbeam", angle))
+   
+def find_target_angle():
+    if jet_target_distance_x < 0:
+        angle_1 = jet_target_distance_y/abs(jet_target_distance_x)
+        degrees = 90 + angle_1*90
+        farpoint = (jet_target_distance_x*100,jet_target_distance_y*100)
+    if jet_target_distance_x >= 0:
+        angle_1 = (jet_target_distance_y)/abs(jet_target_distance_x)
+        degrees = 270 + angle_1*90
+    angle = degrees
+    return angle
+               
+def jet_sequence():
+    jet_targeting_distance()
+    jet_maneuver()
+    jet_attack()
+    draw_jet()
 #Skills = [perception, mobility, armor, weapons, science, social, engineering]   
 
 
@@ -26,28 +135,8 @@ if startup == True: #load Data
                     self.injured = injured
                     self.alive = alive
                     self.location = location
-        class battlesuit:
-            def __init__(self, name, refresh, mobility, shields, weapons, battlesuit_damaged, battlesuit_heavilly_damaged, target, pos_x, pos_y, momentum_x, momentum_y, surf, rect):
-                    self.name = name
-                    self.refresh = refresh
-                    self.mobility = mobility
-                    self.shields = shields
-                    self.weapons = weapons
-                    self.battlesuit_damaged = battlesuit_damaged
-                    self.battlesuit_heavilly_damaged = battlesuit_heavilly_damaged
-                    self.target = target
-                    self.pos_x = pos_x
-                    self.pos_y = pos_y
-                    self.momentum_x = momentum_x
-                    self.momentum_y = momentum_y
-                    self.surf = surf
-                    self.rect = rect
-        class weapon:
-            def __init__(self, name, attack, distance, cooldown):
-                    self.name = name
-                    self.attack = attack
-                    self.distance = distance
-                    self.cooldown = cooldown
+
+        
         class shields:
             def __init__(self, name, cooldown, charged):
                     self.name = name
@@ -126,11 +215,7 @@ if startup == True: #load Data
         target_names_group = pygame.sprite.Group()
         lock_icon_group = pygame.sprite.Group()
         map_tile_group  = pygame.sprite.Group()
-    if startup == True: #load Weapons
-        powersword = weapon("Powersword", 3, "melee", 100)
-        burst_cannon = weapon("Burst cannon", 3, "Close", 200)
-        beam_cannon = weapon("beam cannon", 3, "Close", 200)
-        majestic_beam_cannon = copy.copy(beam_cannon)
+
     if startup == True: #load shields
         light_shield = shields("Light shields", 18, True)
         majestic_shield1 = copy.copy(light_shield)
@@ -138,9 +223,10 @@ if startup == True: #load Data
         majestic_shield1.name = "Primary shield"
         majestic_shield2.name = "Secondary shield"
     if startup == True: #load Battlesuits
-        Majestic = battlesuit("Majestic", 3, "Quick", [majestic_shield1, majestic_shield2], majestic_beam_cannon, False, False, "unassigned.battlesuit", 300, 300, 0, 0, copy.copy(jet_red_surf), copy.copy(jet_red_rect))
-        Leviathan = battlesuit("Leviathan", 4, "Slow", light_shield, beam_cannon, False, False, "unassigned.battlesuit", 300, 300, 0, 0, copy.copy(jet_red_surf), copy.copy(jet_red_rect))
-        Tower = battlesuit("Tower", 4, "none", light_shield, beam_cannon, False, False, "unassigned.battlesuit", 800, 800, 0, 0, copy.copy(radio_surf), copy.copy(radio_rect))
+        Majestic = Battlesuit("majestic")
+        Leviathan = Battlesuit("leviathan")
+        Tower = Battlesuit("tower")
+        # Tower = battlesuit("Tower", 4, "none", light_shield, beam_cannon, False, False, "unassigned.battlesuit", 800, 800, 0, 0, copy.copy(radio_surf), copy.copy(radio_rect))
     if startup == True: #load pilots
         rose = pilot("Intrepid Rose", copy.copy(Majestic), False, True, "Void")
         nighthawk = pilot("Nighthawk", copy.copy(Majestic), False, True, "Void")
@@ -148,7 +234,7 @@ if startup == True: #load Data
         azure = pilot("Azure Kite", copy.copy(Majestic), False, True, "Void")
         lightbringer = pilot("Lightbringer", copy.copy(Majestic), False, True, "Void")
         unassigned = pilot("unassigned", copy.copy(Majestic), False, True, "Void")
-        radio_tower = pilot("unassigned", Tower, False, True, "Void")
+        tower = pilot("unassigned", copy.copy(Tower), False, True, "Void")
     if startup == True: #load locations
         current_location = "Void"
         Crashsite = location("Crashsite", [600,400], "High danger", ["killbots"])
@@ -180,7 +266,7 @@ if startup == True: #load Data
         mission_1_dialogue = 0
         mission_page = False
         global target
-        target = radio_tower.battlesuit
+        # target = radio_tower.battlesuit
         global hit_successful
         hit_successful = False
         global hit_roll
@@ -204,7 +290,7 @@ if startup == True: #load Data
         mission_1_lightbringer_dialogue_1_rect = mission_1_lightbringer_dialogue_1_surf.get_rect(topleft = (300,275))
         jet = unassigned.battlesuit
         dogfight_screen = False
-        target = radio_tower.battlesuit
+        # target = radio_tower.battlesuit
         nighthawk.battlesuit.pos_y = random.randint(0,500)
         lightbringer.battlesuit.pos_y = random.randint(0,500)
         azure.battlesuit.pos_y = random.randint(0,500)
@@ -235,14 +321,16 @@ class Equipment_Slot(pygame.sprite.Sprite):
             text_surf = text_font.render(f"{self.equipped}",False,(90,90,90))
             self.image = text_surf
             self.rect = self.image.get_rect(center = centerpoint)
-            print(self.equipped)
     def update(self):
         self.equipped = "Unassigned"
         self.image = text_font.render(f"{self.equipped}",False,(90,90,90))
 
 equipment_group = pygame.sprite.Group()
 equipment_group.add(Equipment_Slot(1))
+target = rose.battlesuit
 
+tower.battlesuit.pos_x = 1000
+tower.battlesuit.pos_y = 500
 
 while True: #game Cycle
     draw_dashboard_screen()
@@ -253,8 +341,8 @@ while True: #game Cycle
     draw_dogfight_screen()
     draw_jet()
     draw_pause_screen()
-    equipment_group.update()
-    equipment_group.draw(screen)
+    # equipment_group.update()
+    # equipment_group.draw(screen)
     for event in pygame.event.get():
         if event.type == pygame.QUIT: #Quit
             pygame.quit()
@@ -268,6 +356,9 @@ while True: #game Cycle
                     else:
                         map_active = True
                         interface_screen = True
+                if event.key == pygame.K_b:
+                    interface_screen = True
+                    dogfight_screen = True
             if event.type == pygame.MOUSEBUTTONDOWN: #Click dashboard map for full map
                 if clickablemap_rect.collidepoint(event.pos):
                     if interface_screen == False:
@@ -343,19 +434,24 @@ while True: #game Cycle
                     if quit_button_rect.collidepoint(event.pos):
                         pygame.quit()
                         exit()
-
+    if map_active == True:
+        draw_interface_screen_back()
+        draw_map_screen()
+        draw_jet()
+        draw_interface_screen_front()
     if dogfight_screen == True: #Aerial combat
+        screen.blit(map_surf,(map_rect))
         invuln_timer += 1
         jet = rose.battlesuit
-        target = radio_tower.battlesuit
+        target = tower.battlesuit
         jet_sequence()
-        jet = nighthawk.battlesuit
-        if rose.battlesuit.battlesuit_damaged == False:
-            target = rose.battlesuit
-            target_hostile = True
-        else: 
-            target = radio_tower.battlesuit
-            target_hostile = False
+        jet = rose.battlesuit
+        # if rose.battlesuit.battlesuit_damaged == False:
+            # target = rose.battlesuit
+            # target_hostile = True
+        # else: 
+            # target = radio_tower.battlesuit
+            # target_hostile = False
         jet_sequence()
         jet = lightbringer.battlesuit
         target = rose.battlesuit
@@ -364,10 +460,7 @@ while True: #game Cycle
         target = rose.battlesuit
         jet_sequence()
     # map_active = True
-    if map_active == True:
-        draw_interface_screen_back()
-        draw_map_screen()
-        draw_interface_screen_front()
+   
         
 
 
