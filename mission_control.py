@@ -38,16 +38,14 @@ def roll_to_hit():
             target.injured = True
     else: 
         print("Miss")
-        hit_successful = False
-        
+        hit_successful = False     
 def jet_targeting_distance():
     global jet_target_distance_x
     global jet_target_distance_y
     global jet_target_distance_h
     jet_target_distance_x = target.pos_x - jet.pos_x
     jet_target_distance_y = target.pos_y - jet.pos_y
-    jet_target_distance_h = (jet_target_distance_x**2 + jet_target_distance_y**2)**(1/2)
-        
+    jet_target_distance_h = (jet_target_distance_x**2 + jet_target_distance_y**2)**(1/2)      
 def jet_maneuver():
     #change velocity
     global jet
@@ -77,7 +75,6 @@ def jet_maneuver():
     jet.pos_x = (jet.pos_x + jet.momentum_x*0.1*jet.mobility)
     jet.rect = jet.image.get_rect(center = (int(jet.pos_x), int(jet.pos_y)))
     screen.blit(jet.image,(jet.rect))
-    
 class WeaponEffects(pygame.sprite.Sprite):
     def __init__(self, type, rotation):
         super().__init__()
@@ -98,13 +95,10 @@ class WeaponEffects(pygame.sprite.Sprite):
         if self.countdown <= 0:
             self.kill
         
-weapon_effect_group = pygame.sprite.Group()            
-    
-    
+weapon_effect_group = pygame.sprite.Group()               
 def jet_attack_visual():
     if target_hostile == True:
-            weapon_effect_group.add(WeaponEffects("laserbeam", angle))
-   
+            weapon_effect_group.add(WeaponEffects("laserbeam", angle))  
 def find_target_angle():
     if jet_target_distance_x < 0:
         angle_1 = jet_target_distance_y/abs(jet_target_distance_x)
@@ -298,9 +292,6 @@ if startup == True: #load Data
         target_hostile = True
     if startup == True: #End startup
         startup = False
- 
-#Actions
-
 
 def save_game():
     savegame = open("mission_control/savegame.txt", "w")
@@ -309,24 +300,24 @@ def save_game():
     savegame = open("Documents/Python_Exploration/mission_control/savegame.txt", "r")
     print(savegame.read())
 
-map_tile_group  = pygame.sprite.Group()
-load_map_scroll_sprites()
+# map_tile_group  = pygame.sprite.Group()
+# load_map_scroll_sprites()
 
 
-class Equipment_Slot(pygame.sprite.Sprite):
-    def __init__(self, slot):
-        if slot == 1:
-            super().__init__()
-            self.equipped = "Unassigned"
-            text_surf = text_font.render(f"{self.equipped}",False,(90,90,90))
-            self.image = text_surf
-            self.rect = self.image.get_rect(center = centerpoint)
-    def update(self):
-        self.equipped = "Unassigned"
-        self.image = text_font.render(f"{self.equipped}",False,(90,90,90))
+# class Equipment_Slot(pygame.sprite.Sprite):
+    # def __init__(self, slot):
+        # if slot == 1:
+            # super().__init__()
+            # self.equipped = "Unassigned"
+            # text_surf = text_font.render(f"{self.equipped}",False,(90,90,90))
+            # self.image = text_surf
+            # self.rect = self.image.get_rect(center = centerpoint)
+    # def update(self):
+        # self.equipped = "Unassigned"
+        # self.image = text_font.render(f"{self.equipped}",False,(90,90,90))
 
-equipment_group = pygame.sprite.Group()
-equipment_group.add(Equipment_Slot(1))
+# equipment_group = pygame.sprite.Group()
+# equipment_group.add(Equipment_Slot(1))
 target = rose.battlesuit
 
 tower.battlesuit.pos_x = 1000
