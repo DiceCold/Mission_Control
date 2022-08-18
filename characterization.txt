@@ -1,0 +1,134 @@
+characterization
+
+Original colonization: year -17
+Bankruptcy (aka Day01): year 0
+Present day: year 2.5
+
+
+Nighthawk (Olivere):
+	Origin: a local who was part of the original colonizaiton effort as a transportation operator.
+	Begins as: team leader 
+	During the collapse: organized and let an armed neighbourhood watch in her community.
+	Dependant on: having a position of authority and control over others.
+	Heading towards: a poor decision or stress induced breakdown rendering her unfit to lead the team
+	Willing to: act extra-judicially
+	
+Intrepid Rose (Roselina):
+	Origin: a student from a prosperous tradeworld.
+	Begins as: an outsider from off-world.
+	During the collapse: completed her education and then joined the humanitarian aid mission aproximately 2 years after Day01.
+	Dependant on: long-distance asynchronous messaging, serialized media and care packages from her home-world friends and family.
+	Heading towards: social isolation, depression, guilt.
+	Willing to: sacrifice her own wellbeing.
+	
+Lightbringer (Mickael):
+	Origin: a semi-local who took a contract for corporate security on the frontier world a decade ago and was promoted to pilot.
+	Begins as: team's most experienced pilot.
+	During the collapse: took his battlesuit and went mercenary, making a small fortune defending supply ships from bandits.
+	Dependant on: a steady flow of drinks and victories, being seen as a hero.
+	Willing to: walk away if the job's not worth it.
+	
+Shadowstalker (Sophia):
+	Origin: a local youth/student/petty criminal born to colonist parents.
+	Begins as: cruel bully.
+	During the collapse: distinguished herself as a quick learner in a battlesuit, was able to evade juvenile prosecution.
+	Dependant on: dominating and humiliating others to fuel her own ego.
+	Willing to: completely ruin the life of someone she believes is unworthy.
+	
+Azure Kite (Kaito):
+	Origin: professional racing pilot from off-world
+	Begins as: Polite but private about his personal life and prefers to keep others at a professional distance
+	During the collapse: came seeking information following the dissapearance of a friend, who was found hospitalized and comatose.
+	Dependant on: the hope that their friend will recover
+	Willing to: Wield unconventional but powerful weapons
+
+Valorant Phoenix (Helena):
+	Origin: Daughter of the assistant regional manager for MaxEdDal, born local.
+	Begins as: private, suspicious, and vengeful towards organized crime.
+	During the collapse: witnessed the death of her parents at the hands of home-invaders while she hid. Used his ID to break into a hanger and steal suit with weapons, pretended to be an offworlder who had arrived with the relief effort.
+	Dependant on: her burning desire to see justice done.
+	Willing to: take down and interrogate criminals while not wearing an obvious and identifiable battlesuit.
+	
+Questing Ricochet (Adam): 
+	Origin: local construction suit operator
+	Begins as: Boastful stalwart
+	During the collapse: encountered a dead pilot and assumed their identity as an off-world security contractor. Things were so disorganized at the time that nobody questioned it, and his experience piloting construction suits was enough for him to handle at least basic movement.
+	Dependant on: maintaining his fake identity.
+	Willing to: be blackmailed by shadowstalker so she doesn't reveal his secret.
+
+
+
+
+
+
+Pilots:
+
+Intrepid Rose is from off-world and was drawn to the planet as a humanitarian volunteer.
+Living on the planet has diminished her optimism but she still has a strong sense of moral responsability.
+Beneficiary of generational wealth.
+Caring, wants to create a better world for others.
+
+Nighthawk (Oliverai) is a local who was part of the original colonizaiton effort as a transportation operator.
+Holds deep resentment towards anyone who undermines the fragile society or takes advantage of others.
+Will act extra-judicially with the expectation that people will look the other way if the target "deserves it"
+Wants to punish criminals and bandits for the death of her sister.
+Lost her sister during the chaos that occured between the Bankruptcy and the civil government takeover.
+
+Lightbringer (Mickael) acknowledges the tragedy of the chaos that took place after the Bankruptcy, but personally benefited massively from the event.
+He worked as private security for the company before the crash and made a small fortune when he switched to defending supply ships from bandits.
+Blew much of his money on lavishly upgrading his own personal battlesuit which is his prized possession. 
+Likes to be perceived as heroic/tough.
+
+Shadowstalker (Sophia) demonstrated an aptitude for piloting during the frantic civilian recruiting/refurbishment to replace dead pilots.
+Consequently was able to have legal charges that were pending at the time of the crash dismissed/swept under the rug.
+Self-centered, arrogant, believes in the "survival of the fittest" and will take advantage of any opportunity without hesitation if it benefits her.
+
+Azure Kite (Haseo) is from off-world and came seeking information following the dissapearance of a friend.
+Friend was found hospitalized and comatose, and he spends a portion of his earnings maintaining their medical care and treatment.
+Very private about his personal life and prefers to keep others at a professional distance
+
+Valorant Phoenix (Helena) was the young child of a local corporate representative.
+Dispite the fact that their family was just as screwed as everyone else by the company's collapse, an organized gang of criminals attacked her home seeking wealth.
+Family was horribly murdered while she hid in the air vent.
+Used the family's remaining assets to buy a battlesuit, both for her own protection and to protect others from the same fate.
+Unaware that her sister is comatose but alive in medical care.
+
+Questing Ricochet (Adam) encountered a dead pilot and assumed their identity as an off-world security contractor.
+Things were so disorganized at the time that nobody questioned it, and his experience piloting construction suits was enough for him to handle at least basic movement.
+Is technically the legal property of the WPI corporation's creditors, should he ever be discovered.
+Shadowstalker discovered his secret and uses it to hold power over him.
+
+
+Pilot behaviors:
+Stimm use
+Won't retreat when at risk of injury
+Retreats after taking any damage
+Evasive flying, making it harder to hit and be hit by enemies
+Personal relationship with another pilot (good or bad)
+Addiction
+Tunnel vision
+Desperate for attention
+Restless
+Protective
+Anxious
+Punishing
+Expressive
+Private
+Suspicious
+Trusting
+Strong sense of fairness
+Elitist
+Cruel
+Adversarial
+Obsessive
+Curious
+Domineering
+Reckless
+Optimistic
+Pessamistic
+Self-rightious
+Disciplined/rigorus
+Unfulfilled
+Needy
+Lost
+People-pleaser

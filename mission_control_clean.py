@@ -7,11 +7,9 @@ import copy
 from math import atan2, degrees, pi
 
 
-none = "none"
-
-damage_types = ["thermal","cold","piercing","concussive","magnetic","shock"]
-status_effects = ["frozen","overheated","disrupted","blinded","knockback","energized","supressed","tethered"]
-available_missions = [False,True,False,False,False,False]
+# none = "none"
+BLACK = (0,0,0)
+available_missions_list = [False,True,False,False,False,False]
 continue_button = False
 active_mission = 0
 
@@ -22,8 +20,42 @@ def random_pos():
 def roll_1d6():
     roll_result = random.randint(1,6)
     return roll_result
+def Wrap_Text(surface, text, color, rect, font, aa=False, bkg=None):
+    rect = Rect(rect)
+    y = rect.top
+    lineSpacing = -2
+    fontHeight = font.size("Tg")[1]
+    while text:
+        i = 1
+        if y + fontHeight >; rect.bottom:
+            break
+        while font.size(text[:i])[0] <; rect.width and i &lt; len(text):
+            i += 1
+        if i &lt; len(text): 
+            i = text.rfind(" ", 0, i) + 1
+        if bkg:
+            image = font.render(text[:i], 1, color, bkg)
+            image.set_colorkey(bkg)
+        else:
+            image = font.render(text[:i], aa, color)
+        surface.blit(image, (rect.left, y))
+        y += fontHeight + lineSpacing
+        text = text[i:]
 
-if startup == True: #load notes
+    return text
+def get_sprite_frames(sheet, frame_x, frame_y, width, height, colour):
+    image = pygame.Surface((width, height)).convert_alpha()
+    x = frame_x*width
+    y = frame_y*height
+    image.blit(sheet,(0,0),(x,y,width,height))
+    image.set_colorkey(colour)
+    return image
+def update_fps():
+	fps = str(int(clock.get_fps()))
+	fps_text = text_font.render(fps, 1, pygame.Color("coral"))
+	return fps_text
+
+if startup: #load notes
     power_core_list = {"01":"trapped_combustion_core", "02":"dirty_fission_core", "04":"solar_array_core", "06":"cold_fusion_core", "07":"entropy_core", "08":"black_pinhole_core", "10":"wave_collapse_core", "11":"phantom_pinnacle_core", "0x":"alien_crystal_core", "00":"no_core"}
     #suit code is size class, power core type , power core capacity, product generation
     #086403 = 08.6.4.03 = size 8, fusion core, capacity 4, generation 3
@@ -31,7 +63,7 @@ if startup == True: #load notes
     #can replace core with high capacity battery that does not recharge outside of base. Each unit of stored charge = 60 seconds of powercore output
     pass
 
-if startup == True: #load screen
+if startup: #load screen
     screen_width = 1280
     screen_height = 720
     centerpoint = ((screen_width)/2, (screen_height)/2)
@@ -42,91 +74,12 @@ if startup == True: #load screen
     text_font_small = pygame.font.Font("font/Pixeltype.ttf", 30)
     text_font_micro = pygame.font.Font("font/Pixeltype.ttf", 20)
     clock = pygame.time.Clock()
-if startup == True: #load images
-    blank_frame = pygame.image.load("graphics/blank.png").convert_alpha()
-    blank_frame = pygame.transform.scale(blank_frame, (10,10))
-    green_filter_surf = pygame.image.load("graphics/interface/green_filter.png").convert_alpha()
-    green_filter_surf = pygame.transform.scale(green_filter_surf, (screen_width*0.9,screen_height*0.9))
-    green_filter_rect = green_filter_surf.get_rect(center = (screen_width/2,screen_height/2))
-    interface_frame_surf = pygame.image.load("graphics/interface/frames/white_frame_large.png").convert_alpha()
-    interface_frame_surf = pygame.transform.scale(interface_frame_surf, (screen_width*0.9,screen_height*0.9))
-    interface_frame_rect = interface_frame_surf.get_rect(center = (screen_width/2,screen_height/2)) 
-    black_block_surf = pygame.image.load("graphics/interface/frames/black_blocker.png").convert_alpha()
-    black_block_surf = pygame.transform.scale(black_block_surf, (screen_width,screen_height))
-    black_block_rect = black_block_surf.get_rect(center = centerpoint)
-    pause_menu_surf = pygame.image.load("graphics/interface/pause_menu.png").convert()
-    pause_menu_rect = pause_menu_surf.get_rect(topleft = (0,0))
-    quit_button_surf = pygame.image.load("graphics/interface/quit_button.png").convert()
-    quit_button_rect = quit_button_surf.get_rect(topleft = (0,540))
-    x_button_surf = pygame.image.load("graphics/interface/icons/x_button_75.png").convert_alpha()
-    x_button_rect = x_button_surf.get_rect(topleft = (screen_width*0.15,screen_height*0.15))
-    small_frame_1_surf = pygame.image.load("graphics/interface/frames/small_frame.png").convert_alpha()
-    small_frame_1_surf = pygame.transform.scale(small_frame_1_surf, (screen_width*0.25,screen_height*0.9))
-    small_frame_2_surf = pygame.image.load("graphics/interface/frames/small_frame_flipped.png").convert_alpha()
-    small_frame_2_surf = pygame.transform.scale(small_frame_2_surf, (screen_width*0.25,screen_height*0.9))
-    dashboard_surf = pygame.image.load("graphics/interface/cockpit/cockpit_vertical2.png").convert_alpha()
-    dashboard_surf = pygame.transform.scale(dashboard_surf, (screen_width,screen_height))
-    dashboard_rect = dashboard_surf.get_rect(center = centerpoint)
-    planet_surf = pygame.image.load("graphics/interface/cockpit/planet1.png").convert_alpha()
-    planet_surf = pygame.transform.scale(planet_surf, (screen_width,screen_height))
-    planet_rect = planet_surf.get_rect(center = centerpoint)
-    clickablemap_surf = pygame.image.load("graphics/interface/cockpit/clickscreen.png").convert_alpha()
-    clickablemap_surf = pygame.transform.scale(clickablemap_surf, (screen_width*0.2,screen_height*0.2))
-    clickablemap_rect = clickablemap_surf.get_rect(topleft = (screen_width*0.01,screen_height*0.1))
-    mission_icon_1_surf = pygame.image.load("graphics/interface/icons/bionic_eye_lowres_green.png").convert_alpha()
-    mission_icon_1_rect = mission_icon_1_surf.get_rect(topleft = (960,540))
-    nighthawk_pilot_surf = pygame.image.load("graphics/pilots/nighthawk_standing_default_75.png").convert_alpha()
-    nighthawk_pilot_rect = nighthawk_pilot_surf.get_rect(topleft = (1350,300))
-    intrepid_rose_pilot_surf = pygame.image.load("graphics/pilots/intrepid_rose_standing_default_75.png").convert_alpha()
-    intrepid_rose_pilot_rect = intrepid_rose_pilot_surf.get_rect(topleft = (1350,300))
-    lightbringer_pilot_surf = pygame.image.load("graphics/pilots/lightbringer_standing_default_75.png").convert_alpha()
-    lightbringer_pilot_rect = lightbringer_pilot_surf.get_rect(topleft = (1350,300))
-    jet_red_surf = pygame.image.load("graphics/interface/icons/red_dot.png").convert_alpha()
-    jet_red_surf = pygame.transform.scale(jet_red_surf, (10,10))
-    jet_red_rect = jet_red_surf.get_rect(center = (0,0))
-    jet_blue_surf = pygame.image.load("graphics/interface/icons/blue_dot.png").convert_alpha()
-    jet_blue_surf = pygame.transform.scale(jet_blue_surf, (10,10))
-    jet_blue_rect = jet_blue_surf.get_rect(center = (900,900))
-    radio_surf = pygame.image.load("graphics/blank.png").convert_alpha()
-    radio_surf = pygame.transform.scale(radio_surf, (40,40))
-    radio_rect = radio_surf.get_rect(center = (800,500))
-    text_continue_button_surf = pygame.image.load("graphics/interface/text_continue_75.png").convert_alpha()
-    text_continue_button_rect = text_continue_button_surf.get_rect(topleft = (300,200))
-    blueprint_surf = pygame.image.load("graphics/interface/blueprint_small.png").convert_alpha()
-    blueprint_surf = pygame.transform.scale(blueprint_surf, (screen_width*0.5,screen_height*0.5))
-    blueprint_rect = blueprint_surf.get_rect(center = (screen_width/2,screen_height/2))  
-    
 
-def get_sprite_frames(sheet, frame_x, frame_y, width, height, colour):
-    image = pygame.Surface((width, height)).convert_alpha()
-    x = frame_x*width
-    y = frame_y*height
-    image.blit(sheet,(0,0),(x,y,width,height))
-    image.set_colorkey(colour)
-    return image
+blank_frame = pygame.image.load("graphics/blank.png").convert_alpha()
+blank_frame = pygame.transform.scale(blank_frame, (10,10))
+  
     
-BLACK = (0,0,0)
-explosion_sheet_1 = pygame.image.load("graphics/weapons/explosion_sprite_1.png").convert_alpha()
-explosion_sheet_2 = pygame.image.load("graphics/weapons/explosion_sprite_2.png").convert_alpha()
-explosion_sheet_3 = pygame.image.load("graphics/weapons/explosion_sprite_3.png").convert_alpha()
-explosion_sheet_4 = pygame.image.load("graphics/weapons/explosion_sprite_4.png").convert_alpha()
-explosion_sheets_group = [explosion_sheet_1,explosion_sheet_2,explosion_sheet_3,explosion_sheet_4]
-explosion_frames = []
-sheet_column = 0
-sheet_row = 0
-while len(explosion_frames) <= 64:
-    sheet_column += 1
-    if sheet_column >= 8:
-        sheet_column -= 8
-        sheet_row += 1
-    image = get_sprite_frames(explosion_sheet_1, sheet_column, sheet_row, 256, 256, BLACK)
-    explosion_frames.append(image)    
-
-
-desert_map = pygame.image.load("graphics/maps/small_desertplain_dark.png").convert_alpha()
-desert_map = pygame.transform.scale(desert_map, (screen_width,screen_height))
-    
-if startup == True: #load classes
+if startup: #load classes
     class Power_Core:
         def __init__(self, type):
             self.type = type
@@ -147,6 +100,8 @@ if startup == True: #load classes
                 self.name = "Solar Array"
                 self.legal = True
     class Weapon:
+        damage_types = ["thermal","cold","piercing","concussive","magnetic","shock","sonic","gravity"]
+        status_effects_list = ["frozen","overheated","disrupted","blinded","knockback","energized","supressed","tethered"]
         def __init__(self, type):
             self.function = "weapon"
             self.cooldown = -1
@@ -236,8 +191,13 @@ if startup == True: #load classes
                 self.countdown = 60
                 self.image = self.frames[self.animation_index]
             if self.form == "explosion":
+                explosion_sheet_1 = pygame.image.load("graphics/weapons/explosion_sprite_1.png").convert_alpha()
+                explosion_sheet_2 = pygame.image.load("graphics/weapons/explosion_sprite_2.png").convert_alpha()
+                explosion_sheet_3 = pygame.image.load("graphics/weapons/explosion_sprite_3.png").convert_alpha()
+                explosion_sheet_4 = pygame.image.load("graphics/weapons/explosion_sprite_4.png").convert_alpha()
+                explosion_sheets_group = [explosion_sheet_1,explosion_sheet_2,explosion_sheet_3,explosion_sheet_4]
                 self.animation_index = 0
-                self.frames = explosion_frames
+                # self.frames = explosion_frames
                 self.image = blank_frame
                 self.countdown = 64
                 self.sheet = random.choice(explosion_sheets_group)
@@ -594,6 +554,7 @@ if startup == True: #load classes
             self.item = null_weapon
             self.map_display = "none"
             self.island_number = -1
+            self.pointer_slot = -1
     class Island(pygame.sprite.Sprite):
         def __init__(self,type,slot_number):
             super().__init__()
@@ -673,7 +634,6 @@ if startup == True: #load classes
                 self.cooldown -= 1
                 if self.highlighted == True:
                     self.animation_index = 2
-                    print(self.name)
                 else:
                     self.animation_index = 1
                 self.image = self.frames[self.animation_index]
@@ -879,13 +839,29 @@ if startup == True: #load classes
             self.pos_y = pos_y
             self.image = blank_frame
             self.slot_number = slot_number
+            self.animation_index = 1
+            self.frame_0 = blank_frame
+            self.cooldown = 10
             if self.type == "rail":
-                self.image = pygame.image.load("graphics/interface/pointers/rail_pointer.png")
+                self.frame_1 = pygame.image.load("graphics/interface/pointers/rail_pointer.png")
+                self.frame_2 = pygame.image.load("graphics/interface/pointers/rail_pointer_highlight.png")
+                self.frames = [self.frame_0, self.frame_1, self.frame_2]
+            self.image = self.frames[self.animation_index]
             self.rect = self.image.get_rect(center = (pos_x,pos_y))
         def update(self):
+            if self.cooldown > 0:
+                self.cooldown -= 1
+            self.image = self.frames[self.animation_index]
             if event.type == pygame.MOUSEBUTTONDOWN: #Click
-                if self.rect.collidepoint(event.pos):
-                    overlay.type = "mission_brief"
+                if self.rect.collidepoint(event.pos) and self.cooldown == 0:
+                    # overlay.type = "mission_brief"
+                    self.cooldown = 10
+                    if self.animation_index == 2:
+                        self.animation_index = 1
+                        selected.pointer_slot = self.slot_number
+                    else: 
+                        self.animation_index = 2
+                        selected.pointer_slot = -1
     class Icon(pygame.sprite.Sprite):
         def __init__(self,type, pilot):
             super().__init__()
@@ -961,169 +937,120 @@ if startup == True: #load classes
                 self.image = self.frames[self.animation_index]
                 if self.countdown == 0:
                     self.kill()
-            
             self.image = self.frames[self.animation_index]
-if startup == True: #load specifics 
-    if startup == True: #create sprite groups       
-        nameplates_group = pygame.sprite.Group()
-        pilot_names_group = pygame.sprite.Group()
-        pilot_combat_names_group = pygame.sprite.Group()
-        inventory_names_group = pygame.sprite.Group()
-        loadout_names_group = pygame.sprite.Group()
-        island_group = pygame.sprite.Group()
-        pilot_group = pygame.sprite.Group()
-        weapon_effects_group = pygame.sprite.Group()
-        mission_objects_group = pygame.sprite.Group()
-        mission_enemy_group = pygame.sprite.Group()
-        health_icon_group = pygame.sprite.Group()
-        clock_icon_group = pygame.sprite.Group()
-        mission_pointer_group = pygame.sprite.Group()
-    if startup == True: #load cores  
-        fusion_core = Power_Core("fusion_core")
-        null_core = Power_Core("null_core")  
-    if startup == True: #load weapons  
-        beam_cannon = Weapon("beam_cannon")
-        unassigned_weapon = Weapon("unassigned_weapon")
-        null_weapon = Weapon("null_weapon")
-        cryo_shot = Weapon("cryo_shot")
-        power_sword = Weapon("powersword")
-        flame_lance = Weapon("flame_lance")
-        lightning_chain = Weapon("lightning_chain")
-    if startup == True: #load shields
-        light_shield = Shield("light_shield")
-    if startup == True: #load battlesuits
-        majestic = Battlesuit("majestic")
-        leviathan = Battlesuit("leviathan")
-        tower = Battlesuit("tower")
-        javelin = Battlesuit("javelin")
-        drone = Battlesuit("drone")
-        null_suit = Battlesuit("null_suit") 
-        train_suit = Battlesuit("train")
-    if startup == True: #load pilots
-        unassigned_pilot = Pilot("Unassigned",0,copy.deepcopy(tower),"friend")
-        nighthawk = Pilot("Nighthawk",1,copy.deepcopy(majestic),"friend")
-        rose = Pilot("Rose",2,copy.deepcopy(majestic),"friend")
-        lightbringer = Pilot("Lightbringer",3,copy.deepcopy(majestic),"friend")
-        deadlift = Pilot("Deadlift",4,copy.deepcopy(majestic),"friend")
-        kite = Pilot("Azure_Kite",5,copy.deepcopy(majestic),"friend")
-        null_pilot = Pilot(" ",-1,copy.deepcopy(null_suit),"friend")
-        pilot_list = [unassigned_pilot, nighthawk, rose, lightbringer, deadlift, kite]
-        neutral_list = []
-        rose.battlesuit.loadout[1] = cryo_shot
-        nighthawk.battlesuit.loadout[1] = cryo_shot
-        null_pilot.pos_x = -1
-        null_pilot.pos_y = -1
-    if startup == True: #load mission 1 enemies
-        tower_1 = Pilot("Tower",1,copy.deepcopy(tower),"enemy")
-    if startup == True: #load pilot sprites
-        pilot_group.add(unassigned_pilot)
-        pilot_group.add(nighthawk)
-        pilot_group.add(rose)
-        pilot_group.add(lightbringer)
-        pilot_group.add(deadlift)
-        pilot_group.add(kite)
-        pilot_group.add(tower_1)
-    if startup == True: #load resources
-        inventory_list = [fusion_core, beam_cannon, light_shield, light_shield, null_weapon, null_weapon, null_weapon]
-        credits_currency = 0
-        scrap_metal = 0
-        fuel_rods = 0
-        meds = 0
-        stimms = 0
-    if startup == True: #create selected
-        selected = Selected()
-    if startup == True: #add nameplates
-        nameplates_group.add(Nameplates("pilot_line_item",1))
-        nameplates_group.add(Nameplates("pilot_line_item",2))
-        nameplates_group.add(Nameplates("pilot_line_item",3))
-        nameplates_group.add(Nameplates("pilot_line_item",4))
-        nameplates_group.add(Nameplates("pilot_line_item",5))
-
-        nameplates_group.add(Nameplates("inventory_line_item",1))
-        nameplates_group.add(Nameplates("inventory_line_item",2))
-        nameplates_group.add(Nameplates("inventory_line_item",3))
-
-        nameplates_group.add(Nameplates("loadout_label", 0))
-        nameplates_group.add(Nameplates("loadout_label", 1))
-        nameplates_group.add(Nameplates("loadout_label", 3))
-        nameplates_group.add(Nameplates("loadout_label", 2))
-        nameplates_group.add(Nameplates("loadout_label", 4))
-        
-        nameplates_group.add(Nameplates("swap_button", 0))
-    if startup == True: #add island maps
-        island_group.add(Island("world_map",0))
-        island_group.add(Island("island",1))
-        island_group.add(Island("island",2))
-        island_group.add(Island("island",3))
-        island_group.add(Island("island",4))
-        island_group.add(Island("island",5))
-        island_group.add(Island("island",6))
-    if startup == True: #add text names
-        pilot_names_group.add(Text_Names("pilot",1))
-        pilot_names_group.add(Text_Names("pilot",2))
-        pilot_names_group.add(Text_Names("pilot",3))
-        pilot_names_group.add(Text_Names("pilot",4))
-        pilot_names_group.add(Text_Names("pilot",5))
-
-        loadout_names_group.add(Text_Names("loadout",1))
-        loadout_names_group.add(Text_Names("loadout",2))
-        loadout_names_group.add(Text_Names("loadout",3))
-        loadout_names_group.add(Text_Names("loadout",4))
-        loadout_names_group.add(Text_Names("loadout",0))
-        
-        inventory_names_group.add(Text_Names("inventory",1))
-        inventory_names_group.add(Text_Names("swap_button",0))
-        
-        pilot_combat_names_group.add(Text_Names("pilot",1))
-        pilot_combat_names_group.add(Text_Names("pilot",2))
-        pilot_combat_names_group.add(Text_Names("pilot",3))
-        pilot_combat_names_group.add(Text_Names("pilot",4))
-        pilot_combat_names_group.add(Text_Names("pilot",5))
-    if startup == True: #add health icons
-        for pilot in pilot_list:
-            if pilot.slot_number > 0:
-                health_icon_group.add(Icon("shield", pilot))
-                health_icon_group.add(Icon("damaged", pilot))
-                health_icon_group.add(Icon("severely_damaged", pilot))
-    if startup == True: #add pointers
-        mission_pointer_group.add(Pointer("rail", screen_width*0.6,screen_height*0.7,1))  
-class Overlay:
-    def __init__(self, type):
-        self.type = type
-    def draw_selected_pilot_name(self):
-        selected.pilot_name_surf = text_font.render(f"{selected.pilot.name}",False,(111,196,169))
-        selected.pilot_name_rect = selected.pilot_name_surf.get_rect(center = (screen_width*0.5,screen_height*0.25))
-        screen.blit(selected.pilot_name_surf,(selected.pilot_name_rect))
-    def draw_cockpit(self):
-        screen.blit(planet_surf,(0,0))
-        screen.blit(dashboard_surf,(0,0))
-        screen.blit(clickablemap_surf,(clickablemap_rect))
-    def draw_interface_screen_front(self):
-        screen.blit(black_block_surf, (black_block_rect))
-        screen.blit(green_filter_surf,(green_filter_rect))
-        screen.blit(interface_frame_surf,(interface_frame_rect))
-    def draw_ui_buttons(self):
-        if x_button == True:
-            screen.blit(x_button_surf,(x_button_rect))
-        if continue_button == True:
-            screen.blit(text_continue_button_surf,(text_continue_button_rect))
-    def draw_mission_markers(self):
-        if available_missions[1] == True:
-            screen.blit(mission_icon_1_surf,(mission_icon_1_rect))       
-    def draw_pause_screen(self):
-        screen.blit(pause_menu_surf, (0,0))
-        screen.blit(quit_button_surf, (0,540))
-    def draw_small_frame(self, side):
-        if side == "left":
-            small_frame_1_rect = small_frame_1_surf.get_rect(topleft = (interface_frame_rect.left, screen_height*0.13))
-            screen.blit(small_frame_1_surf,(small_frame_1_rect))
-        if side == "right":
-            screen.blit(small_frame_2_surf,(screen_width*0.71,screen_height*0.13))
-    def draw_loadout(self):
-        screen.blit(blueprint_surf,(blueprint_rect))
-    def draw_void(self):
-        screen.fill((0,0,0))
-    def update(self):
+    class Button(pygame.sprite.Sprite):
+        def __init__(self, type):
+            super().__init__()
+            self.type = type
+            self.pos_x = 0
+            self.pos_y = 0
+            self.animation_index = 1
+            self.frame_0 = blank_frame
+            if self.type == "x_button"
+                self.frame_1 = pygame.image.load("graphics/interface/icons/x_button_75.png").convert_alpha()
+                self.frame_1 = pygame.transform.scale(self.frame_1, (40,40))
+                self.frames = [frame_0, frame_1]
+                self.image = self.frames[animation_index]
+                self.rect = self.image.get_rect(topleft = (screen_width*0.15,screen_height*0.15))
+            if self.type == "dashboard_map":
+                self.frame_1 = pygame.image.load("graphics/interface/cockpit/clickscreen.png").convert_alpha()
+                self.frame_1 = pygame.transform.scale(self.frame_1, (screen_width*0.2,screen_height*0.2))
+                self.frames = [self.frame_0, self.frame_1]
+                self.image = self.frames[self.animation_index]
+                self.rect = self.image.get_rect(topleft = (screen_width*0.01,screen_height*0.1))
+        def update(self):
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if self.rect.collidepoint(event.pos):
+                    if self.type == "x_button" and overlay.type != "cockpit":
+                        overlay.type = "cockpit"
+                    if overlay.type == "cockpit" and self.type == "dashboard_map":
+                        overlay.screen = "map"
+    class Overlay:
+        def __init__(self, type):
+            self.type = type
+            self.frame_image = pygame.image.load("graphics/interface/frames/white_frame_large.png").convert_alpha()
+            self.frame_image = pygame.transform.scale(frame_image, (screen_width*0.9,screen_height*0.9))
+            self.frame_rect = frame_image.get_rect(center = (screen_width/2,screen_height/2)) 
+            self.black_block_image = pygame.image.load("graphics/interface/frames/black_blocker.png").convert_alpha()
+            self.black_block_image = pygame.transform.scale(black_block_image, (screen_width,screen_height))
+            self.black_block_rect = black_block_image.get_rect(center = centerpoint)
+            self.green_filter_image = pygame.image.load("graphics/interface/green_filter.png").convert_alpha()
+            self.green_filter_image = pygame.transform.scale(green_filter_image, (screen_width*1,screen_height*1))
+            self.green_filter_rect = green_filter_image.get_rect(center = (screen_width/2,screen_height/2))
+            self.pause_menu_image = pygame.image.load("graphics/interface/pause_menu.png").convert_alpha()
+            self.pause_menu_rect = self.pause_menu_image.get_rect(topleft = (0,0))
+            self.quit_button_image = pygame.image.load("graphics/interface/quit_button.png").convert_alpha()
+            self.quit_button_rect = self.quit_button_image.get_rect(topleft = (0,540))
+            self.dashboard_image = pygame.image.load("graphics/interface/cockpit/cockpit_vertical2.png").convert_alpha()
+            self.dashboard_image = pygame.transform.scale(self.dashboard_image, (screen_width,screen_height))
+            self.dashboard_rect = self.dashboard_image.get_rect(center = centerpoint)
+            self.planet_image = pygame.image.load("graphics/interface/cockpit/planet1.png").convert_alpha()
+            self.planet_image = pygame.transform.scale(self.planet_image, (screen_width,screen_height))
+            self.planet_rect = self.planet_image.get_rect(center = centerpoint)
+            self.mission_icon_1_image = pygame.image.load("graphics/interface/icons/bionic_eye_lowres_green.png").convert_alpha()
+            self.mission_icon_1_rect = self.mission_icon_1_image.get_rect(topleft = (960,540))
+            self.nighthawk_pilot_image = pygame.image.load("graphics/pilots/nighthawk_standing_default_75.png").convert_alpha()
+            self.nighthawk_pilot_rect = self.nighthawk_pilot_image.get_rect(topleft = (1350,300))
+            self.intrepid_rose_pilot_image = pygame.image.load("graphics/pilots/intrepid_rose_standing_default_75.png").convert_alpha()
+            self.intrepid_rose_pilot_rect = self.intrepid_rose_pilot_image.get_rect(topleft = (1350,300))
+            self.lightbringer_pilot_image = pygame.image.load("graphics/pilots/lightbringer_standing_default_75.png").convert_alpha()
+            self.lightbringer_pilot_rect = lightbringer_pilot_image.get_rect(topleft = (1350,300))
+            self.jet_red_image = pygame.image.load("graphics/interface/icons/red_dot.png").convert_alpha()
+            self.jet_red_image = pygame.transform.scale(jet_red_image, (10,10))
+            self.jet_red_rect = jet_red_image.get_rect(center = (0,0))
+            self.jet_blue_image = pygame.image.load("graphics/interface/icons/blue_dot.png").convert_alpha()
+            self.jet_blue_image = pygame.transform.scale(jet_blue_image, (10,10))
+            self.jet_blue_rect = jet_blue_image.get_rect(center = (900,900))
+            self.radio_image = pygame.image.load("graphics/blank.png").convert_alpha()
+            self.radio_image = pygame.transform.scale(radio_image, (40,40))
+            self.radio_rect = radio_image.get_rect(center = (800,500))
+            self.text_continue_button_image = pygame.image.load("graphics/interface/text_continue_75.png").convert_alpha()
+            self.text_continue_button_rect = text_continue_button_image.get_rect(topleft = (300,200))
+            self.blueprint_image = pygame.image.load("graphics/interface/blueprint_small.png").convert_alpha()
+            self.blueprint_image = pygame.transform.scale(blueprint_image, (screen_width*0.5,screen_height*0.5))
+            self.blueprint_rect = blueprint_image.get_rect(center = (screen_width/2,screen_height/2))
+            self.desert_map = pygame.image.load("graphics/maps/small_desertplain_dark.png").convert_alpha()
+            self.desert_map = pygame.transform.scale(self.desert_map, (screen_width,screen_height))
+        def draw_selected_pilot_name(self):
+            selected.pilot_name_image = text_font.render(f"{selected.pilot.name}",False,(111,196,169))
+            selected.pilot_name_rect = selected.pilot_name_image.get_rect(center = (screen_width*0.5,screen_height*0.25))
+            screen.blit(selected.pilot_name_image,(selected.pilot_name_rect))
+        def draw_cockpit(self):
+            screen.blit(self.planet_image,(0,0))
+            screen.blit(self.dashboard_image,(0,0))
+        def draw_interface_screen_front(self):
+            screen.blit(self.black_block_image, (self.black_block_rect))
+            screen.blit(self.green_filter_image,(self.green_filter_rect))
+            screen.blit(self.frame_image,(self.frame_rect))
+        # def draw_mission_markers(self):
+            # if available_missions[1] == True:
+                # screen.blit(mission_icon_1_image,(mission_icon_1_rect))       
+        def draw_pause_screen(self):
+            screen.blit(self.pause_menu_image, (0,0))
+            screen.blit(self.quit_button_image, (0,540))
+        def draw_small_frame(self, side):
+            if side == "left":
+                self.frame_image = pygame.image.load("graphics/interface/frames/small_frame.png").convert_alpha()
+                self.frame_image = pygame.transform.scale(self.frame_image, (screen_width*0.25,screen_height*0.9))
+                self.back_image = pygame.image.load("graphics/interface/frames/small_frame_back.png").convert_alpha()
+                self.back_image = pygame.transform.scale(self.back_image, (screen_width*0.25,screen_height*0.9))
+                self.frame_rect = self.frame_image.get_rect(topleft = (self.interface_frame_rect.left, screen_height*0.13))
+                screen.blit(self.back_image,(self.frame_rect))
+                screen.blit(self.frame_image,(self.frame_rect))
+            if side == "right":
+                self.frame_image = pygame.image.load("graphics/interface/frames/small_frame_flipped.png").convert_alpha()
+                self.frame_image = pygame.transform.scale(self.frame_image, (screen_width*0.25,screen_height*0.9))
+                self.back_image = pygame.image.load("graphics/interface/frames/small_frame_flipped_back.png").convert_alpha()
+                self.back_image = pygame.transform.scale(self.back_image, (screen_width*0.25,screen_height*0.9))
+                self.frame_rect = self.frame_image.get_rect(topright = (interface_frame_rect.right, screen_height*0.13))
+                screen.blit(self.back_image,(self.frame_rect))
+                screen.blit(self.frame_image,(self.frame_rect))
+                # screen.blit(small_frame_2_image,(screen_width*0.71,screen_height*0.13))
+        def draw_loadout(self):
+            screen.blit(self.blueprint_image,(self.blueprint_rect))
+        def draw_void(self):
+            screen.fill((0,0,0))
+        def update(self):
         self.draw_void
         screen.fill((0,0,0))
         if self.type == "inventory":
@@ -1147,8 +1074,10 @@ class Overlay:
             mission_pointer_group.update()
             mission_pointer_group.draw(screen)
             self.draw_interface_screen_front()
+            if selected.pointer_slot > 0:
+                self.draw_small_frame("right")  
         elif self.type == "combat":
-            screen.blit(desert_map, (0,0))
+            screen.blit(self.desert_map, (0,0))
             pilot_group.draw(screen)
             pilot_combat_names_group.draw(screen)
             mission_objects_group.draw(screen)
@@ -1180,7 +1109,9 @@ class Overlay:
             continue_button = False
         else:
             continue_button = False
-class Mission_Manager:
+        button_group.update()
+        button_group.draw(screen)
+    class Mission_Manager:
         def __init__(self):
             self.current_mission = 0
             self.waypoints = []
@@ -1254,56 +1185,173 @@ class Mission_Manager:
                     rose.pos_x = random.randint(-screen_width*0.2+pilot_list[0].pos_x,screen_width*0.2+pilot_list[0].pos_x)
                     rose.pos_y = random.randint(-screen_height*0.2+pilot_list[0].pos_y,0)
 
-selected.pilot = null_pilot
-overlay = Overlay("cockpit")
-mission_manager = Mission_Manager()
+if startup: #load specifics 
+    if startup: #create sprite groups       
+        nameplates_group = pygame.sprite.Group()
+        pilot_names_group = pygame.sprite.Group()
+        pilot_combat_names_group = pygame.sprite.Group()
+        inventory_names_group = pygame.sprite.Group()
+        loadout_names_group = pygame.sprite.Group()
+        island_group = pygame.sprite.Group()
+        pilot_group = pygame.sprite.Group()
+        weapon_effects_group = pygame.sprite.Group()
+        mission_objects_group = pygame.sprite.Group()
+        mission_enemy_group = pygame.sprite.Group()
+        health_icon_group = pygame.sprite.Group()
+        clock_icon_group = pygame.sprite.Group()
+        mission_pointer_group = pygame.sprite.Group()
+        button_group = pygame.sprite.Group()
+    if startup: #load cores  
+        fusion_core = Power_Core("fusion_core")
+        null_core = Power_Core("null_core")  
+    if startup: #load weapons  
+        beam_cannon = Weapon("beam_cannon")
+        unassigned_weapon = Weapon("unassigned_weapon")
+        null_weapon = Weapon("null_weapon")
+        cryo_shot = Weapon("cryo_shot")
+        power_sword = Weapon("powersword")
+        flame_lance = Weapon("flame_lance")
+        lightning_chain = Weapon("lightning_chain")
+    if startup: #load shields
+        light_shield = Shield("light_shield")
+    if startup: #load battlesuits
+        majestic = Battlesuit("majestic")
+        leviathan = Battlesuit("leviathan")
+        tower = Battlesuit("tower")
+        javelin = Battlesuit("javelin")
+        drone = Battlesuit("drone")
+        null_suit = Battlesuit("null_suit") 
+        train_suit = Battlesuit("train")
+    if startup: #load pilots
+        unassigned_pilot = Pilot("Unassigned",0,copy.deepcopy(tower),"friend")
+        nighthawk = Pilot("Nighthawk",1,copy.deepcopy(majestic),"friend")
+        rose = Pilot("Rose",2,copy.deepcopy(majestic),"friend")
+        lightbringer = Pilot("Lightbringer",3,copy.deepcopy(majestic),"friend")
+        deadlift = Pilot("Deadlift",4,copy.deepcopy(majestic),"friend")
+        kite = Pilot("Azure_Kite",5,copy.deepcopy(majestic),"friend")
+        null_pilot = Pilot(" ",-1,copy.deepcopy(null_suit),"friend")
+        pilot_list = [unassigned_pilot, nighthawk, rose, lightbringer, deadlift, kite]
+        rose.battlesuit.loadout[1] = cryo_shot
+        nighthawk.battlesuit.loadout[1] = cryo_shot
+        null_pilot.pos_x = -1
+        null_pilot.pos_y = -1
+        tower_1 = Pilot("Tower",1,copy.deepcopy(tower),"enemy")
+    if startup: #load pilot sprites
+        pilot_group.add(unassigned_pilot)
+        pilot_group.add(nighthawk)
+        pilot_group.add(rose)
+        pilot_group.add(lightbringer)
+        pilot_group.add(deadlift)
+        pilot_group.add(kite)
+        pilot_group.add(tower_1)
+    if startup: #load resources
+        inventory_list = [fusion_core, beam_cannon, light_shield, light_shield, null_weapon, null_weapon, null_weapon]
+        credits_currency = 0
+        scrap_metal = 0
+        fuel_rods = 0
+        meds = 0
+        stimms = 0
+    if startup: #create handlers
+        selected = Selected()
+        overlay = Overlay("cockpit")
+        mission_manager = Mission_Manager()
+    if startup: #add nameplates
+        nameplates_group.add(Nameplates("pilot_line_item",1))
+        nameplates_group.add(Nameplates("pilot_line_item",2))
+        nameplates_group.add(Nameplates("pilot_line_item",3))
+        nameplates_group.add(Nameplates("pilot_line_item",4))
+        nameplates_group.add(Nameplates("pilot_line_item",5))
+
+        nameplates_group.add(Nameplates("inventory_line_item",1))
+        nameplates_group.add(Nameplates("inventory_line_item",2))
+        nameplates_group.add(Nameplates("inventory_line_item",3))
+
+        nameplates_group.add(Nameplates("loadout_label", 0))
+        nameplates_group.add(Nameplates("loadout_label", 1))
+        nameplates_group.add(Nameplates("loadout_label", 3))
+        nameplates_group.add(Nameplates("loadout_label", 2))
+        nameplates_group.add(Nameplates("loadout_label", 4))
+        
+        nameplates_group.add(Nameplates("swap_button", 0))
+    if startup: #add island maps
+        island_group.add(Island("world_map",0))
+        island_group.add(Island("island",1))
+        island_group.add(Island("island",2))
+        island_group.add(Island("island",3))
+        island_group.add(Island("island",4))
+        island_group.add(Island("island",5))
+        island_group.add(Island("island",6))
+    if startup: #add text names
+        pilot_names_group.add(Text_Names("pilot",1))
+        pilot_names_group.add(Text_Names("pilot",2))
+        pilot_names_group.add(Text_Names("pilot",3))
+        pilot_names_group.add(Text_Names("pilot",4))
+        pilot_names_group.add(Text_Names("pilot",5))
+
+        loadout_names_group.add(Text_Names("loadout",1))
+        loadout_names_group.add(Text_Names("loadout",2))
+        loadout_names_group.add(Text_Names("loadout",3))
+        loadout_names_group.add(Text_Names("loadout",4))
+        loadout_names_group.add(Text_Names("loadout",0))
+        
+        inventory_names_group.add(Text_Names("inventory",1))
+        inventory_names_group.add(Text_Names("swap_button",0))
+        
+        pilot_combat_names_group.add(Text_Names("pilot",1))
+        pilot_combat_names_group.add(Text_Names("pilot",2))
+        pilot_combat_names_group.add(Text_Names("pilot",3))
+        pilot_combat_names_group.add(Text_Names("pilot",4))
+        pilot_combat_names_group.add(Text_Names("pilot",5))
+    if startup: #add health icons
+        for pilot in pilot_list:
+            if pilot.slot_number > 0:
+                health_icon_group.add(Icon("shield", pilot))
+                health_icon_group.add(Icon("damaged", pilot))
+                health_icon_group.add(Icon("severely_damaged", pilot))
+    if startup: #add pointers
+        mission_pointer_group.add(Pointer("rail", screen_width*0.6,screen_height*0.7,1))  
+    if startup:
+        button_group.add(Button("x_button"))
+        button_group.add(Button("continue"))
+
+# selected.pilot = null_pilot
 
 #Mission 1 setup
 active_mission_number = 1
 mission_manager.mission_setup(1)
-
-def update_fps():
-	fps = str(int(clock.get_fps()))
-	fps_text = text_font.render(fps, 1, pygame.Color("coral"))
-	return fps_text
-
 
 while True: #game Cycle
     for event in pygame.event.get():
         if event.type == pygame.QUIT: #Quit
             pygame.quit()
             exit()
-        if event.type == pygame.MOUSEBUTTONDOWN: #Click dashboard map for full map
-            if clickablemap_rect.collidepoint(event.pos):
-                if overlay.type == "cockpit":
-                    overlay.type = "map"
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_i: #toggle inventory
                 if overlay.type == "inventory":
-                    overlay.type = "none"
+                    overlay.type = "cockpit"
                 else:
                     overlay.type = "inventory"
                     x_button = True
                     continue_button = False
-            if event.key == pygame.K_m:
+            if event.key == pygame.K_m: #toggle map
                 if overlay.type == "map":
-                    overlay.type = "none"
+                    overlay.type = "cockpit"
                     x_button = False
                     continue_button = False
                 else:
                     overlay.type = "map"
                     x_button = True
-            if event.key == pygame.K_c:
+            if event.key == pygame.K_c: #go to cockpit
                 overlay.type = "cockpit"
-            if event.key == pygame.K_b:
+            if event.key == pygame.K_b: #toggle combat
                 if overlay.type == "combat":
-                    overlay.type = "none"
+                    overlay.type = "cockpit"
                     x_button = False
                     continue_button = False
                 else:
                     overlay.type = "combat"
                     x_button = True
-            if event.key == pygame.K_p:
+            if event.key == pygame.K_p: #toggle health tracker
                 if overlay.type == "health_tracker":
                     overlay.type = "none"
                     x_button = False
