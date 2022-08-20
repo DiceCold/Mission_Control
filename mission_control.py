@@ -57,7 +57,10 @@ if startup: #load screen
 
 blank_frame = pygame.image.load("graphics/blank.png").convert_alpha()
 blank_frame = pygame.transform.scale(blank_frame, (10,10))
-  
+explosion_sheet_1 = pygame.image.load("graphics/weapons/explosion_sprite_1.png").convert_alpha()
+explosion_sheet_2 = pygame.image.load("graphics/weapons/explosion_sprite_2.png").convert_alpha()
+explosion_sheet_3 = pygame.image.load("graphics/weapons/explosion_sprite_3.png").convert_alpha()
+explosion_sheet_4 = pygame.image.load("graphics/weapons/explosion_sprite_4.png").convert_alpha()
     
 if startup: #load classes
     class Power_Core:
@@ -171,14 +174,10 @@ if startup: #load classes
                 self.countdown = 60
                 self.image = self.frames[self.animation_index]
             if self.form == "explosion":
-                explosion_sheet_1 = pygame.image.load("graphics/weapons/explosion_sprite_1.png").convert_alpha()
-                explosion_sheet_2 = pygame.image.load("graphics/weapons/explosion_sprite_2.png").convert_alpha()
-                explosion_sheet_3 = pygame.image.load("graphics/weapons/explosion_sprite_3.png").convert_alpha()
-                explosion_sheet_4 = pygame.image.load("graphics/weapons/explosion_sprite_4.png").convert_alpha()
                 explosion_sheets_group = [explosion_sheet_1,explosion_sheet_2,explosion_sheet_3,explosion_sheet_4]
                 self.animation_index = 0
                 # self.frames = explosion_frames
-                self.image = blank_frame
+                # self.image = blank_frame
                 self.countdown = 64
                 self.sheet = random.choice(explosion_sheets_group)
                 self.sheet_column = 0
@@ -927,34 +926,48 @@ if startup: #load classes
             self.pos_y = 0
             self.animation_index = 0
             self.frame_0 = blank_frame
-            self.frames = [self.frame_0]
-            self.rect = self.frame_0.get_rect(center = (0,0))
             if self.type == "x_button":
                 self.frame_1 = pygame.image.load("graphics/interface/icons/x_button_75.png").convert_alpha()
-                self.frame_1 = pygame.transform.scale(self.frame_1, (40,40))
+                self.frame_1 = pygame.transform.scale(self.frame_1,(screen_width*0.05,screen_height*0.05))
                 self.frames = [self.frame_0, self.frame_1]
+                self.animation_index = 0
                 self.image = self.frames[self.animation_index]
-                self.rect = self.image.get_rect(topleft = (screen_width*0.15,screen_height*0.15))
+                self.pos_x = screen_width*0.15
+                self.pos_y - screen_height*0.15
+                self.rect = self.image.get_rect(topleft = (self.pos_x,self.pos_y))
             if self.type == "dashboard_map":
                 self.frame_1 = pygame.image.load("graphics/interface/cockpit/clickscreen.png").convert_alpha()
                 self.frame_1 = pygame.transform.scale(self.frame_1, (screen_width*0.2,screen_height*0.2))
                 self.frames = [self.frame_0, self.frame_1]
+                self.animation_index = 1
                 self.image = self.frames[self.animation_index]
-                self.rect = self.image.get_rect(topleft = (screen_width*0.01,screen_height*0.1))
+                self.pos_x = screen_width*0.01
+                self.pos_y = screen_height*0.1
+                self.rect = self.image.get_rect(topleft = (self.pos_x,self.pos_y))
+            if self.type == "continue_button":
+                self.animation_index = 0
+            self.frames = [self.frame_0, self.frame_1]
+            self.image = self.frame_0
+            self.rect = self.image.get_rect(topleft = (self.pos_x,self.pos_y))
         def update(self):
             self.image = self.frames[self.animation_index]
+            self.rect = self.image.get_rect(topleft = (self.pos_x,self.pos_y))
+            if self.type == "dashboard_map":
+                if overlay.type != "cockpit": self.animation_index = 0
+                else: self.animation_index = 1
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.rect.collidepoint(event.pos):
                     if self.type == "x_button" and overlay.type != "cockpit":
                         overlay.type = "cockpit"
                     if overlay.type == "cockpit" and self.type == "dashboard_map":
-                        overlay.screen = "map"
+                        overlay.type = "map"
     class Overlay_Manager:
         def __init__(self, type):
             self.type = type
-            self.frame_image = pygame.image.load("graphics/interface/frames/white_frame_large.png").convert_alpha()
-            self.frame_image = pygame.transform.scale(self.frame_image, (screen_width*0.9,screen_height*0.9))
-            self.frame_rect = self.frame_image.get_rect(center = (screen_width/2,screen_height/2)) 
+            self.large_frame_image = pygame.image.load("graphics/interface/frames/white_frame_large.png").convert_alpha()
+            self.large_frame_image = pygame.transform.scale(self.large_frame_image, (screen_width*0.9,screen_height*0.9))
+            self.large_frame_rect = self.large_frame_image.get_rect(center = (screen_width/2,screen_height/2)) 
             self.black_block_image = pygame.image.load("graphics/interface/frames/black_blocker.png").convert_alpha()
             self.black_block_image = pygame.transform.scale(self.black_block_image, (screen_width,screen_height))
             self.black_block_rect = self.black_block_image.get_rect(center = centerpoint)
@@ -997,9 +1010,12 @@ if startup: #load classes
             screen.blit(self.planet_image,(0,0))
             screen.blit(self.dashboard_image,(0,0))
         def draw_interface_screen_front(self):
+            self.large_frame_image = pygame.image.load("graphics/interface/frames/white_frame_large.png").convert_alpha()
+            self.large_frame_image = pygame.transform.scale(self.large_frame_image, (screen_width*0.9,screen_height*0.9))
+            self.large_frame_rect = self.large_frame_image.get_rect(center = (screen_width/2,screen_height/2)) 
             screen.blit(self.black_block_image, (self.black_block_rect))
             screen.blit(self.green_filter_image,(self.green_filter_rect))
-            screen.blit(self.frame_image,(self.frame_rect))
+            screen.blit(self.large_frame_image,(self.large_frame_rect))
         # def draw_mission_markers(self):
             # if available_missions[1] == True:
                 # screen.blit(mission_icon_1_image,(mission_icon_1_rect))       
@@ -1009,25 +1025,27 @@ if startup: #load classes
         def draw_small_frame(self, side):
             if side == "left":
                 self.frame_image = pygame.image.load("graphics/interface/frames/small_frame.png").convert_alpha()
-                self.frame_image = pygame.transform.scale(self.frame_image, (screen_width*0.25,screen_height*0.9))
+                self.frame_image = pygame.transform.scale(self.frame_image, (screen_width*0.24,screen_height*0.82))
                 self.back_image = pygame.image.load("graphics/interface/frames/small_frame_back.png").convert_alpha()
-                self.back_image = pygame.transform.scale(self.back_image, (screen_width*0.25,screen_height*0.9))
-                self.frame_rect = self.frame_image.get_rect(topleft = (self.interface_frame_rect.left, screen_height*0.13))
-                screen.blit(self.back_image,(self.frame_rect))
-                screen.blit(self.frame_image,(self.frame_rect))
+                self.back_image = pygame.transform.scale(self.back_image, (screen_width*0.24,screen_height*0.82))
+                self.small_frame_rect = self.frame_image.get_rect(topleft = (self.large_frame_rect.left, screen_height*0.13))
+                # screen.blit(self.back_image,(self.small_frame_rect))
+                screen.blit(self.frame_image,(self.small_frame_rect))
             if side == "right":
                 self.frame_image = pygame.image.load("graphics/interface/frames/small_frame_flipped.png").convert_alpha()
-                self.frame_image = pygame.transform.scale(self.frame_image, (screen_width*0.25,screen_height*0.9))
+                self.frame_image = pygame.transform.scale(self.frame_image, (screen_width*0.24,screen_height*0.82))
                 self.back_image = pygame.image.load("graphics/interface/frames/small_frame_flipped_back.png").convert_alpha()
-                self.back_image = pygame.transform.scale(self.back_image, (screen_width*0.25,screen_height*0.9))
-                self.frame_rect = self.frame_image.get_rect(topright = (interface_frame_rect.right, screen_height*0.13))
-                screen.blit(self.back_image,(self.frame_rect))
-                screen.blit(self.frame_image,(self.frame_rect))
-                # screen.blit(small_frame_2_image,(screen_width*0.71,screen_height*0.13))
+                self.back_image = pygame.transform.scale(self.back_image, (screen_width*0.24,screen_height*0.82))
+                self.small_frame_rect = self.frame_image.get_rect(topright = (self.large_frame_rect.right, screen_height*0.13))
+                # screen.blit(self.back_image,(self.small_frame_rect))
+                screen.blit(self.frame_image,(self.small_frame_rect))
         def draw_loadout(self):
             screen.blit(self.blueprint_image,(self.blueprint_rect))
         def draw_void(self):
             screen.fill((0,0,0))
+        def draw_ui_buttons(self):
+            button_group.update()
+            button_group.draw(screen)
         def wrap_text(self, surface, text, color, rect, font, aa=False, bkg=None):
             rect = Rect(rect)
             y = rect.top
@@ -1052,6 +1070,7 @@ if startup: #load classes
         def update(self):
             self.draw_void
             screen.fill((0,0,0))
+            button_group.update()
             if self.type == "inventory":
                 self.draw_loadout()
                 nameplates_group.update()
@@ -1103,15 +1122,15 @@ if startup: #load classes
                 self.draw_ui_buttons()
             elif overlay.type == "cockpit":
                 self.draw_cockpit()
+                self.draw_ui_buttons()
             elif overlay.type == "mission_brief":
                 self.draw_interface_screen_front()
+                self.draw_ui_buttons()
             elif overlay.type == "none":
                 x_button = False
                 continue_button = False
             else:
                 continue_button = False
-            button_group.update()
-            button_group.draw(screen)
     class Mission_Manager:
         def __init__(self):
             self.current_mission = 0
@@ -1296,6 +1315,10 @@ if startup: #load specifics
         pilot_group.add(deadlift)
         pilot_group.add(kite)
         pilot_group.add(tower_1)
+    if startup: #load buttons
+        button_group.add(Button("x_button"))
+        button_group.add(Button("dashboard_map"))
+        # button_group.add(Button("continue_button"))
     if startup: #load resources
         inventory_list = [fusion_core, beam_cannon, light_shield, light_shield, null_weapon, null_weapon, null_weapon]
         credits_currency = 0
@@ -1364,9 +1387,6 @@ if startup: #load specifics
                 health_icon_group.add(Icon("severely_damaged", pilot))
     if startup: #add pointers
         mission_pointer_group.add(Pointer("rail", screen_width*0.6,screen_height*0.7,1))  
-    if startup:
-        button_group.add(Button("x_button"))
-        button_group.add(Button("continue"))
 
 # selected.pilot = null_pilot
 
@@ -1407,7 +1427,7 @@ while True: #game Cycle
                     x_button = True
             if event.key == pygame.K_p: #toggle health tracker
                 if overlay.type == "health_tracker":
-                    overlay.type = "none"
+                    overlay.type = "cockpit"
                     x_button = False
                     continue_button = False
                 else:

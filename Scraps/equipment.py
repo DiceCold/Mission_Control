@@ -18,18 +18,17 @@ red_dot_surf = pygame.image.load('graphics/pilots/red_dot_icon.png').convert_alp
 red_dot_surf = pygame.transform.scale(jet_red_surf, (10,10))
 
 class Equipment_Slot(pygame.sprite.Sprite):
-    def __init__(self, slot_number, pos_x, pos_y):
+    def __init__(self, slot):
         if slot == 1:
             super().__init__()
-            self.slot_number = slot_number
             self.equipped = "Unassigned"
             text_surf = text_font.render(f"{self.equipped}",False,(90,90,90))
             self.image = text_surf
-            self.pos_x = pos_x
-            self.pos_y = pos_y
-            self.rect = self.image.get_rect(center = (self.pos_x, self.pos_y))
+            self.rect = self.image.get_rect(center = centerpoint)
         def update():
+            self.equipped = "Unassigned"
             self.image = text_font.render(f"{self.equipped}",False,(90,90,90))
+            self.rect.y += 10
 
 class Battlesuit(pygame.sprite.Sprite):
     def __init__(self, type):
@@ -47,7 +46,7 @@ class Battlesuit(pygame.sprite.Sprite):
         if type == "tower":
             self.name = "Tower"
             self.mobility = 0
-        self.equipment = {1:beam_cannon, 2:none, 3:none, 4:none}
+        self.slots = {1:none, 2:none, 3:none, 4:none}
         self.shields = []
         self.weapons = [beam_cannon,beam_cannon]
         self.damaged = False
@@ -130,8 +129,8 @@ class Shields:
             self.cooldown = cooldown
             self.charged = charged
 
-# equipment_group = pygame.sprite.Group()
-# equipment_group.add(Equipment_Slot(1))
+equipment_group = pygame.sprite.Group()
+equipment_group.add(Equipment_Slot(1))
 
 # while True:
     # equipment_group.update()
