@@ -26,6 +26,28 @@ mission_briefing = "This is a mission briefing for testing the text wrapping fun
 global nameplate_locked
 nameplate_locked = False
 locked_row = 0
+# map_tile_quantity = 0
+
+# map_tile_1_surf = pygame.image.load('graphics/maps/grass_texture.png').convert_alpha()
+# map_tile_1_surf = pygame.transform.scale(map_tile_1_surf, (screen_width,screen_height))
+# map_tile_1_rect = map_tile_1_surf.get_rect(topleft = (0,0))
+   
+# map_tile_2_surf = pygame.image.load('graphics/maps/grass_texture.png').convert_alpha()
+# map_tile_2_surf = pygame.transform.scale(map_tile_2_surf, (screen_width,screen_height))
+# map_tile_2_rect = map_tile_2_surf.get_rect(topleft = (0,- screen_height))
+       
+#scroll
+
+# def scroll_background():
+    # screen.blit(map_tile_1_surf,(map_tile_1_rect))
+    # screen.blit(map_tile_2_surf,(map_tile_2_rect))
+    # map_tile_1_rect.top += scroll_velocity
+    # map_tile_2_rect.top += scroll_velocity
+    # if map_tile_1_rect.top >= screen_height:
+        # map_tile_1_rect.bottom = 0
+    # if map_tile_2_rect.top >= screen_height:
+        # map_tile_2_rect.bottom = 0
+
 
 
 class Lock_Icon(pygame.sprite.Sprite):
@@ -36,11 +58,11 @@ class Lock_Icon(pygame.sprite.Sprite):
         global nameplate_locked
         global pilot_target
         if type == "lock":
-            lock_1 = pygame.image.load('graphics/interface/lock_icon_white.png').convert_alpha()
+            lock_1 = pygame.image.load('graphics/interface/icons/lock_icon_white.png').convert_alpha()
             lock_1 = pygame.transform.scale(lock_1, (20,20))
-            lock_2= pygame.image.load('graphics/interface/shield_blank.png').convert_alpha()
+            lock_2= pygame.image.load('graphics/blank.png').convert_alpha()
             lock_2 = pygame.transform.scale(lock_2, (20,20))
-            crosshair_3= pygame.image.load('graphics/interface/crosshair_red.png').convert_alpha()
+            crosshair_3= pygame.image.load('graphics/interface/icons/crosshair_red.png').convert_alpha()
             crosshair_3 = pygame.transform.scale(crosshair_3, (40,40))
             self.frames = [lock_1,lock_2,crosshair_3]
             self.row_number = 0
@@ -86,10 +108,8 @@ def drawText(surface, text, color, rect, font, aa=False, bkg=None):
     # rect = Rect(rect)
     y = rect.top
     lineSpacing = -2
-
     # get the height of the font
     fontHeight = font.size("Tg")[1]
-
     while text:
         i = 1
         # determine if the row of text will be outside our area
@@ -172,26 +192,26 @@ class Health_Icons(pygame.sprite.Sprite):
         super().__init__()
         global nameplate_quantity
         if type == 'shield':
-            shield_1 = pygame.image.load('graphics/interface/shield.png').convert_alpha()
+            shield_1 = pygame.image.load('graphics/interface/icons/shield.png').convert_alpha()
             shield_1 = pygame.transform.scale(shield_1, (40,40))
-            shield_2 = pygame.image.load('graphics/interface/shield_blank.png').convert_alpha()
-            shield_2 = pygame.transform.scale(shield_2, (40,40))
-            self.frames = [shield_1,shield_2]
+            shield_0 = pygame.image.load('graphics/blank.png').convert_alpha()
+            shield_0 = pygame.transform.scale(shield_0, (40,40))
+            self.frames = [shield_0,shield_1]
             self.slot = 3
             self.row_number = 0
         if type == 'damaged':
-            damaged_1 = pygame.image.load('graphics/interface/warning_white.png').convert_alpha()
+            damaged_1 = pygame.image.load('graphics/interface/icons/warning_white.png').convert_alpha()
             damaged_1 = pygame.transform.scale(damaged_1, (40,40))
-            damaged_2 = pygame.image.load('graphics/interface/warning_yellow.png').convert_alpha()
+            damaged_2 = pygame.image.load('graphics/interface/icons/warning_yellow.png').convert_alpha()
             damaged_2 = pygame.transform.scale(damaged_2, (40,40))
-            damaged_3 = pygame.image.load('graphics/interface/warning_red.png').convert_alpha()
+            damaged_3 = pygame.image.load('graphics/interface/icons/warning_red.png').convert_alpha()
             self.frames = [damaged_1,damaged_2]
             self.slot = 2
             self.row_number = 0
         if type == 'heavily_damaged':
-            heavily_damaged_1 = pygame.image.load('graphics/interface/warning_white.png').convert_alpha()
+            heavily_damaged_1 = pygame.image.load('graphics/interface/icons/warning_white.png').convert_alpha()
             heavily_damaged_1 = pygame.transform.scale(heavily_damaged_1, (40,40))
-            heavily_damaged_2 = pygame.image.load('graphics/interface/warning_red.png').convert_alpha()
+            heavily_damaged_2 = pygame.image.load('graphics/interface/icons/warning_red.png').convert_alpha()
             heavily_damaged_2 = pygame.transform.scale(heavily_damaged_2, (40,40))
             self.frames = [heavily_damaged_1,heavily_damaged_2]
             self.slot =1
@@ -212,17 +232,17 @@ class Nameplates(pygame.sprite.Sprite):
         global wide_row
         global nameplate_locked
         if type == 'nameplate':
-            nameplate_1 = pygame.image.load('graphics/interface/interface_panel_name.png').convert_alpha()
+            nameplate_1 = pygame.image.load('graphics/interface/labels/interface_panel_name.png').convert_alpha()
             nameplate_1 = pygame.transform.scale(nameplate_1, (400,100))
-            nameplate_2 = pygame.image.load('graphics/interface/interface_panel_name_green.png').convert_alpha()
+            nameplate_2 = pygame.image.load('graphics/interface/labels/interface_panel_name_green.png').convert_alpha()
             nameplate_2 = pygame.transform.scale(nameplate_2, (800,100))
             self.frames = [nameplate_1,nameplate_2]
             self.locked = False
             self.size = "small"
         if type == "hazard":
-            hazard_1 = pygame.image.load('graphics/interface/warning_yellow.png').convert_alpha()
+            hazard_1 = pygame.image.load('graphics/interface/icons/warning_yellow.png').convert_alpha()
             hazard_1 = pygame.transform.scale(hazard_1, (20,20))
-            hazard_2 = pygame.image.load('graphics/interface/warning_red.png').convert_alpha()
+            hazard_2 = pygame.image.load('graphics/interface/icons/warning_red.png').convert_alpha()
             hazard_2 = pygame.transform.scale(hazard_2, (20,20))
             self.frames = [hazard_1,hazard_2]
             self.locked = False
@@ -287,9 +307,9 @@ class Target_Options(pygame.sprite.Sprite):
         super().__init__()
         global target_quantity
         if type == 'nameplate':
-            nameplate_1 = pygame.image.load('graphics/interface/interface_panel_name.png').convert_alpha()
+            nameplate_1 = pygame.image.load('graphics/interface/labels/interface_panel_name.png').convert_alpha()
             nameplate_1 = pygame.transform.scale(nameplate_1, (400,100))
-            nameplate_2 = pygame.image.load('graphics/interface/interface_panel_name_red.png').convert_alpha()
+            nameplate_2 = pygame.image.load('graphics/interface/labels/interface_panel_name_red.png').convert_alpha()
             nameplate_2 = pygame.transform.scale(nameplate_2, (400,100))
             self.frames = [nameplate_1,nameplate_2]
         self.animation_index = 0
@@ -341,6 +361,7 @@ health_icon_group = pygame.sprite.Group()
 pilot_names_group = pygame.sprite.Group()
 target_names_group = pygame.sprite.Group()
 lock_icon_group = pygame.sprite.Group()
+map_tile_group  = pygame.sprite.Group()
 
 def add_health_tracker():
     global nameplate_quantity
@@ -354,35 +375,5 @@ def add_health_tracker():
 add_health_tracker()
 target_names_group.add(Target_Options('nameplate'))
 
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            exit()
-    if game_active:
-        pos = pygame.mouse.get_pos()
-        if cooldown == 0:
-            # nameplate_quantity = len(buttons_group)
-            if nameplate_quantity < nameplate_quantity_max:
-                add_health_tracker()
-        cooldown -= 1
-        if cooldown <= 0:
-            cooldown = 0
-        screen.fill((0,0,0))
-        drawText(screen, mission_briefing, (64,64,64), mission_text_rect, text_font, False, None)
-        buttons_group.update()
-        buttons_group.draw(screen)
-        health_icon_group.update()
-        health_icon_group.draw(screen)
-        pilot_names_group.update()
-        pilot_names_group.draw(screen)
-        target_names_group.update()
-        target_names_group.draw(screen)
-        if nameplate_locked == True:
-            lock_icon_group.add(Lock_Icon("lock"))
-        lock_icon_group.update()
-        lock_icon_group.draw(screen)
-    else:
-        screen.fill((0,0,0))
-    pygame.display.update()
-    clock.tick(60)
+game_active2 = False
+print(map_tile_group)
