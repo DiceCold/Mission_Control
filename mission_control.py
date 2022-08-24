@@ -20,9 +20,6 @@ def random_pos():
 def roll_1d6():
     roll_result = random.randint(1,6)
     return roll_result
-
-
-    return text
 def get_sprite_frames(sheet, frame_x, frame_y, width, height, colour):
     image = pygame.Surface((width, height)).convert_alpha()
     x = frame_x*width
@@ -31,9 +28,9 @@ def get_sprite_frames(sheet, frame_x, frame_y, width, height, colour):
     image.set_colorkey(colour)
     return image
 def update_fps():
-	fps = str(int(clock.get_fps()))
-	fps_text = text_font.render(fps, 1, pygame.Color("coral"))
-	return fps_text
+    fps = str(int(clock.get_fps()))
+    fps_text = text_font.render(fps, 1, pygame.Color("coral"))
+    return fps_text
 
 if startup: #load notes
     power_core_list = {"01":"trapped_combustion_core", "02":"dirty_fission_core", "04":"solar_array_core", "06":"cold_fusion_core", "07":"entropy_core", "08":"black_pinhole_core", "10":"wave_collapse_core", "11":"phantom_pinnacle_core", "0x":"alien_crystal_core", "00":"no_core"}
@@ -61,6 +58,35 @@ explosion_sheet_1 = pygame.image.load("graphics/weapons/explosion_sprite_1.png")
 explosion_sheet_2 = pygame.image.load("graphics/weapons/explosion_sprite_2.png").convert_alpha()
 explosion_sheet_3 = pygame.image.load("graphics/weapons/explosion_sprite_3.png").convert_alpha()
 explosion_sheet_4 = pygame.image.load("graphics/weapons/explosion_sprite_4.png").convert_alpha()
+
+def drawText(surface, text, color, rect, font, aa=False, bkg=None):
+    y = rect.top
+    lineSpacing = 10
+    # get the height of the font
+    fontHeight = font.size("Tg")[1]
+    while text:
+        i = 1
+        # determine if the row of text will be outside our area
+        if y + fontHeight > rect.bottom:
+            break
+        # determine maximum width of line
+        while font.size(text[:i])[0] < rect.width and i < len(text):
+            i += 1
+        # if we've wrapped the text, then adjust the wrap to the last word      
+        if i < len(text): 
+            i = text.rfind(" ", 0, i) + 1
+        # render the line and blit it to the surface
+        if bkg:
+            image = font.render(text[:i], 1, color, bkg)
+            image.set_colorkey(bkg)
+        else:
+            image = font.render(text[:i], aa, color)
+        surface.blit(image, (rect.left, y))
+        y += fontHeight + lineSpacing
+        # remove the text we just blitted
+        text = text[i:]
+
+    return text
     
 if startup: #load classes
     class Power_Core:
@@ -835,6 +861,7 @@ if startup: #load classes
             if event.type == pygame.MOUSEBUTTONDOWN: #Click
                 if self.rect.collidepoint(event.pos) and self.cooldown == 0:
                     overlay.type = "mission_brief"
+                    dialogue.load_scene_dialogue("mission",1)
                     self.cooldown = 10
                     if self.animation_index == 2:
                         self.animation_index = 1
@@ -1015,10 +1042,7 @@ if startup: #load classes
             self.large_frame_rect = self.large_frame_image.get_rect(center = (screen_width/2,screen_height/2)) 
             screen.blit(self.black_block_image, (self.black_block_rect))
             screen.blit(self.green_filter_image,(self.green_filter_rect))
-            screen.blit(self.large_frame_image,(self.large_frame_rect))
-        # def draw_mission_markers(self):
-            # if available_missions[1] == True:
-                # screen.blit(mission_icon_1_image,(mission_icon_1_rect))       
+            screen.blit(self.large_frame_image,(self.large_frame_rect))   
         def draw_pause_screen(self):
             screen.blit(self.pause_menu_image, (0,0))
             screen.blit(self.quit_button_image, (0,540))
@@ -1046,8 +1070,25 @@ if startup: #load classes
         def draw_ui_buttons(self):
             button_group.update()
             button_group.draw(screen)
+        def draw_portrait(self, pilot):
+            if dialogue.speaker == nighthawk:
+                portrait = pygame.image.load("graphics/pilots/nighthawk_standing.png").convert_alpha()
+            elif dialogue.speaker == rose:
+                portrait = pygame.image.load("graphics/pilots/rose_standing.png").convert_alpha()
+            elif dialogue.speaker == lightbringer:
+                 portrait = pygame.image.load("graphics/pilots/lightbringer_standing.png").convert_alpha()
+            elif dialogue.speaker == deadlift:
+                portrait = pygame.image.load("graphics/pilots/deadlift_standing.png").convert_alpha()
+            elif dialogue.speaker == kite:
+                portrait = pygame.image.load("graphics/pilots/kite_standing.png").convert_alpha()
+            elif dialogue.speaker == shadowstalker:
+                portrait = pygame.image.load("graphics/pilots/shadowstalker_standing.png").convert_alpha()
+            else:
+                portrait = pygame.image.load("graphics/pilots/unassigned_standing.png").convert_alpha()
+            portrait = pygame.transform.scale(portrait,(screen_width*0.15,screen_height*0.8))
+            screen.blit(portrait,(screen_width*0.75,screen_height*0.25))
         def wrap_text(self, surface, text, color, rect, font, aa=False, bkg=None):
-            rect = Rect(rect)
+            # rect = pygame.Rect(rect)
             y = rect.top
             lineSpacing = -2
             fontHeight = font.size("Tg")[1]
@@ -1055,7 +1096,7 @@ if startup: #load classes
                 i = 1
                 if y + fontHeight >= rect.bottom:
                     break
-                while font.size(text[:i])[0] < rect.width and i < len(text):
+                while font.size(text[i])[0] < rect.width and i < len(text):
                     i += 1
                 if i < len(text): 
                     i = text.rfind(" ", 0, i) + 1
@@ -1067,6 +1108,7 @@ if startup: #load classes
                 surface.blit(image, (rect.left, y))
                 y += fontHeight + lineSpacing
                 text = text[i:]
+            return text
         def update(self):
             self.draw_void
             screen.fill((0,0,0))
@@ -1124,12 +1166,20 @@ if startup: #load classes
                 self.draw_cockpit()
                 self.draw_ui_buttons()
             elif overlay.type == "mission_brief":
+                self.draw_portrait(dialogue.speaker)
                 self.draw_interface_screen_front()
+                self.draw_small_frame("right")
                 self.draw_ui_buttons()
+                dialogue.update()
+                drawText(screen, dialogue.speaker.lines[dialogue.npc_line_number], (111,196,169), dialogue.npc_text_rect, text_font)
+                drawText(screen, dialogue.player_lines[dialogue.player_line_number], pygame.Color("coral"), dialogue.player_text_rect, text_font)
+            elif overlay.type == "pilot_select":
+                self.draw_portrait()
             elif overlay.type == "none":
                 x_button = False
                 continue_button = False
             else:
+                x_button = False
                 continue_button = False
     class Mission_Manager:
         def __init__(self):
@@ -1208,11 +1258,22 @@ if startup: #load classes
         def __init__(self):
             self.speaker = "speaker"
             self.scene_type = "none"
-            self.pilot_image = blank_frame
+            self.portrait = blank_frame
+            self.scene_index = 0
+            self.npc_line_number = 0
+            self.npc_text_rect = pygame.Rect((screen_width*0.1,screen_height*0.25),(screen_width*0.6,screen_height*0.5))
+            self.player_line_number = 0
+            self.player_lines = [" "]
+            self.player_text_rect = pygame.Rect((screen_width*0.1,screen_height*0.7),(screen_width*0.6,screen_height*0.2))
+            self.cooldown_max = 20
+            self.cooldown = self.cooldown_max
         def load_scene_dialogue(self, scene_type, scene_index):
             #mission event 1: train under attack
             if scene_type == "mission" and scene_index == 1:
-                nighthawk.lines = ["Hi, you've got great timing! Normally I'd give you the whole 'welcome to Arcturus' bit, but someone is attacking one of our supply trains and I'm en-route to respond. I can probably handle it, but I'd appreciate it if you could call in some backup just in case.",
+                self.speaker = nighthawk
+                self.npc_line_number = 0
+                self.player_line_number = 0
+                nighthawk.lines = ["    Hi, you've got great timing!  Normally I'd give you the whole 'Welcome to Arcturus' bit, but someone is attacking one of our supply trains and I'm en-route to respond.  I can probably handle it, but I'd appreciate it if you could call in some backup just in case.",
                                     "Alright, showtime."]
                 rose.lines = ["Nighthawk needs help? No problem, I'm on my way!"]
                 lightbringer.lines = ["Understood, I've been itching for a chance to test out a new weapon."]
@@ -1221,6 +1282,7 @@ if startup: #load classes
                                     "Currently unavailable."]
                 deadlift.lines = ["Currently assigned on another mission. Try contacting anyway?",
                                     "Currently unavailable."]
+                self.player_lines = ["Understood. Let me see who's available"]
             #social event 1: free trial weapons offer
             if scene_type == "social_event" and scene_index == 1:
                 benny.lines = ["Hey there, the name's Benny. I'm the local representative of Marco's Munitions LLC. I just wanted to thank you and your team for your hard work keeping us all safe.",
@@ -1241,26 +1303,18 @@ if startup: #load classes
                                     "No doubt in my mind, the biggest threat to people is the organized gangs in the city."]
                 rose.lines = ["Hi there, it's nice to meet you!",
                                 "So, what would you like to know?"]
-        def update_portrait(self):
-            if self.speaker == nighthawk:
-                self.pilot_image = pygame.image.load("graphics/pilots/nighthawk_standing.png").convert_alpha()
-            elif self.speaker == rose:
-                self.pilot_image = pygame.image.load("graphics/pilots/rose_standing.png").convert_alpha()
-            elif self.speaker == lightbringer:
-                 self.pilot_image = pygame.image.load("graphics/pilots/lightbringer_standing.png").convert_alpha()
-            elif self.speaker == deadlift:
-                self.pilot_image = pygame.image.load("graphics/pilots/deadlift_standing.png").convert_alpha()
-            elif self.speaker == kite:
-                self.pilot_image = pygame.image.load("graphics/pilots/kite_standing.png").convert_alpha()
-            elif self.speaker == shadowstalker:
-                self.pilot_image = pygame.image.load("graphics/pilots/shadowstalker_standing.png").convert_alpha()
-            else:
-                self.pilot_image = pygame.image.load("graphics/pilots/unassigned_standing.png").convert_alpha()
+        def converse(self, choice_number):
+            for event in pygame.event.get():
+                if self.scene_type == "mission" and self.scene_index == 1:
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_1 or event.key == pygame.K_SPACE:
+                            overlay.type = "pilot_select"
         def update(self):
-            self.update_portrait()
+            if self.cooldown > 0:
+                self.cooldown -= 1
     class Plot_Manager():
         def __init__(self):
-            self.plot_thread_1 = "marko's munitions"
+            self.sidequest_1 = "marko's munitions"
 
 if startup: #load specifics 
     if startup: #create sprite groups       
@@ -1306,8 +1360,9 @@ if startup: #load specifics
         lightbringer = Pilot("Lightbringer",3,copy.deepcopy(majestic),"friend")
         deadlift = Pilot("Deadlift",4,copy.deepcopy(majestic),"friend")
         kite = Pilot("Azure_Kite",5,copy.deepcopy(majestic),"friend")
+        shadowstalker = Pilot("Shadowstalker",6,copy.deepcopy(majestic),"friend")
         null_pilot = Pilot(" ",-1,copy.deepcopy(null_suit),"friend")
-        pilot_list = [unassigned_pilot, nighthawk, rose, lightbringer, deadlift, kite]
+        pilot_list = [unassigned_pilot, nighthawk, rose, lightbringer, deadlift, kite,shadowstalker]
         rose.battlesuit.loadout[1] = cryo_shot
         nighthawk.battlesuit.loadout[1] = cryo_shot
         null_pilot.pos_x = -1
@@ -1448,4 +1503,3 @@ while True: #game Cycle
     # screen.blit(fps_text, (centerpoint)) #display fps
     pygame.display.update()
     clock.tick(60)
-    
