@@ -1217,7 +1217,7 @@ if startup: #load classes
                 rose.lines = ["Nighthawk needs help? No problem, I'm on my way!"]
                 lightbringer.lines = ["Understood, I've been itching for a chance to test out a new weapon."]
                 shadowstalker.lines = ["Just let me know who needs killing."]
-                azurekite.lines = ["Currently assigned on another mission. Try contacting anyway?",
+                kite.lines = ["Currently assigned on another mission. Try contacting anyway?",
                                     "Currently unavailable."]
                 deadlift.lines = ["Currently assigned on another mission. Try contacting anyway?",
                                     "Currently unavailable."]
@@ -1244,10 +1244,18 @@ if startup: #load classes
         def update_portrait(self):
             if self.speaker == nighthawk:
                 self.pilot_image = pygame.image.load("graphics/pilots/nighthawk_standing.png").convert_alpha()
-            if self.speaker == rose:
+            elif self.speaker == rose:
                 self.pilot_image = pygame.image.load("graphics/pilots/rose_standing.png").convert_alpha()
-            if self.speaker == lightbringer:
+            elif self.speaker == lightbringer:
                  self.pilot_image = pygame.image.load("graphics/pilots/lightbringer_standing.png").convert_alpha()
+            elif self.speaker == deadlift:
+                self.pilot_image = pygame.image.load("graphics/pilots/deadlift_standing.png").convert_alpha()
+            elif self.speaker == kite:
+                self.pilot_image = pygame.image.load("graphics/pilots/kite_standing.png").convert_alpha()
+            elif self.speaker == shadowstalker:
+                self.pilot_image = pygame.image.load("graphics/pilots/shadowstalker_standing.png").convert_alpha()
+            else:
+                self.pilot_image = pygame.image.load("graphics/pilots/unassigned_standing.png").convert_alpha()
         def update(self):
             self.update_portrait()
     class Plot_Manager():
