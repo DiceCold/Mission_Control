@@ -10,6 +10,9 @@ from math import atan2, degrees, pi
 # none = "none"
 BLACK = (0,0,0)
 continue_button = False
+debug_mode = False
+
+#game.paused = False
 
 
 startup = True
@@ -42,13 +45,16 @@ def find_distance(origin, target):
         #make sure they're no longer the closest target if they aren't alive
         else: distance_h = screen_width*2
         return distance_h
-    except: print("Error: unable to find distance between", origin.name, "and", target.name)
+    except: 
+        if debug_mode == True: print("Error: unable to find distance between", origin.name, "and", target.name)
+        else: pass
 
 def find_angle(origin, target):
             
             # if type == "attack": target = self.attack_target
             # elif type == "move": target = self.move_target
-            # else: print("Error: invalid target for find_angle")
+            # elif debug_mode == True: print("Error: invalid target for find_angle")
+            # else: pass
                 
             distance_x = target.pos_x - origin.pos_x
             distance_y = target.pos_y - origin.pos_y
@@ -190,9 +196,11 @@ if startup: #load classes
             
             #set cooldown to maximum
             try: self.cooldown = self.cooldown_max
-            except: print("Error: unable to set cooldown to max for", self.name)
+            except: 
+                if debug_mode == True: print("Error: unable to set cooldown to max for", self.name)
+                else: pass
             
-    class Weapon_Effect(pygame.sprite.Sprite):
+    class Visual_Effect(pygame.sprite.Sprite):
         def __init__(self, form, damage_type, origin, target):
             super().__init__()
             self.name = "undefined"
@@ -285,16 +293,17 @@ if startup: #load classes
         
         def update(self):
             
-            try: print(self.name, self.animation_index, self.length, self.width)
-            except: print(self.name, "has no width")
+            if debug_mode == True:
+                try: print(self.name, self.animation_index, self.length, self.width)
+                except: print(self.name, "has no width")
             
             if self.length > screen_width: 
-                print("excessive length", self.origin.name, self.target.name)
+                if debug_mode == True: print("excessive length", self.origin.name, self.target.name)
                 self.length = screen_width
             
             #update countdown
             if self.countdown <= 0:
-                print("End effect:", self.name)
+                if debug_mode == True: print("End effect:", self.name)
                 self.kill()
             else: self.countdown -= 1
             
@@ -426,10 +435,12 @@ if startup: #load classes
             
             if self.type == "supply_crate":
                 self.name = "supply_crate"
+                self.width = screen_width*0.03
+                self.height = screen_width*0.03
                 self.frame_1 = pygame.image.load("graphics/interface/icons/box_closed.png").convert_alpha()
-                self.frame_1 = pygame.transform.scale(self.frame_1, (screen_width*0.05,screen_width*0.05))
+                self.frame_1 = pygame.transform.scale(self.frame_1, (self.width, self.height))
                 self.frame_2 = pygame.image.load("graphics/interface/icons/box_open.png").convert_alpha()
-                self.frame_2 = pygame.transform.scale(self.frame_2, (screen_width*0.05,screen_width*0.05))
+                self.frame_2 = pygame.transform.scale(self.frame_2, (self.width, self.height))
                 self.frames = [self.frame_0,self.frame_1,self.frame_2]
                 self.image = self.frames[self.animation_index]
                 self.carried = False
@@ -446,15 +457,53 @@ if startup: #load classes
         
         def update(self):
             if self.type == "supply_crate":
+                if 0 < self.progress_track < 100: print(self.progress_track)
+                #create clock visual when progress starts ticking up
+                if self.progress_track == 1: mission.spawn_clock(self)
+                
+                #update image and position
                 if self.carried: 
                     self.animation_index = 2
                     self.pos_x = self.carrier.pos_x
-                    self.pos_y = self.carrier.pos_y
+                    self.pos_y = self.carrier.pos_y + screen_height*0.05
                 else: self.animation_index = 1
+                
+                
                 
             self.image = self.frames[self.animation_index]
             #offset rect from pilot
             self.rect = self.image.get_rect(center = (self.pos_x, self.pos_y - screen_height*0.05))
+    
+    class Terrain_Piece(pygame.sprite.Sprite):
+        def __init__(self, type, pos_x, pos_y, width, height):
+            super().__init__()
+            
+            self.type = type
+            self.pos_x = pos_x
+            self.pos_y = pos_y
+            self.width = width
+            self.height = height
+            self.animation_index = 1
+            self.repel_force = 4
+            
+            self.frame_0 = pygame.image.load("graphics/blank.png")
+            
+            if self.type == "rock":
+                self.frame_1 = pygame.image.load("graphics/terrain/rock1.png")
+                self.frames = [self.frame_0, self.frame_1]
+            
+            self.image = self.frames[self.animation_index]
+            self.image = pygame.transform.scale(self.image, (self.width, self.height))
+            self.mask = pygame.mask.from_surface(self.image)
+            self.rect = self.mask.get_rect(center = (self.pos_x,self.pos_y))
+            
+        def repel(self):
+            for pilot in mission.pilots:
+                if self.rect.collidepoint((pilot.pos_x, pilot.pos_y)):
+                    #keep pilot's momentum but direct away from the terrain object
+                    if pilot.pos_x < self.pos_x: pilot.momentum_x = abs(pilot.momentum_x)
+                    else: pilot.momentum_x = abs(pilot.momentum_x) * -1
+
             
     class Pilot(pygame.sprite.Sprite):
         def __init__(self, name, slot_number, battlesuit, team):
@@ -526,10 +575,12 @@ if startup: #load classes
                     #determine target group
                     try:
                         if self.team == "vanguard":
-                            target_group = group.enemies
+                            target_group = mission.enemies
                         elif self.team == "enemy":
-                            target_group = group.combat_pilots
-                    except: print("Error: unable to assign target group")
+                            target_group = mission.pilots
+                    except: 
+                        if debug_mode == True: print("Error: unable to assign target group")
+                        else: pass
                     
                     #avoid targeting/attacking self/allies
                     if self.attack_target == self: self.attack_distance = screen_width
@@ -539,7 +590,7 @@ if startup: #load classes
                         if enemy.alive == True and enemy.battlesuit.severely_damaged == False and enemy.injured == False:
                             enemy_distance = self.find_distance(self, enemy)
                             if enemy_distance < self.attack_distance:
-                                print("Pilot ", self.name, "has new target:", enemy.name) 
+                                # if debug_mode == True: print("Pilot ", self.name, "has new target:", enemy.name) 
                                 self.attack_target = enemy
                                 self.attack_distance = enemy_distance
                     
@@ -548,36 +599,57 @@ if startup: #load classes
                     #make sure targeting yourself is never the closest target
                     if self.move_target == self: self.move_distance = screen_width*2
                     
-                    #chase the attack target
+                    #determine target group
+                    try:
+                        if self.orders == "aggressive":
+                            if self.team == "vanguard":
+                                target_group = mission.enemies
+                            elif self.team == "enemy":
+                                target_group = mission.pilots
+                        elif self.orders == "objective":
+                            target_group = mission.objectives
+                    except: 
+                        if debug_mode == True: print("Error: unable to assign target group")
+                        else: pass
+                    
+                    #chasing the attack target
                     if self.orders == "aggressive":
+                        #change orders to objective if there are no enemies to attack
+                        if len(target_group) <= 0: self.orders = "objective"
+                        
+                        #set move target to be attack target
                         if self.attack_target.battlesuit.severely_damaged == False:
                             try: self.move_target = self.attack_target
-                            except: print("Error: unable to set attack target as move target")
+                            except: 
+                                if debug_mode == True: print("Error: unable to set attack target as move target")
+                                else: pass
                         #stop being aggressive once they're severely wounded
                         else: self.orders = "objective"
                     
                     #move towards the closest objective
                     elif self.orders == "objective":
-                        for objective in group.mission_objects:
+                        target_group = mission.objectives
+                        for objective in target_group:
                             target_distance = self.find_distance(self, objective)
-                            if target_distance < self.move_distance:
+                            if objective.carried == True and self.carrying != objective: target_distance = screen_width
+                            if target_distance < self.move_distance and objective.carried == False:
                                 self.move_target = objective
                                 self.move_distance = target_distance
+                                if debug_mode == True: print(self.name, "has new target:", self.move_target.name, self.move_distance)
                     
                     #placeholder for evac orders
                     elif self.orders == "evac": pass
                     
                     #print error for invalid errors
-                    else: print("Error: invalid orders", self.name, self.orders)
+                    else: 
+                        if debug_mode == True: print("Error: invalid orders", self.name, self.orders)
+                        else: pass
                                 
         #find the distance between the pilot and their target, returned as a value                     
         def find_distance(self, origin, target):
-            if target.alive == True:
-                distance_x = target.pos_x - origin.pos_x
-                distance_y = target.pos_y - origin.pos_y
-                distance_h = (distance_x**2 + distance_y**2)**(1/2)
-            #make sure they're no longer the closest target if they aren't alive
-            else: distance_h = screen_width*2
+            distance_x = target.pos_x - origin.pos_x
+            distance_y = target.pos_y - origin.pos_y
+            distance_h = (distance_x**2 + distance_y**2)**(1/2)
             return distance_h
         
         #picking up or interacting with mission objects
@@ -585,20 +657,26 @@ if startup: #load classes
             objective = self.move_target
             
             #pick up supply crate object
-            if self.orders == "objective" and self.carrying == "none" and objective.type == "supply_crate":
+            if self.orders == "objective" and objective.type == "supply_crate":
                 
-                #check range and whether the object is being held by someone already
-                if objective.carried == False and self.move_distance < screen_width*0.01:
+                #slowdown stage 1
+                if objective.carried == False and self.carrying == "none" and abs(self.move_distance) < screen_width*0.06:
                     #slow down momentum to stay in range of the objective instead of flying past
-                    self.momentum_x *= 0.5
-                    self.momentum_y *= 0.5    
+                    if abs(self.momentum_x) > 6: self.momentum_x *= 0.9
+                    if abs(self.momentum_y) > 6: self.momentum_y *= 0.9  
+                
+                #check range, whether pilot is already carrying something, and whether the object is being held by someone already
+                if objective.carried == False and self.carrying == "none" and abs(self.move_distance) < screen_width*0.02:
+                    #slow down stage 2 to stay in range of the objective instead of flying past
+                    if abs(self.momentum_x) > 4: self.momentum_x *= 0.9
+                    if abs(self.momentum_y) > 4: self.momentum_y *= 0.9  
                     
                     #tick up the progress track by 1% or pick it up if progress is full
-                    if objective.progress_track < 1: objective.progress += 0.01
+                    if objective.progress_track < 100: objective.progress_track += 1
                     else:
                         objective.carried = True
-                        self.carrying = objective
                         objective.carrier = self
+                        self.carrying = objective
                         
                         #carry the supply crate away from battle
                         self.orders = "evac"
@@ -618,7 +696,9 @@ if startup: #load classes
             
             # if type == "attack": target = self.attack_target
             # elif type == "move": target = self.move_target
-            # else: print("Error: invalid target for find_angle")
+            # else: 
+                # if debug_mode == True: print("Error: invalid target for find_angle")
+                # else: pass
                 
             distance_x = target.pos_x - origin.pos_x
             distance_y = target.pos_y - origin.pos_y
@@ -656,7 +736,10 @@ if startup: #load classes
             if target.team == self.team and target.name != "supply_train" and target.name != "Enemy_Drone": print("Error: target", target.name, "is on the same team as", self.name)
             
             #don't execute targets
-            elif target.injured == True: print("Killing shot not fired")
+            elif target.injured == True: 
+                # if debug_mode == True: print("Killing shot not fired")
+                # else: pass
+                pass
             
             else:
                 #find distance
@@ -692,10 +775,9 @@ if startup: #load classes
                             else: pass #placeholder, will add aim variation for missed targets later
                             
                             #create visual effect
-                            group.weapon_effects.add(Weapon_Effect(item.form, item.damage_type, self, target))
-                            print("Created weapon effect:", item.form, item.damage_type, self.name, target.name)
+                            group.weapon_effects.add(Visual_Effect(item.form, item.damage_type, self, target))
+                            if debug_mode == True: print("Created weapon effect:", item.form, item.damage_type, self.name, target.name)
                             
-        
         def maneuver(self):
             #retreat if severely damaged
             if self.battlesuit.severely_damaged == True: 
@@ -732,7 +814,7 @@ if startup: #load classes
             #start explosion graphic
             if self.ttl == -1: 
                 self.ttl = 64
-                group.weapon_effects.add(Weapon_Effect("explosion", "thermal", self, self))
+                group.weapon_effects.add(Visual_Effect("explosion", "thermal", self, self))
             
             #reduce remaining time to live
             self.ttl -= 1
@@ -775,14 +857,14 @@ if startup: #load classes
             
             self.maintain_shields()
             self.attack(self.attack_target)
-            # self.mission_object_interaction()
+            self.mission_object_interaction()
             self.maneuver()
             
             #update rect
             self.rect = self.image.get_rect(center = (int(self.pos_x),int(self.pos_y)))
             
             #avoid bunching up
-            for pilot in group.combat_pilots: 
+            for pilot in mission.pilots: 
                 if pilot.name != self.name:
                     if abs(pilot.pos_x - self.pos_x) < 0.1:
                         self.momentum_x = self.momentum_x * 1.1
@@ -963,7 +1045,7 @@ if startup: #load classes
                     self.name = " "
                     self.image = blank_frame
             if type == "train":
-                self.pilot = group.train_roster[self.slot_number]
+                self.pilot = mission.train_roster[self.slot_number]
                 self.name = self.pilot.name
                 self.width = screen_width*0.235
                 self.height = screen_height*0.07
@@ -1025,7 +1107,7 @@ if startup: #load classes
                     self.image = text_font_micro.render(f"{self.name}",False,(111,196,169))
                     self.rect = self.image.get_rect(center = (self.pilot.pos_x,self.pilot.pos_y+11))
                     if self.type == "train":
-                        self.pilot = group.train_roster[self.slot_number]
+                        self.pilot = mission.train_roster[self.slot_number]
                 
             elif self.type == "swap_button":
                 if overlay.type == "inventory":
@@ -1076,7 +1158,10 @@ if startup: #load classes
                     self.image = text_font_micro.render(f"{self.name}",False,(111,196,169))
                     self.rect = self.image.get_rect(center = (self.pilot.pos_x,self.pilot.pos_y+11))
                     if self.type == "train":
-                        self.pilot = group.train_roster[self.slot_number]
+                        try: self.pilot = mission.train_roster[self.slot_number]
+                        except:
+                            if debug_mode == True: print("no trains in roster")
+                            self.image = text_font_micro.render(" ",False,(111,196,169))
     
     class Nameplates(pygame.sprite.Sprite):
         def __init__(self,type,slot_number):
@@ -1222,10 +1307,69 @@ if startup: #load classes
                         self.animation_index = 2
                         selected.pointer_slot = -1
     
-    class Icon(pygame.sprite.Sprite):
-        def __init__(self,type, pilot):
+    class Clock_Icon(pygame.sprite.Sprite):
+        def __init__(self, reference):
             super().__init__()
-            self.pilot = pilot
+            self.reference = reference
+            self.animation_index = 0
+            self.width = screen_height*0.08
+            self.height = screen_height*0.08
+            
+            #load frames
+            self.frame_0 = pygame.image.load("graphics/interface/icons/clock_segments/clock_0.png").convert_alpha()
+            self.frame_1 = pygame.image.load("graphics/interface/icons/clock_segments/clock_1.png").convert_alpha()
+            self.frame_2 = pygame.image.load("graphics/interface/icons/clock_segments/clock_2.png").convert_alpha()
+            self.frame_3 = pygame.image.load("graphics/interface/icons/clock_segments/clock_3.png").convert_alpha()
+            self.frame_4 = pygame.image.load("graphics/interface/icons/clock_segments/clock_4.png").convert_alpha()
+            self.frame_5 = pygame.image.load("graphics/interface/icons/clock_segments/clock_5.png").convert_alpha()
+            self.frame_6 = pygame.image.load("graphics/interface/icons/clock_segments/clock_6.png").convert_alpha()
+            self.frame_7 = pygame.image.load("graphics/interface/icons/clock_segments/clock_7.png").convert_alpha()
+            self.frame_8 = pygame.image.load("graphics/interface/icons/clock_segments/clock_8.png").convert_alpha()
+            self.frame_9 = pygame.image.load("graphics/interface/icons/clock_segments/clock_9.png").convert_alpha()
+            self.frame_10 = pygame.image.load("graphics/interface/icons/clock_segments/clock_10.png").convert_alpha()
+            
+            #resize frames
+            self.frame_0 = pygame.transform.scale(self.frame_0, (self.width, self.height))
+            self.frame_1 = pygame.transform.scale(self.frame_1, (self.width, self.height))
+            self.frame_2 = pygame.transform.scale(self.frame_2, (self.width, self.height))
+            self.frame_3 = pygame.transform.scale(self.frame_3, (self.width, self.height))
+            self.frame_4 = pygame.transform.scale(self.frame_4, (self.width, self.height))
+            self.frame_5 = pygame.transform.scale(self.frame_5, (self.width, self.height))
+            self.frame_6 = pygame.transform.scale(self.frame_6, (self.width, self.height))
+            self.frame_7 = pygame.transform.scale(self.frame_7, (self.width, self.height))
+            self.frame_8 = pygame.transform.scale(self.frame_8, (self.width, self.height))
+            self.frame_9 = pygame.transform.scale(self.frame_9, (self.width, self.height))
+            self.frame_10 = pygame.transform.scale(self.frame_10, (self.width, self.height))
+            
+            self.frames = [self.frame_0,self.frame_1,self.frame_2,self.frame_3,self.frame_4,self.frame_5,self.frame_6,self.frame_7,self.frame_8,self.frame_9,self.frame_10]
+            
+            self.pos_x = self.reference.pos_x
+            self.pos_y = self.reference.pos_y - screen_height*0.05
+            
+            self.clock_segment = 10
+            self.animation_index = self.clock_segment
+            
+            self.image = self.frames[self.animation_index]
+            self.rect = self.image.get_rect(center = (self.pos_x, self.pos_y))
+            
+        def update(self):
+            #update clock segments
+            self.clock_segment = int((100 - self.reference.progress_track)/10)
+            self.animation_index = self.clock_segment
+            
+            #update position, relevant if the reference object moves
+            self.pos_x = self.reference.pos_x
+            self.pos_y = self.reference.pos_y - screen_height*0.05
+            
+            #update image and rect
+            self.image = self.frames[self.animation_index]
+            self.rect = self.image.get_rect(center = (self.pos_x, self.pos_y))
+    
+    class Health_Icon(pygame.sprite.Sprite):
+        def __init__(self,type, reference):
+            super().__init__()
+            self.reference = reference
+            self.pilot = reference
             self.frames = []
             self.animation_index = 0
             self.slot_number = 0
@@ -1233,42 +1377,33 @@ if startup: #load classes
             self.width = screen_height*0.04
             self.height = screen_height*0.04
             self.frame_0 = pygame.image.load("graphics/blank.png").convert_alpha()
-            if type == "clock":
-                self.frame_0 = pygame.image.load("graphics/interface/icons/clock_segments/clock_0.png").convert_alpha()
-                self.frame_1 = pygame.image.load("graphics/interface/icons/clock_segments/clock_1.png").convert_alpha()
-                self.frame_2 = pygame.image.load("graphics/interface/icons/clock_segments/clock_2.png").convert_alpha()
-                self.frame_3 = pygame.image.load("graphics/interface/icons/clock_segments/clock_3.png").convert_alpha()
-                self.frame_4 = pygame.image.load("graphics/interface/icons/clock_segments/clock_4.png").convert_alpha()
-                self.frame_5 = pygame.image.load("graphics/interface/icons/clock_segments/clock_5.png").convert_alpha()
-                self.frame_6 = pygame.image.load("graphics/interface/icons/clock_segments/clock_6.png").convert_alpha()
-                self.frame_7 = pygame.image.load("graphics/interface/icons/clock_segments/clock_7.png").convert_alpha()
-                self.frame_8 = pygame.image.load("graphics/interface/icons/clock_segments/clock_8.png").convert_alpha()
-                self.frame_9 = pygame.image.load("graphics/interface/icons/clock_segments/clock_9.png").convert_alpha()
-                self.frame_10 = pygame.image.load("graphics/interface/icons/clock_segments/clock_10.png").convert_alpha()
-                self.frames = [self.frame_0,self.frame_1,self.frame_2,self.frame_3,self.frame_4,self.frame_5,self.frame_6,self.frame_7,self.frame_8,self.frame_9,self.frame_10]
-                self.pos_x = self.pilot.move_target.pos_x
-                self.pos_y = self.pilot.move_target.pos_y
-                self.countdown = 10
+            
+            #health status icons
             if type == "shield":
                 self.frame_1 = pygame.image.load("graphics/interface/icons/shield.png").convert_alpha()
                 self.frame_2 = pygame.image.load("graphics/interface/icons/shield.png").convert_alpha()
                 self.frames = [self.frame_0,self.frame_1]
                 self.slot_number = 1
-            if type == "damaged":
+            
+            elif type == "damaged":
                 self.frame_1 = pygame.image.load("graphics/interface/icons/warning_white.png").convert_alpha()
                 self.frame_2 = pygame.image.load("graphics/interface/icons/warning_yellow.png").convert_alpha()
                 self.frames = [self.frame_0,self.frame_1,self.frame_2]
                 self.slot_number = 2
-            if type == "severely_damaged":
+            
+            elif type == "severely_damaged":
                 self.frame_0 = pygame.image.load("graphics/blank.png").convert_alpha()
                 self.frame_1 = pygame.image.load("graphics/interface/icons/warning_white.png").convert_alpha()
                 self.frame_2 = pygame.image.load("graphics/interface/icons/warning_red.png").convert_alpha()
                 self.frames = [self.frame_0,self.frame_1,self.frame_2]
                 self.slot_number = 3
+            
             self.frame_0 = pygame.transform.scale(self.frame_0,(self.width,self.height))
             self.frame_1 = pygame.transform.scale(self.frame_1,(self.width,self.height))
             self.frame_2 = pygame.transform.scale(self.frame_2,(self.width,self.height))
             self.frames = [self.frame_0,self.frame_1,self.frame_2]
+            
+            
             self.image = self.frames[self.animation_index]
             self.rect = self.image.get_rect(center = ((screen_width*0.19+self.width*1.1*self.slot_number),screen_height*0.21+self.height*1.7*self.pilot.slot_number))
         def update(self):
@@ -1398,7 +1533,9 @@ if startup: #load classes
             elif self.type == "x_button":
                 pass
             
-            else: print("Error: unrecognized button type when checking if active", self.type)
+            else: 
+                if debug_mode == True: print("Error: unrecognized button type when checking if active", self.type)
+                else: pass
             
             # mouse inputs
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -1449,22 +1586,26 @@ if startup: #load classes
                         
                         scene.scene_queue.append("combat")
                         
-                        print(scene.scene_queue)
+                        if debug_mode == True: print(scene.scene_queue)
                             # mission.mission_setup(selected.active_mission_number)
                             
                     # advance to next scene if queue is not empty
                     elif self.type == "continue_button" and self.active == True and overlay.type == "dialogue" and dialogue.choices_available == False:
                         try: 
-                            print(" ")
-                            print(scene.scene_queue)
-                            print("removing scene: ", scene.scene_queue[0])
-                            print("advancing to scene:", scene.scene_queue[1])
+                            if debug_mode == True:
+                                print(" ")
+                                print(scene.scene_queue)
+                                print("removing scene: ", scene.scene_queue[0])
+                                print("advancing to scene:", scene.scene_queue[1])
                             dialogue.advance_scene(-1)
-                            print("current scene is now:", scene.scene_queue[0])
-                            print("next scene in queue:", scene.scene_queue[1])
-                            print(scene.scene_queue)
-                            print(" ")
-                        except: print("Error: no scenes in queue to remove")
+                            if debug_mode == True:
+                                print("current scene is now:", scene.scene_queue[0])
+                                print("next scene in queue:", scene.scene_queue[1])
+                                print(scene.scene_queue)
+                                print(" ")
+                        except: 
+                            if debug_mode == True: print("Error: no scenes in queue to remove")
+                            else: pass
                             
                     # if none of the above button is not activated
                     else: self.active = False
@@ -1606,9 +1747,12 @@ if startup: #load classes
                 text = text[i:]
             return text
         def update(self):
-            self.draw_void
+            #fill screen with black to cover previous cycle
             screen.fill((0,0,0))
+            
+            #update buttons
             group.buttons.update()
+            
             if self.type == "inventory":
                 self.draw_loadout()
                 group.inventory_nameplates.update()
@@ -1635,17 +1779,18 @@ if startup: #load classes
                 self.draw_interface_screen_front()
             elif self.type == "combat":
                 screen.blit(self.desert_map, (0,0))
-                group.combat_pilots.draw(screen)
+                mission.terrain_pieces.draw(screen)
+                mission.objectives.draw(screen)
+                group.clock_icons.draw(screen)
+                mission.pilots.draw(screen)
                 group.pilot_combat_names.draw(screen)
-                group.mission_objects.draw(screen)
-                group.enemies.draw(screen)
+                mission.enemies.draw(screen)
                 group.weapon_effects.update()
                 group.weapon_effects.draw(screen)
                 #temp
                 # group.health_icons.update()
                 # group.health_icons.draw(screen)
                 #temp
-                group.mission_objects.draw(screen)
                 self.draw_interface_screen_front()
             elif self.type == "health_tracker":
                 group.pilot_nameplates.update()
@@ -1658,9 +1803,9 @@ if startup: #load classes
                 self.draw_small_frame("left")
                 self.draw_small_frame("right")
                 self.draw_interface_screen_front()
-            elif overlay.type == "cockpit":
+            elif self.type == "cockpit":
                 self.draw_cockpit()
-            elif overlay.type == "dialogue":
+            elif self.type == "dialogue":
                 self.draw_portrait(dialogue.speaker)
                 self.draw_small_frame("right")
                 self.draw_ui_buttons()
@@ -1668,7 +1813,7 @@ if startup: #load classes
                 drawText(screen, dialogue.current_npc_lines, (111,196,169), dialogue.npc_text_rect, text_font)
                 drawText(screen, dialogue.current_player_lines, pygame.Color("coral"), dialogue.player_text_rect, text_font)
                 self.draw_interface_screen_front()
-            elif overlay.type == "pilot_select":
+            elif self.type == "pilot_select":
                 group.pilot_nameplates.update()
                 group.pilot_nameplates.draw(screen)
                 group.pilot_text_names.update()
@@ -1682,9 +1827,6 @@ if startup: #load classes
                 self.draw_small_frame("left")
                 self.draw_small_frame("right")
                 self.draw_interface_screen_front()
-            elif overlay.type == "none":
-                x_button = False
-                continue_button = False
             else:
                 x_button = False
                 continue_button = False
@@ -1694,6 +1836,7 @@ if startup: #load classes
             group.text_objects.update()
             group.text_objects.draw(screen)
             
+            #add green transparency and black border to hide anything outside the "window"
             if self.type != "cockpit":
                 screen.blit(self.green_filter_image,(self.green_filter_rect)) #this one causes lag
                 screen.blit(self.black_block_image, (self.black_block_rect))
@@ -1702,9 +1845,17 @@ if startup: #load classes
         def __init__(self):
             self.current_mission = 0
             self.waypoints = []
+            self.pilots = pygame.sprite.Group()
+            self.enemies = pygame.sprite.Group()
+            self.terrain_pieces = pygame.sprite.Group()
+            self.objectives = pygame.sprite.Group()
+            self.train_roster = []
         
-        def create_clock(self,pilot):
-            group.clock_icons.add(Icon("clock",pilot))
+        def spawn_clock(self, reference):
+            group.clock_icons.add(Clock_Icon(reference))
+            
+        def spawn_terrain(self, type, pos_x, pos_y, width, height):
+            self.terrain_pieces.add(Terrain_Piece(type, pos_x, pos_y, width, height))
         
         def spawn_drones(self):
             drone_quantity = random.randint(2,4)
@@ -1712,18 +1863,20 @@ if startup: #load classes
                 enemy_drone = Pilot("Enemy_Drone",1,copy.deepcopy(drone),"enemy")
                 enemy_drone.orders = "objective"
                 
-                try: enemy_drone.move_target = group.train_roster[0]
-                except: print("nothing in the train roster to target")
+                try: enemy_drone.move_target = mission.train_roster[0]
+                except: 
+                    if debug_mode == True: print("nothing in the train roster to target")
+                    else: pass
                 
                 enemy_drone.battlesuit.shielded = False
-                group.enemies.add(enemy_drone)
+                mission.enemies.add(enemy_drone)
                 drone_quantity -= 1
         
         def spawn_crates(self, crate_quantity):
             while crate_quantity > 0:
-                pos_x = random.randint(0,screen_width)
-                pos_y = random.randint(0,screen_height)
-                group.mission_objects.add(Mission_Object("supply_crate",crate_quantity,pos_x,pos_y,"vanguard"))
+                pos_x = random.randint(screen_width*0.2,screen_width*0.8)
+                pos_y = random.randint(screen_height*0.4,screen_height*0.8)
+                mission.objectives.add(Mission_Object("supply_crate",crate_quantity,pos_x,pos_y,"vanguard"))
                 crate_quantity -= 1
         
         def spawn_train(self):
@@ -1736,14 +1889,14 @@ if startup: #load classes
             train_objective.checkpoint = 0
             train_objective.move_target = mission.waypoints[train_objective.checkpoint]
             train_objective.image = pygame.image.load("graphics/interface/icons/green_blip.png").convert_alpha()
-            group.mission_objects.add(train_objective)
-            group.train_roster.append(train_objective)
-            slot_number = len(group.train_roster) - 1
+            mission.objectives.add(train_objective)
+            mission.train_roster.append(train_objective)
+            slot_number = len(mission.train_roster) - 1
             train_name = Short_Text("train",slot_number)
             group.pilot_combat_names.add(train_name)
         
         def conduct_trains(self):
-            for train in group.train_roster:
+            for train in mission.train_roster:
             
                 #immortal train
                 if train.alive == False: train.alive = True
@@ -1759,33 +1912,37 @@ if startup: #load classes
                     if train.checkpoint < len(self.waypoints):
                         try: 
                             train.move_target = mission.waypoints[train.checkpoint]
-                            print("advance to checkpoint: ", train.checkpoint)
+                            if debug_mode == True: print("advance to checkpoint: ", train.checkpoint)
                             self.spawn_drones()
                             train.move_distance = train.find_distance(train, train.move_target)
-                        except: print("Error: unable to advance train to next checkpoint")
+                        except: 
+                            if debug_mode == True: print("Error: unable to advance train to next checkpoint")
+                            else: pass
                     
                     #advance to next mission after reaching last waypoint
                     else:
                         selected.active_mission_number += 1
-                            print("advance to mission: ", selected.active_mission_number)
-                            overlay.type = "map"
+                        if debug_mode == True: print("advance to mission: ", selected.active_mission_number)
+                        overlay.type = "map"
                 
                 
         def update(self):
             if overlay.type == "combat":
                 self.conduct_trains()
-                group.combat_pilots.update()
+                mission.pilots.update()
                 group.pilot_combat_names.update()
-                group.enemies.update()
-                group.mission_objects.update()
+                mission.enemies.update()
+                mission.objectives.update()
+                group.clock_icons.update()
+                mission.terrain_pieces.update()
         
         def mission_setup(self, mission_number):
-            print("mission number", mission_number)
+            if debug_mode == True: print("mission number", mission_number)
             mission_setup = True
-            group.enemies.empty()
-            group.combat_pilots.empty()
-            group.mission_objects.empty()
-            group.train_roster.clear()
+            mission.enemies.empty()
+            mission.pilots.empty()
+            mission.objectives.empty()
+            mission.train_roster.clear()
             
             if mission_number == 1:
                 if mission_setup: #create waypoints
@@ -1799,19 +1956,19 @@ if startup: #load classes
                     for waypoint in self.waypoints: waypoint.alive = True
                 if mission_setup == True: #create train
                     self.spawn_train()
-                    train_objective = group.train_roster[0]
+                    train_objective = mission.train_roster[0]
                 if mission_setup == True: #create enemies
                     mission.spawn_drones()
-                    for enemy in group.enemies:
+                    for enemy in mission.enemies:
                         enemy.attack_target = train_objective
                         enemy.move_target = train_objective
                         enemy.orders = "objective"
                 if mission_setup == True: #prep pilots
                     for pilot in group.pilot_roster:
                         if pilot.on_mission: 
-                            print(pilot.name, "assigned to mission:", selected.active_mission_number)
+                            if debug_mode == True: print(pilot.name, "assigned to mission:", selected.active_mission_number)
                             pilot.orders = "objective"
-                            group.combat_pilots.add(pilot)
+                            mission.pilots.add(pilot)
                     rose.orders = "objective"
                     rose.active = True
                     nighthawk.orders = "objective"
@@ -1819,19 +1976,38 @@ if startup: #load classes
                     lightbringer.active = True
                     rose.pos_x = random.randint(-screen_width*0.2+train_objective.pos_x,screen_width*0.2+train_objective.pos_x)
                     rose.pos_y = random.randint(-screen_height*0.2+train_objective.pos_y, 0)
-                    for pilot in group.combat_pilots: 
-                        pilot.move_target = group.train_roster[0]
-                    for pilot in group.enemies: 
-                        pilot.move_target = group.train_roster[0]
+                    for pilot in mission.pilots: 
+                        pilot.move_target = mission.train_roster[0]
+                    for pilot in mission.enemies: 
+                        pilot.move_target = mission.train_roster[0]
             
             elif mission_number == 2:
                 #create enemies
                 mission.spawn_drones()
                 
                 #create pickups
-                mission.spawn_crates(8)
+                mission.spawn_crates(5)
+                
+                #create terrain
+                mission.spawn_terrain ("rock", screen_width*0.5, screen_height*0.5, screen_width*0.3, screen_height*0.3)
+                
+                #placeholder to add multiple pilots to mission 2
+                rose.on_mission = True
+                nighthawk.on_mission = True
+                lightbringer.on_mission = True
+                kite.on_mission = True
                 
                 #prep pilots
+                if mission_setup == True:
+                    for pilot in group.pilot_roster:
+                        if pilot.on_mission: 
+                            if debug_mode == True: print(pilot.name, "assigned to mission:", selected.active_mission_number)
+                            pilot.orders = "objective"
+                            pilot.momentum_y = 10
+                            pilot.pos_y = 0 - random.randint(0,300)
+                            pilot.pos_x = screen_width/2 - 150 + random.randint(0,300)
+                            mission.pilots.add(pilot)
+                
                 rose.orders = "objective"
                 rose.active = True
                 nighthawk.orders = "objective"
@@ -1847,7 +2023,9 @@ if startup: #load classes
             #update the current scene
             if len(scene.scene_queue) > 0:
                 try: self.current_scene = self.scene_queue[0]
-                except: print("Error: scene queue is empty")
+                except: 
+                    if debug_mode == True: print("Error: scene queue is empty")
+                    else: pass
             
             # advance to combat if no scenes remain in queue and at least one pilot is on_mission
             # if len(scene.scene_queue) == 0:
@@ -1962,7 +2140,7 @@ if startup: #load classes
         
         def advance_scene(self, choice_number):
             if self.cooldown == 0:
-                print("Choice:", choice_number)
+                if debug_mode == True: print("Choice:", choice_number)
                 
                 #reset cooldown
                 self.cooldown = self.cooldown_max
@@ -1984,14 +2162,16 @@ if startup: #load classes
                             scene.scene_queue.append("pilot_select")
                             scene.scene_queue.remove("Mission 1 welcome")
                             scene.current_scene = scene.scene_queue[0]
-                            print(scene.current_scene)
+                            if debug_mode == True: print(scene.current_scene)
                             
                             #silence player dialogue
                             try:
                                 dialogue.player_line_number = 1
                                 player_lines = dialogue.lines["Player"]
                                 dialogue.current_player_lines = player_lines[dialogue.player_line_number]
-                            except: print("Error: could not silence the player after choice")
+                            except: 
+                                if debug_mode == True: print("Error: could not silence the player after choice")
+                                else: pass
             
         def update(self):
             
@@ -2001,7 +2181,9 @@ if startup: #load classes
                 
             # set the current scene to be whatever is at the front of the queue
             try: scene.current_scene = scene.scene_queue[0]
-            except: print("Error: can't update scene because queue is empty")
+            except: 
+                if debug_mode == True: print("Error: can't update scene because queue is empty")
+                else: pass
             # if len(scene.scene_queue) > 0:
                 # scene.current_scene = scene.scene_queue[0]
             
@@ -2018,11 +2200,15 @@ if startup: #load classes
             try:
                 npc_lines = dialogue.lines[self.speaker.name]
                 dialogue.current_npc_lines = npc_lines[dialogue.npc_line_number]
-            except: print("Error: speaker name or lines are invalid")
+            except: 
+                if debug_mode == True: print("Error: speaker name or lines are invalid")
+                else: pass
             
             # update portrait by making the selected pilot = the current speaking npc
             try: selected.pilot = dialogue.speaker
-            except: print("Error: dialogue.speaker is invalid choice for selected.pilot portrait")
+            except: 
+                if debug_mode == True: print("Error: dialogue.speaker is invalid choice for selected.pilot portrait")
+                else: pass
             # try: self.portrait = image.portrait[f"{dialogue.speaker.name}"]
             # except: print("Error: invalid portrait")
             
@@ -2034,28 +2220,31 @@ if startup: #load classes
                 if current_npc_lines[dialogue.npc_line_number] == "   Currently assigned on another mission. Try contacting anyway?":
                     if scene.scene_queue[0] != f"{self.speaker.name} unavailable" and scene.scene_queue[1] != f"{self.speaker.name} unavailable": 
                         scene.scene_queue.insert(1, f"{self.speaker.name} unavailable")
-                        print("Success: second page for 'unavailable' inserted into queue")
-                        print(scene.scene_queue)
-                        print(" ")
+                        if debug_mode == True:
+                            print("Success: second page for 'unavailable' inserted into queue")
+                            print(scene.scene_queue)
+                            print(" ")
                     # elif scene.scene_queue[1] == f"{self.speaker.name} unavailable": print("second page for 'unavailable' already inserted into queue")
-            except: print("Error: unable to add second page for 'unavailable' to the queue")
+            except: 
+                if debug_mode == True: print("Error: unable to add second page for 'unavailable' to the queue")
+                else: pass
             # if scene.scene_queue[0] == f"{self.speaker.name} unavailable": dialogue.npc_line_number = 2
             
             # unassign pilot from the mission if they are unavailable
             if scene.current_scene == f"{selected.pilot.name} unavailable":
                 selected.pilot.dispatching = False
                 selected.pilot.on_mission = False
-                print(selected.pilot.name, selected.pilot.dispatching, selected.pilot.on_mission)
+                if debug_mode == True: print(selected.pilot.name, selected.pilot.dispatching, selected.pilot.on_mission)
                 dialogue.npc_line_number = 2
    
     class Story_Manager:
         def __init__(self):
             self.sidequest_1 = "marko's munitions"
             self.current_mission = 0
+            self.main_story_level = 1
     
     class Group_Manager:
         def __init__(self):
-            self.combat_pilots = pygame.sprite.Group()
             self.pilot_roster = []
             self.inventory_nameplates = pygame.sprite.Group()
             self.pilot_nameplates = pygame.sprite.Group()
@@ -2067,13 +2256,11 @@ if startup: #load classes
             self.islands = pygame.sprite.Group()
             self.weapon_effects = pygame.sprite.Group()
             self.mission_objects = pygame.sprite.Group()
-            self.enemies = pygame.sprite.Group()
             self.health_icons = pygame.sprite.Group()
             self.clock_icons = pygame.sprite.Group()
             self.mission_pointers = pygame.sprite.Group()
             self.buttons = pygame.sprite.Group()
             self.inventory = []
-            self.train_roster = []
             self.status_effects = ["frozen","overheated","disrupted","blinded","knockback","energized","supressed","tethered"]
             self.power_cores = {"01":"trapped_combustion_core", "02":"dirty_fission_core", "04":"solar_array_core", "06":"cold_fusion_core", "07":"entropy_core", "08":"black_pinhole_core", "10":"wave_collapse_core", "11":"phantom_pinnacle_core", "0x":"alien_crystal_core", "00":"no_core"}
             self.text_objects = pygame.sprite.Group()
@@ -2267,13 +2454,13 @@ if startup: #load specifics
         benny = Pilot(" ",-1,copy.deepcopy(null_suit),"vanguard")
         samuel = Pilot(" ",-1,copy.deepcopy(null_suit),"vanguard")
     if startup: #load pilot sprites
-        group.combat_pilots.add(unassigned_pilot)
-        group.combat_pilots.add(nighthawk)
-        group.combat_pilots.add(rose)
-        group.combat_pilots.add(lightbringer)
-        group.combat_pilots.add(deadlift)
-        group.combat_pilots.add(kite)
-        group.combat_pilots.add(tower_1)
+        mission.pilots.add(unassigned_pilot)
+        mission.pilots.add(nighthawk)
+        mission.pilots.add(rose)
+        mission.pilots.add(lightbringer)
+        mission.pilots.add(deadlift)
+        mission.pilots.add(kite)
+        mission.pilots.add(tower_1)
         nighthawk.battlesuit.loadout[1] = cryo_shot
         rose.battlesuit.loadout[1] = cryo_shot
     #update inventory
@@ -2345,11 +2532,11 @@ if startup: #load specifics
         group.pilot_combat_names.add(Short_Text("pilot",4))
         group.pilot_combat_names.add(Short_Text("pilot",5))
     if startup: #add health icons
-        for pilot in group.combat_pilots:
+        for pilot in mission.pilots:
             if pilot.slot_number > 0:
-                group.health_icons.add(Icon("shield", pilot))
-                group.health_icons.add(Icon("damaged", pilot))
-                group.health_icons.add(Icon("severely_damaged", pilot))
+                group.health_icons.add(Health_Icon("shield", pilot))
+                group.health_icons.add(Health_Icon("damaged", pilot))
+                group.health_icons.add(Health_Icon("severely_damaged", pilot))
     if startup: #add pointers
         group.mission_pointers.add(Pointer("rail", screen_width*0.6,screen_height*0.7,1))  
 
@@ -2363,6 +2550,19 @@ while True: #game Cycle
             pygame.quit()
             exit()
         if event.type == pygame.KEYDOWN:
+            
+            #enable debug mode
+            if event.key == pygame.K_q:
+                if debug_mode == False: 
+                    debug_mode = True
+                    print("debug_mode enabled")
+                
+                
+            #disable debug mode
+            if event.key == pygame.K_z:
+                if debug_mode == True: 
+                    debug_mode = False
+                    print("debug_mode disabled")
             
             #make dialogue choices
             if overlay.type == "dialogue" and dialogue.choices_available == True:

@@ -41,7 +41,7 @@ class Pilot_Characterization:
         if pilot == "Rose":
             self.pilot_bio = {
                                 "Name":"Roselina",
-                                "Origin":"A student from a prosperous tradeworld.",
+                                "Origin":"A student from a prosperous and aristocratic tradeworld.",
                                 "Begins as":"An outsider from off-world.",
                                 "During the collapse":"Completed her education and then joined the humanitarian aid mission aproximately 2 years after Day01.",
                                 "Dependant on":"Long-distance asynchronous messaging, serialized media and care packages from her home-world friends and family.",
@@ -174,3 +174,16 @@ Resources = {
         "cybernetics": 2,
         "medications": 10
         }
+        
+Regions = [
+        "Wind turbine field",
+        "Hydroelectric dam",
+        "Greenhouse",
+        "Factory",
+        "Mine",
+        "Water treatment plant",
+        "Starport",
+        "Data center/server farm",
+        "Wilderness",
+        "Wasteland"
+        ]
