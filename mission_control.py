@@ -631,11 +631,13 @@ if startup: #load classes
                         target_group = mission.objectives
                         for objective in target_group:
                             target_distance = self.find_distance(self, objective)
-                            if objective.carried == True and self.carrying != objective: target_distance = screen_width
-                            if target_distance < self.move_distance and objective.carried == False:
-                                self.move_target = objective
-                                self.move_distance = target_distance
-                                if debug_mode == True: print(self.name, "has new target:", self.move_target.name, self.move_distance)
+                            try:
+                                if objective.carried == True and self.carrying != objective: target_distance = screen_width
+                                if target_distance < self.move_distance and objective.carried == False:
+                                    self.move_target = objective
+                                    self.move_distance = target_distance
+                                    if debug_mode == True: print(self.name, "has new target:", self.move_target.name, self.move_distance)
+                            except: pass
                     
                     #placeholder for evac orders
                     elif self.orders == "evac": pass
@@ -2620,6 +2622,6 @@ while True: #game Cycle
     # if overlay.type == "dialogue" and len(scene.scene_queue) > 0: print("current scene:", scene.scene_queue[0])
         
     fps_text = update_fps()
-    screen.blit(fps_text, (centerpoint)) #display fps
+    if debug_mode == True: screen.blit(fps_text, (centerpoint)) #display fps
     pygame.display.update()
     clock.tick(60)
