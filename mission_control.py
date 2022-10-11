@@ -14,6 +14,12 @@ debug_mode = False
 
 #game.paused = False
 
+#temp
+class Map_Center:
+    def __init__(self):
+        self.pos_x = screen_width*0.5
+        self.pos_y = screen_height*0.5
+#temp
 
 startup = True
 def random_pos():
@@ -90,6 +96,7 @@ explosion_sheet_1 = pygame.image.load("graphics/weapons/explosion_sprite_1.png")
 explosion_sheet_2 = pygame.image.load("graphics/weapons/explosion_sprite_2.png").convert_alpha()
 explosion_sheet_3 = pygame.image.load("graphics/weapons/explosion_sprite_3.png").convert_alpha()
 explosion_sheet_4 = pygame.image.load("graphics/weapons/explosion_sprite_4.png").convert_alpha()
+teleport_sheet = pygame.image.load("graphics/weapons/teleport_explosion.png").convert_alpha()
 
 def drawText(surface, text, color, rect, font, aa=False, bkg=None):
     y = rect.top
@@ -267,11 +274,26 @@ if startup: #load classes
                 self.sheet_column = 0
                 self.sheet_row = 0
             
+            #teleport
+            if self.form == "teleport":
+                self.name = "teleport"
+                teleport_sheet = pygame.image.load("graphics/weapons/teleport_explosion.png").convert_alpha()
+                self.animation_index = 0
+                # self.frames = explosion_frames
+                # self.image = blank_frame
+                self.countdown_max = 64
+                self.sheet = teleport_sheet
+                self.sheet_column = 0
+                self.sheet_row = 0
+            
             self.countdown = self.countdown_max
             self.image = pygame.transform.rotate(self.image, self.angle)
             self.rect = self.image.get_rect(center = (self.origin.pos_x, self.origin.pos_y))
         
         def draw_explosion(self,sheet,height,column,row):
+            screen.blit(sheet, (self.origin.pos_x-height*0.5, self.origin.pos_y-height*0.5),(height*column, height*row, height, height))
+            
+        def draw_teleport(self, sheet, height, column, row):
             screen.blit(sheet, (self.origin.pos_x-height*0.5, self.origin.pos_y-height*0.5),(height*column, height*row, height, height))
         
         def find_distance(self, origin, target):
@@ -315,6 +337,15 @@ if startup: #load classes
                     self.sheet_column = 0
                     self.sheet_row += 1
                 self.draw_explosion(self.sheet, 256, self.sheet_column, self.sheet_row)
+                
+            #teleport
+            if self.form == "teleport":
+                self.sheet_column += 1
+                self.image = blank_frame
+                if self.sheet_column == 8:
+                    self.sheet_column = 0
+                    self.sheet_row += 1
+                self.draw_teleport(self.sheet, 256, self.sheet_column, self.sheet_row)
             
             #red beam
             if self.form == "beam" and self.damage_type == "thermal":
@@ -502,9 +533,8 @@ if startup: #load classes
                 if self.rect.collidepoint((pilot.pos_x, pilot.pos_y)):
                     #keep pilot's momentum but direct away from the terrain object
                     if pilot.pos_x < self.pos_x: pilot.momentum_x = abs(pilot.momentum_x)
-                    else: pilot.momentum_x = abs(pilot.momentum_x) * -1
-
-            
+                    else: pilot.momentum_x = abs(pilot.momentum_x) * -1    
+    
     class Pilot(pygame.sprite.Sprite):
         def __init__(self, name, slot_number, battlesuit, team):
             super().__init__()
@@ -825,6 +855,20 @@ if startup: #load classes
             if self.ttl == 0:
                 self.kill()
         
+        def teleport(self):
+            self.pos_x = random.randint(screen_width*0.2,screen_width*0.8)
+            self.pos_y = random.randint(screen_height*0.2, screen_height*0.8)
+            #set entry velocity
+            momentum_x = random.randint(5,10)
+            if self.pos_x < screen_width*0.5: self.momentum_x = momentum_x
+            else: self.momentum_x = -1*momentum_x
+            
+            momentum_y = random.randint(2,10)
+            if self.pos_y < screen_width*0.5: self.momentum_y = momentum_y
+            else: self.momentum_y = -1*momentum_y
+            angle = find_angle(self, map_center)
+            group.weapon_effects.add(Visual_Effect("teleport", "thermal", self, self))
+        
         def update(self):                        
             #temp invulnerability
             if self.invuln_timer > 0:
@@ -863,6 +907,7 @@ if startup: #load classes
             self.maneuver()
             
             #update rect
+            self.image = pygame.transform.scale(self.image, (10,10))
             self.rect = self.image.get_rect(center = (int(self.pos_x),int(self.pos_y)))
             
             #avoid bunching up
@@ -2546,12 +2591,17 @@ if startup: #load specifics
 selected.active_mission_number = 1
 # mission.mission_setup(1)
 
+map_center = Map_Center()
+
 while True: #game Cycle
     for event in pygame.event.get():
         if event.type == pygame.QUIT: #Quit
             pygame.quit()
             exit()
         if event.type == pygame.KEYDOWN:
+            
+            if event.key == pygame.K_t:
+                for pilot in group.pilot_roster: pilot.teleport()
             
             #enable debug mode
             if event.key == pygame.K_q:

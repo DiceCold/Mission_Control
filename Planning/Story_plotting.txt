@@ -1,0 +1,90 @@
+What should the game experience of playing mission control be?
+
+Features not currently in the game:
+	cooldown.variance
+	game.pause
+	faction reputation
+	mission.timer (counts up length of time the mission has been running so far and acts as trigger for timed events)
+
+Sequence:
+	Start game
+	Intro dialogue scene
+	First mission: defend the train from Iron Hive drones
+	Post mission dialogue scene
+	Game opens up. Options available are: 
+		Three different missions to choose from (main and 2 optional side-missions?)
+		A dialogue scene with each of the pilots where they talk about their backstory
+	After doing a second mission one of the random events from the list occurs. Maybe just make a random event happen after each mission.
+
+Factions:
+	Baal Corporation (para-military security, medical technology R&D/distributor, production of educational media for schools, interstellar transportation)
+	Marksman Marko's Modern Munitions (aka "4M") (weapons and ammunition wholesaler, advanced special-weapons research. Workers co-op?)
+	Paragon-Pinacle Research Ltd. (Market analysis, advertising, brand-management, political consulting) 
+	The Democratic People's Confederation of the Arcturus Planetary System (local government, severely underfunded)
+	Citizens United (galactic UN of solar-system governments that don't cooperate well and tend towards isolationism)
+	Neighbourhood Watch (disorganized group of local vigilantees)
+	Titanium Hive (autonomous machine army) (Iron Hive?)
+	The Bravos (violent and chaotic gang, very loud)
+	The Carabetti Crime Family (wealthier and more sophisticated gang) (Cabarelli? Carabelli?)
+
+Main missions:
+1: Defend the train from drone attack
+	Success: Reputation increase, some resources
+
+2: Pick up supplies that were scattered
+	Choice: Some of the supplies are useful to you (like weapons). You can give them back to their rightful owner or pretend they were destroyed and keep them.
+	Success: Reputation increase, some amount of resources.
+	Failure: Reputation decrease, no resources to cover your repairs.
+
+3: Static defences have been sabotaged. Defend them from waves of attack until they come back online.
+	One or more of the pilots are skilled at repair and can be assigned to help with repairs (faster completion) instead of fighting.
+	Success:
+
+4: Oversee a prisoner exchange, trading an allied politician or scientist for an enemy leader.
+	Choice: you can try to betray the enemy faction and keep both prisoners. Doing so will trigger combat and then social consequences later on, becoming worse if you were unsuccessful.
+
+5: The child of a powerful local individual thinks they're a prodigious pilot and wants to engage in a public 1v1 duel with one of your pilots.
+	Choice: 
+		1: Refuse the spectacle. It's wasteful and dangerous, a poor use of resouces and someone might get hurt.
+		2: Don't hold back and honestly do your best to win. They may respect the guenuine effort, or might be salty they lost.
+		3: If you've had a social scene with Helena she may ask to be the one to fight, for personal reasons.
+		4: Fight, but tell the pilot to try and throw the match and let them win. They might be satisfied with this outcome or offended that you were deceiptful.
+		Outcome will affect reputation with other local factions. Best outcome is if both pilots have taken damage. An outright stomp one way or the other is less ideal.
+
+6: A criminal leader wants you to delay your response to a big robbery they're about to pull. 
+	They refuse to tell you the target. (Attacking a bank is ethical, taking the local food or water reseve will severely harm people.) They offer a bribe in advance of the event.
+	Choice:
+		1: Accept the bribe and delay the tactical response as requested.
+		2: Accept the bribe but respond as normal anyway.
+		3: Offer to wait and see, deciding you can't commit one way or the other without knowing the target.
+			Doing this may make them decide to tell you the target so that their plans will be more reliable one way or the other.
+		4: Reject the bribe regardless.
+
+7: A corporation demands that you hand over a specific pilot to them, who they intend to imprison. They've come heavily armed.
+	Choice: 
+		1: Agree and give them what they want. They outgun you or have control of resources you need.
+		2: Agree and hand over the pilot, but then launch a covert op to get them back. Being discovered could cause a major political incident.
+		3: Refuse and throw down if they want to fight about it.
+		4: Offer to discipline internally, based on the pilot's actions. Unlikely to succeed.
+		5: Give up something else of value instead.
+
+8: You've discovered a hidden mining facility set up by the invasive machine faction. It must be destroyed quickly, before the machines can rally overwhelming forces in response.
+	Choice: One or more pilots need to set a series of explosive charges underground while the others defend the enterance to the mine from escalating waves of enemies.
+	Choice: While setting the charges they discover valuable tech. You can delay the charges and try to take the tech, but the longer you wait the stronger and more numerous the enemies will become.
+	Success: Reputation, some resources, (Bonus objective gives one of the items from the Experimental Tech list)
+	Failure: Any pilots still underground when you order the retreat will be taken prisoner or killed. All of their equipment will also be lost.
+
+9: The Hive launches a retaliatory attack against three different sites. Their forces will be stronger if you failed any previous missions against them.
+	Choice: 
+		All three attacks occur simultainiously and you must decide where to send your pilots. Enemy will be stronger if you failed any missions against them.
+		Sites are three from the list of locations: [residential housing, Baal regional headquarters, armory, datacenter, central communications spire, food production, hydroelectric dam]
+		1: Send all pilots to a single site, essentially guaranteeing pilots will be personally safe and you will win that site but lose the other two.
+		2: Split forces among two sites, having decent odds of winning one or both but forcing you to choose one site guaranteed to be lost.
+		3: Try to save all three sites, spreading your forces thin. Good chance of losing one, two, or all three sites due to insufficient forces at each.
+
+10: The hive attacks the orbital satellite where you yourself are located. 
+	Failure:
+		1: Since you are also an AI their goal is to copy your data and create an evil version of you to lead their forces in battle.
+		2: If they still have time after that they will infect you with a virus, creating a secret traitor trusted by the humans.
+		
+	
