@@ -1,0 +1,12 @@
+Character_name = Intrepid_Rose
+
+#A daring pilot ace with tunnel vision
+
+#Attributes
+perception = 2
+mobility = 3
+armor = 1
+weapons = 1
+science = 0
+social = 1
+engineering = 1

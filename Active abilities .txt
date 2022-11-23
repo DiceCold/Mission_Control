@@ -1,9 +1,0 @@
-Active abilities:
-
-Overcharge systems (faster cooldowns)
-Teleport jump (reposition)
-Cloaking field (massively boost evasion)
-Stasis lock (temporary invuln/immobility)
-Tactical Blizzard (place a temporary aoe)
-Tactical Firestorm (place a temporary aoe)
-Orbital Strike (aoe hits area after a short delay)

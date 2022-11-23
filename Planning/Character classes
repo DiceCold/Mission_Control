@@ -1,0 +1,10 @@
+#character classes
+
+character class gives access to class-specific items
+
+Stealth/evasive class gives access to cloaking shield
+Mobility class gives access to higher-speed engines
+Gunner class gives access to special weapons
+Melee class gives access to melee weapons with knockback physics
+
+Pilot skills: accuracy(melee/short-range/long-range), evasion

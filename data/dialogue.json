@@ -1,0 +1,295 @@
+{
+"Nasha demands a duel": 
+	{
+	"segment_list":
+		[
+		"Intro",
+		"Response-Wasteful",
+		"Response-Negotiate",
+		"Response-Confident",
+		"(locked)",
+		],
+	"Intro":
+		{
+		"Nasha": 
+			[
+			"Hey, what's up? The name's Nasha. Nasha Sallowar.",
+			"I'm a pretty hot pilot and I've been just destroying practice runs in the Sim. What I need is an actually challenge, so here's the offer:",
+			"Let me duel one of your pilots. Public exhibition match in the Sallowar stadium.",
+			"I give you a dozen units of spare parts for fighting, and a Volcanic Lance weapon if you can beat me. Do we have a deal?",
+			],
+		"Choices": 
+			[
+			"Not interested. It would be wasteful and dangerous.",
+			"A public spectacle match could be entertaining. We'll do it, but only if you agree to still give us the weapon if you win.",
+			"You don't stand a chance. I can guarantee that any one of my pilots will be more than a match for you.",
+			"Alright then."
+			]
+		},
+	"Response-Wasteful":
+		{
+		"Player": "Not interested. It would be wasteful and dangerous.",
+		"Nasha": "Fine, if you're not going to give me an opponent I'll find someone who isn't a coward.",
+		"Choices":
+			[
+			"Alright then.",
+			"Wait, I've changed my mind..."
+			]
+		},
+	"Response-Negotiate":
+		{
+		"Player": "A public spectacle match could be entertaining. We'll do it, but only if you agree to still give us the weapon if you win.",
+		"Nasha": "Sure, whatever. We have a deal as long as I get to blast someone. Just make sure they can put up a fight before I wreck 'em."
+		"Choices":
+			[
+			"Alright then.",
+			"Wait, I've changed my mind..."
+			]
+		},
+	"Response-Confident":
+		{
+		"Player": "You don't stand a chance. I can guarantee that any one of my pilots will be more than a match for you.",
+		"Nasha": "Big talk. Guess we'll see if you can back it up."
+		"Choices":
+			[
+			"Alright then.",
+			"Wait, I've changed my mind..."
+			]
+		},
+	"(locked)": 
+		{
+		"Player-1": "Why fight each other? If you want to see some real combat then come join us on a mission some time."
+		"Note": "This is locked for now because it will require some extra game functionality."
+		}
+	},
+
+"Baal's crashed satellite":
+	{
+	"Intro":
+		{
+		"Speaker.mood": "default",
+		"Roger": 
+			[
+			"Good afternoon. My name is Roger Ore, acting on behalf of the Baal Corporation. We'd like to offer you a job.",
+			"We have a crashed satellite north of Warbuk Station containing important data that the company wishes to recover.",
+			"While the company does have the option of sending an in-house team the crash site is in a remote location.",
+			"Your travel network would allow the task to be completed in significantly less time.",
+			"I can offer you [6,000] credits, payable upon completion of the job.",
+			"The information stored on the satellite is confidential and is the exclusive property of the Baal Corporation.",
+			"Any attempt to view or duplicate the information will result in a fine of up to [10,000] credits for breach of contract."
+			],
+		"Choices":
+			[
+			"What kind of information does the satellite hold?",
+			]
+		},
+	"Response-Ask about information?":
+		{
+		"Player": "What kind of information does the satellite hold?",
+		"Roger": "Company policy prevents me from disclosing the content of that data. What it contains is not relevant to your mission.",
+		"Choices":
+			[
+			"I won't accept the job without knowing what it is we're retreiving.",
+			"Understandable. We'll respect the company's need for confidentiality.",
+			"Fine, but if that's the case then I think an additional [2,000] credits is reasonable."
+			]
+		}
+	"Reject Mission":
+		{
+			"Roger": "Then I'm afraid the Baal Corporation will need to explore our other options. Thank you for your time."
+		},
+	"Response-Accept secrecy":
+		{
+		"Player": "Understandable. We'll respect the company's need for confidentiality.",
+		"Game": "resource.rep-baal += 1"
+		},
+	"Response-Negotiate":
+		{
+		"Player": "Fine, but if that's the case then I think an additional [2,000] credits is reasonable.",
+		"Roger": "[8,000] is acceptable and still within the allocated budget."
+		}
+	"Response-Ask about threats":
+		{
+		"Player": "Do you anticipate any threats to the team while retreiving the data?",
+		"Roger": 
+			[
+			"Defensive weapons on the satellite may still be active. Destruction of Baal Corporation property is permitted in this instance.",
+			"There is also a minor Hive presence in the area, and the crash is likely to have drawn their attention.",
+			"I don't anticipate them appearing in significant numbers, but this is one of the reasons why the company would prefer a more immediate resolution."
+			]
+		},
+	"Conclusion":
+		{
+		"Roger": "Do we have an agreement?",
+		"Choices":
+			[
+			"[Accept mission]",
+			"[Decline mission]"
+			]
+		},			
+	"Accept Mission":
+		{
+		"Roger": "Excelllent, I've marked the coordinates on your map."
+		}
+	},
+	
+"Social-Kite-1":
+	{
+	"Intro":
+		{
+		"speaker.mood": "concerned",
+		"Kite": "Hey, hi, it's Kite. I'm Kite, I mean. You wanted to see me?",
+		"Player": "I just want to spend a little time getting to know the pilots I'm working with."
+		},
+	"Select topic":
+		{
+		"speaker.mood": "surprised",
+		"Kite": "Oh okay, great. What would you like to know?"
+		"Choices":
+			[
+			"I saw on your profile you spent most of your life on Tulia. What made you decide to come here?",
+			"What do you think of the other pilots?"
+		},	
+	"Reason for joining":
+		{
+		"Player": "I saw on your profile you spent most of your life on Tulia. What made you decide to come here?"
+		"speaker.mood": "upset",
+		"Kite": 
+			[
+			"After the crash hit... We didn't get the full picture from the news, but I knew there were so many people who needed help.",
+			"I'd done some racing on a team through school, so I figured I had a bit piloting experience already.",
+			"When the planetary government asked for volunteers... I thought I could help. That I had a responsability to do so.",
+			],
+		"Choices":
+			[
+			"When you got here was it what you were expecting?",
+			"Let's talk about something else"
+			]
+		}
+	"Experience after joining":
+		{
+		"Player": "When you got here was it what you were expecting?",
+		"Kite": 
+			[
+			"It was... it was a lot worse.",
+			"I realized how badly out of my depth I was. I wanted to go home.",
+			"My flying was alright, but I'd never fired a weapon before. I sucked. The first time I went against some Hive drones I almost died.",
+			"Another pilot covered me. Taught me how to shoot afterwards. Not as well as he could, he could aim like a god, but well enough to hold my own.",
+			],
+		"Choices":
+			[
+			"What happened after that?",
+			"Let's talk about something else"
+			],
+		}
+	"The other pilot":
+		{
+		"Kite": 
+			[
+			"It... things didn't work out for him.",
+			"Sorry, I didn't mean for this to get really heavy. You asked why I came to this planet..."
+			]
+		},
+	"Oversharing":
+		{
+		"speaker.mood": "default",
+		"Kite": "I should have just said it was to help people. That was probably way more than you were looking for.",
+		"Choices":
+			[
+			"It's good if you feel like you can communicate with me honestly and openly. Don't worry about it being too much.",
+			"Everyone gets a little carried away sometimes.",
+			"Perhaps you can keep this in mind the next time you're asked about something."
+		}
+	"Response-Reassure":
+		{
+		"Player":
+			[
+			"It's good if you feel like you can communicate with me honestly and openly. Don't worry about it being too much.",
+			"I'm always happy to hear about whatever's on your mind."
+			],
+		"speaker.mood": "happy",
+		"Kite": "Thank you, I'll try to remember that for next time." 
+		},
+	"Response-Accept":
+		{
+		"Player": 
+			[
+			"Everyone gets a little carried away sometimes.",
+			"It happens. I'm sure I've been guilty of it myself."
+			],
+		"speaker.mood": "default",
+		"Kite": "Thank you, I'll try to remember that for next time." 
+		},
+	"Response-Disapprove":
+		{
+		"Player": 
+			[
+			"Perhaps you can keep this in mind the next time you're asked about something.",
+			"In the future I'd prefer a more sucinct answer. I can ask further questions as needed."
+			],
+		"speaker.mood": "stern",
+		"Kite": "Thank you, I'll try to remember that for next time." 
+		}			
+	"The other pilots":
+		{
+		"Player": "What do you think of the other pilots?",
+		"speaker.mood": "default",
+		"Kite": 
+			[
+			"There are some really good people on the team. There are a few people that I'd say are less than ideal.",
+			"I dont want to name names... You'll probably be able to judge for yourself fairly quickly."
+			],
+		"Choices":
+			[
+			"[Ask about a specific pilot]",
+			"Let's talk about something else."
+			]
+		},
+	"Specific pilots":
+		{
+		"Choices":
+			[
+			"What do you think about Deadlift?",
+			"What do you think about Nighthawk?",
+			"What do you think of Stalker?"
+			"Let's talk about something else."
+			]
+		},
+	"Deadlift":
+		{
+		"Player": "What do you think about Deadlift?",
+		"speaker.mood": "happy",
+		"Kite": "I think he's a really good person to have on the team. He seems a little intimidating at first but he's actually really kind and caring.",
+		"Choices":
+			[
+			"[Ask about a specific pilot]",
+			"Let's talk about something else."
+			]
+		},
+	"Nighthawk":
+		{
+		"Player": "What do you think about Nighthawk?",
+		"speaker.mood": "default",
+		"Kite": "She's a good pilot and she takes things really seriously.",
+		"Choices":
+			[
+			"[Ask about a specific pilot]",
+			"Let's talk about something else."
+			]
+		},
+	"Stalker":
+		{
+		"Player": "What do you think of Stalker?"
+		"Kite": 
+			[
+			"I have trouble answering that question in a way that is polite and respectful.",
+			"There are a lot of people she does not get along with. I'm definitely one of them."
+			],
+		"Choices":
+			[
+			"[Ask about a specific pilot]",
+			"Let's talk about something else."
+			]
+		}
+	}
+}		

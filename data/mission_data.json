@@ -1,0 +1,51 @@
+{
+"satellite_crash": {
+	"mission_id": 2,
+	"faction": "baal_corp",
+	"reward": {"credits": 6000},
+	"map": "satellite_crash_site",
+	"enemies": 
+		{
+		"satellite_turret_1": {
+			"type": "laser_turret",
+			"pos_x": 0.4,
+			"pos_y": 0.4,
+			"team": "baal_corp",
+			"hostile": "True"
+			},
+		"satellite_turret_2": {
+			"type": "laser_turret",
+			"pos_x": 0.7,
+			"pos_y": 0.8,
+			"team": "baal_corp",
+			"hostile": "True"
+			},
+		"hive_drone_1": 
+		{
+			"type": "drone",
+			"pos_x": 2.1,
+			"pos_y": 0.6,
+			"team": "hive",
+			"hostile": "True"
+			}
+		},
+	"mission_objects": 
+		{
+		"data_core": {
+			"type": "interactable",
+			"pos_x": 0.6,
+			"pos_y": 0.6,
+			},
+		"salvage_1": {
+			"type": "pickup",
+			"pos_x": 0.3,
+			"pos_y": 0.4,
+			},
+		"salvage_2": {
+			"type": "pickup",
+			"pos_x": 0.55,
+			"pos_y": 0.4,
+			}
+		}
+	}
+}

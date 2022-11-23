@@ -21,8 +21,7 @@ Factions:
 	Marksman Marko's Modern Munitions (aka "4M") (weapons and ammunition wholesaler, advanced special-weapons research. Workers co-op?)
 	Paragon-Pinacle Research Ltd. (Market analysis, advertising, brand-management, political consulting) 
 	The Democratic People's Confederation of the Arcturus Planetary System (local government, severely underfunded)
-	Citizens United (galactic UN of solar-system governments that don't cooperate well and tend towards isolationism)
-	Neighbourhood Watch (disorganized group of local vigilantees)
+	Systems United (galactic UN of solar-system governments that don't cooperate well and tend towards isolationism)
 	Titanium Hive (autonomous machine army) (Iron Hive?)
 	The Bravos (violent and chaotic gang, very loud)
 	The Carabetti Crime Family (wealthier and more sophisticated gang) (Cabarelli? Carabelli?)
@@ -31,8 +30,9 @@ Main missions:
 1: Defend the train from drone attack
 	Success: Reputation increase, some resources
 
-2: Pick up supplies that were scattered
-	Choice: Some of the supplies are useful to you (like weapons). You can give them back to their rightful owner or pretend they were destroyed and keep them.
+2: Recover data from a crashed satellite:
+	Choice: Take time to harvest pieces from the wreckage. Some of the components are useful to you (like weapons).
+	Choice: Take time to secretly create your own copy of the encrypted data.
 	Success: Reputation increase, some amount of resources.
 	Failure: Reputation decrease, no resources to cover your repairs.
 
@@ -88,3 +88,5 @@ Main missions:
 		2: If they still have time after that they will infect you with a virus, creating a secret traitor trusted by the humans.
 		
 	
+Side mission:
+1: Test an experimental weapon (keep the prototype)
