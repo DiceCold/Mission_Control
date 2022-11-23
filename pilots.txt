@@ -1,0 +1,53 @@
+Pilots
+
+
+Nighthawk (Olivere):
+	Origin: a local who was part of the original colonizaiton effort as a transportation operator.
+	Begins as: team leader 
+	During the collapse: organized and let an armed neighbourhood watch in her community.
+	Dependant on: having a position of authority and control over others.
+	Heading towards: a poor decision or stress induced breakdown rendering her unfit to lead the team
+	Willing to: act extra-judicially
+	
+Intrepid Rose (Roselina):
+	Origin: a student from a prosperous tradeworld.
+	Begins as: an outsider from off-world.
+	During the collapse: completed her education and then joined the humanitarian aid mission aproximately 2 years after Day01.
+	Dependant on: long-distance asynchronous messaging, serialized media and care packages from her home-world friends and family.
+	Heading towards: social isolation, depression, guilt.
+	Willing to: sacrifice her own wellbeing.
+	
+Lightbringer (Mickael):
+	Origin: a semi-local who took a contract for corporate security on the frontier world a decade ago and was promoted to pilot.
+	Begins as: team's most experienced pilot.
+	During the collapse: took his battlesuit and went mercenary, making a small fortune defending supply ships from bandits.
+	Dependant on: a steady flow of drinks and victories, being seen as a hero.
+	Willing to: walk away if the job's not worth it.
+	
+Shadowstalker (Sophia):
+	Origin: a local youth/student/petty criminal born to colonist parents.
+	Begins as: cruel bully.
+	During the collapse: distinguished herself as a quick learner in a battlesuit, was able to evade juvenile prosecution.
+	Dependant on: dominating and humiliating others to fuel her own ego.
+	Willing to: completely ruin the life of someone she believes is unworthy.
+	
+Azure Kite (Kaito):
+	Origin: professional racing pilot from off-world
+	Begins as: Polite but private about his personal life and prefers to keep others at a professional distance
+	During the collapse: came seeking information following the dissapearance of a friend, who was found hospitalized and comatose.
+	Dependant on: the hope that their friend will recover
+	Willing to: Wield unconventional but powerful weapons
+
+Valorant Phoenix (Helena):
+	Origin: Daughter of the assistant regional manager for MaxEdDal, born local.
+	Begins as: private, suspicious, and vengeful towards organized crime.
+	During the collapse: witnessed the death of her parents at the hands of home-invaders while she hid. Used his ID to break into a hanger and steal suit with weapons, pretended to be an offworlder who had arrived with the relief effort.
+	Dependant on: her burning desire to see justice done.
+	Willing to: take down and interrogate criminals while not wearing an obvious and identifiable battlesuit.
+	
+Questing Ricochet (Adam): 
+	Origin: local construction suit operator
+	Begins as: Boastful stalwart
+	During the collapse: encountered a dead pilot and assumed their identity as an off-world security contractor. Things were so disorganized at the time that nobody questioned it, and his experience piloting construction suits was enough for him to handle at least basic movement.
+	Dependant on: maintaining his fake identity.
+	Willing to: be blackmailed by shadowstalker so she doesn't reveal his secret.

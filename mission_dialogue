@@ -1,0 +1,129 @@
+Game dialogue
+
+Scene: Nasha demands a duel
+
+	Nasha: 'Hey, what's up? The name's Nasha. Nasha Sallowar.'
+	Nasha: 'I'm a pretty hot pilot and I've been just destroying practice runs in the Sim. What I need is an actually challenge, so here's the offer:'
+	Nasha: 'Let me 1v1 one of your pilots. Public exhibition match in the Sallowar stadium.
+	Nasha: 'I give you a dozen units of spare parts for fighting, and a Volcanic Lance weapon if you can beat me. Do we have a deal?'
+
+		Choice 1:
+			Player: 'Not interested. Engaging in combat unnecessarily is wasteful and dangerous.'
+			Nasha: 'Fine, if you're not going to give me an opponent I'll find someone who isn't such a coward.'
+			Choice 1.1:
+				Player: 'Okay.'
+			Choice 1.2:
+				Player: 'Wait, I've changed my mind...'
+
+		Choice 2:
+			Player: 'A public spectacle match could be entertaining. We'll do it, but only if you agree to still give us the weapon if you win.'
+			Nasha (success): 'Sure, whatever. We have a deal as long as I get to blast someone. Just make sure they can put up a fight before I wreck them.'
+		
+		Choice 3:
+			Player: 'You don't stand a chance. I guarantee that any one of my pilots will be more than a match for you.'
+			Nasha: 'Big talk. Guess we'll see if you can back it up.'
+
+		Player-4 (locked): 'Why fight each other? If you want to see some real combat then come join us on a mission some time.'
+		
+
+Scene: Roger Ore introduces the Baal Corporation and contracts you to retreive encrypted data from a crashed satellite.
+	Game: 'Roger.mood = default'
+	
+	Stage: Intro
+		Roger: 'Good afternoon. My name is Roger Ore, acting on behalf of the Baal Corporation. We'd like to offer you a job.'
+		Roger: 'We have a crashed satellite north of Warbuk Station containing important data that the company wishes to recover.'
+		Roger: 'While the company does have the option of sending an in-house team the crash site is in a remote location.'
+		Roger: 'Your travel network would allow the task to be completed in significantly less time.'
+		Roger: 'I can offer you [6,000] credits, payable upon completion of the job.'
+		Roger: 'The information stored on the satellite is confidential and is the exclusive property of the Baal Corporation.'
+		Roger: 'Any attempt to view or duplicate the information will result in a fine of up to [10,000] credits for breach of contract.'
+	
+	Stage: Choice 1.1
+		Player: 'What kind of information does the satellite hold?'
+		Roger: 'Company policy prevents me from disclosing the content of that data. What it contains is not relevant to your mission.'
+		Stage: Choice 1.1.1 
+			Player: 'I won't accept the job without knowing what it is we're retreiving.'
+			Roger: 'Then I'm afraid the Baal Corporation will need to explore our other options. Thank you for your time.'
+		Stage: Choice 1.1.2
+			Player: 'Understandable. We'll respect the company's need for confidentiality.'
+			Game: 'resource.rep-baal += 1'
+		Stage: Choice 1.1.3
+			Player: 'Fine, but if that's the case then I think an additional [2,000] credits is reasonable.'
+			Roger: '[8,000] is acceptable and still within the allocated budget.'
+		
+	Stage: Choice 1.2
+		Player: 'Do you anticipate any threats to the team while retreiving the data?'
+		Roger: 'Defensive weapons on the satellite may still be active. Destruction of Baal Corporation property is permitted in this instance.'
+		Roger: 'There is also a minor Hive presence in the area, and the crash is likely to have drawn their attention.'
+		Roger: 'I don't anticipate them appearing in significant numbers, but this is one of the reasons why the company would prefer a more immediate resolution.'	
+	
+	Roger: 'Do we have an agreement?'
+	
+	Choice 2.1:
+		Player: '[Accept mission]'
+		Roger: 'Excelllent, I've marked the coordinates on your map.'
+	Choice 2.2:
+		Player: '[Decline mission]'
+		Roger: 'Then I'm afraid the Baal Corporation will need to explore our other options. Thank you for your time.'
+
+Scene: Social-Kite-1
+	Game: 'Kite.mood = "concerned"'
+	
+	Stage: 'Intro'
+		Kite: 'Hey, hi, it's Kite. I'm Kite I mean. You wanted to see me?'
+		Player: 'I just want to spend a little time getting to know the pilots I'm working with.'
+		Game: 'Kite.mood = surprised'
+		Kite: 'Oh okay, great. What would you like to know?'
+			
+	Stage: 'Reason for joining'
+		Player: 'I saw on your profile you spent most of your life on Tulia. What made you decide to come here?'
+		Game: 'Kite.mood = "concerned"'
+		Kite: 'After the crash hit... We didn't get the full picture from the news, but I knew there were so many people who needed help.'
+		Game: 'Kite.mood = "upset"'
+		Kite: 'I'd done some racing on a team through school, so I figured I had a bit piloting experience already.'
+		Kite: 'When the planetary government asked for volunteers... I thought I could help. That I had a responsability to do so.'
+	Stage: 'Experience after joining'
+		Player: 'When you got here was it what you were expecting?'
+		Kite: 'It was... it was a lot worse.' 
+		Kite: 'I realized how badly out of my depth I was. I wanted to go home.'
+		Kite: 'My flying was alright, but I'd never fired a weapon before. I sucked. The first time I went against some Hive drones I almost died.'
+		Kite: 'Another pilot covered me. Taught me how to shoot afterwards. Not as well as he could, he could aim like a god, but well enough to hold my own.'
+		Player: 'What happened after that?'
+		Kite: 'It... things didn't work out for him.'
+		Kite: 'Sorry, I didn't mean for this to get really heavy. You asked why I came to this planet...'
+		Game: 'Kite.mood = default'
+		Kite: 'I should have just said it was to help people. That was probably way more than you were looking for.'
+	Stage: 'Talking about joining'
+		Option 1:
+			Player: 'It's good if you feel like you can communicate with me honestly and openly. Don't worry about it being too much.'
+			Player: 'I'm always happy to hear about whatever's on your mind.'
+			Game: 'Kite.mood = happy'
+		Option 2:
+			Player: 'Everyone gets a little carried away sometimes.'
+			Player: 'It happens. I'm sure I've been guilty of it myself.'
+			Game: 'Kite.mood = default'
+		Option 3:
+			Player: 'Perhaps you can keep this in mind the next time you're asked about something.'
+			Player: 'Others usually prefer a more sucinct answer. They can ask further questions as needed.' 
+			Game: 'Kite.mood = stern'
+		Kite: 'Thank you, I'll try to remember that for next time.' 
+				
+	Stage: 'The other pilots'
+		Player: 'What do you think of the other pilots?'
+		Game: 'Kite.mood = default'
+		Kite: 'There are some really good people on the team. There are a few people that I'd say are less than ideal.'
+		Player: 'Who on the team do you think is a problem?'
+		Kite: 'I dont want to name names... You'll probably be able to judge for yourself fairly quickly.'
+		
+		Player: 'What do you think about Deadlift?'
+		Kite: 'I think he's a really good person to have on the team. He seems a little intimidating at first but he's really kind and caring.'
+		
+		Player: 'What do you think about Nighthawk?'
+		Kite: 'She's a good pilot and she takes things really seriously.'
+		
+		Player: 'What do you think of Stalker?'
+		Kite: 'I have trouble answering that question in a way that is polite and respectful.'
+		Player: 'You and she don't get along?'
+		Kite: 'There are a lot of people she does not get along with. I'm definitely one of them.'
+		
+		
