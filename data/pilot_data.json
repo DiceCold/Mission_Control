@@ -10,8 +10,8 @@
 			"attribute - daring": 0,
 			"attribute - precision": 0,
 			"feats": "none",
-			"chasis": "majestic",
-			"loadout": ["jet booster", "burst laser", "burst laser", "light shield"],
+			"chassis": "majestic",
+			"loadout": ["jet booster", "burst laser", "burst laser", "light shield"]
 		},
 		{
 			"name": "Nighthawk",
@@ -22,8 +22,8 @@
 			"attribute - insight": 0,
 			"attribute - daring": 1,
 			"attribute - precision": 0,
-			"chasis": "majestic",
-			"loadout": ["jet booster", "burst laser", "burst laser", "light shield"],
+			"chassis": "majestic",
+			"loadout": ["jet booster", "burst laser", "burst laser", "light shield"]
 		}
 	]
 }

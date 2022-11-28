@@ -344,13 +344,13 @@ class Objective:
             if pilot.link == "empty" and self.link == "empty":
                 #check distance
                 if abs(self.pos_x - pilot.pos_x) < self.radius and abs(self.pos_y - pilot.pos_y) < self.radius:
-                    #assign link to pilot and objective
+                    #assign link to Pilot and objective
                     pilot.link = self
                     self.link = pilot
                 else: pass
     
     def pull(pilot):
-        #pull tethered pilot closer, becoming stronger as distance decreases
+        #pull tethered Pilot closer, becoming stronger as distance decreases
         if pilot.pos_x < self.pos_x: pilot.momentum_x += self.pull_strength/abs(self.pos_x - pilot.pos_x)
         elif pilot.pos_x > self.pos_x: pilot.momentum_x -= self.pull_strength/abs(self.pos_x - pilot.pos_x)
         
@@ -361,10 +361,10 @@ class Objective:
         if self.link != "empty":
             pilot = self.link
             
-            #unlink if the pilot is injured or dead
+            #unlink if the Pilot is injured or dead
             if pilot.injured == True or pilot.alive == False: self.link = "empty"
             
-            #draw tether to linked pilot
+            #draw tether to linked Pilot
             pygame.draw.line(screen, (80,80,80), (self.pos_x, self.pos_y), (pilot.pos_x, pilot.pos_y, 10)
             
     def track_progress(self):
@@ -372,7 +372,7 @@ class Objective:
         if self.link != "empty" and self.progress < self.progress_max: self.progress += 1
         #empty
         elif self.link == "empty" and self.progress_min < self.progress: self.progress -= 1
-        #follow linked pilot with y offset if progress is full
+        #follow linked Pilot with y offset if progress is full
         elif self.link != "empty" and self.progress = self.progress_max:
             self.pos_x = self.link.pos_x
             self.pos_y = self.link.pos_y + screen_height*0.05
@@ -386,10 +386,10 @@ class Objective:
         #update link
         if self.link == "empty": self.establish_link()
         elif self.link != "empty":
-            #pull pilot if not at 100% progress
+            #pull Pilot if not at 100% progress
             if self.progress < self.progress_max: 
                 try: self.pull(self.link)
-                except: if debug_mode == True: print("Error:", self.name, "was unable to pull linked pilot", self.link.name)
+                except: if debug_mode == True: print("Error:", self.name, "was unable to pull linked Pilot", self.link.name)
             
             try: self.manage_link()
             except: if debug_mode == True: print("Error: there was a problem managing link between", self.name, "and", self.link.name)

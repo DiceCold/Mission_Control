@@ -1,4 +1,7 @@
-import pygame 
+import pygame
+from math import atan2, degrees, pi
+import random
+
 debug_mode = False
 
 def find_distance(origin, target):
@@ -54,7 +57,7 @@ class Equipment:
                 self.damage = 1
                 self.visual = "bullets"
                 
-            elif self.name = "missile pod":
+            elif self.name == "missile pod":
                 self.weapon_type = "assault"
                 self.shots = 2
                 self.distance = 30
@@ -63,7 +66,7 @@ class Equipment:
                 self.damage = 2
                 self.visual = "explosion"
             
-            elif self.name = "plasma rifle":
+            elif self.name == "plasma rifle":
                 self.weapon_type = "assault"
                 self.shots = 1
                 self.distance = 30
@@ -72,7 +75,7 @@ class Equipment:
                 self.damage = 3
                 self.visual = "plasma"
                 
-            elif self.name = "flamer":
+            elif self.name == "flamer":
                 self.weapon_type = "assault"
                 self.shots = random.randint(1,6) + 2
                 self.distance = 12
@@ -99,7 +102,7 @@ class Equipment:
         if self.type == "shield" and self.flashtime > 0: self.flashtime -= 1
         
 class Visual_Effect:
-    def __init__(self, type, name, origin, target)
+    def __init__(self, type, name, origin, target):
         self.type = type
         self.name = name
         self.origin = origin

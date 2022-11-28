@@ -34,17 +34,17 @@
 		"data_core": {
 			"type": "interactable",
 			"pos_x": 0.6,
-			"pos_y": 0.6,
+			"pos_y": 0.6
 			},
 		"salvage_1": {
 			"type": "pickup",
 			"pos_x": 0.3,
-			"pos_y": 0.4,
+			"pos_y": 0.4
 			},
 		"salvage_2": {
 			"type": "pickup",
 			"pos_x": 0.55,
-			"pos_y": 0.4,
+			"pos_y": 0.4
 			}
 		}
 	}

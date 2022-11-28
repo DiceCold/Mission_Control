@@ -1,23 +1,15 @@
 {
 "Nasha demands a duel": 
 	{
-	"segment_list":
-		[
-		"Intro",
-		"Response-Wasteful",
-		"Response-Negotiate",
-		"Response-Confident",
-		"(locked)",
-		],
 	"Intro":
 		{
 		"Nasha": 
-			[
-			"Hey, what's up? The name's Nasha. Nasha Sallowar.",
-			"I'm a pretty hot pilot and I've been just destroying practice runs in the Sim. What I need is an actually challenge, so here's the offer:",
-			"Let me duel one of your pilots. Public exhibition match in the Sallowar stadium.",
-			"I give you a dozen units of spare parts for fighting, and a Volcanic Lance weapon if you can beat me. Do we have a deal?",
-			],
+			{
+			"001":"Hey, what's up? The name's Nasha. Nasha Sallowar.",
+			"002":"I'm a pretty hot pilot and I've been just destroying practice runs in the Sim. What I need is an actually challenge, so here's the offer:",
+			"003":"Let me duel one of your pilots. Public exhibition match in the Sallowar stadium.",
+			"004":"I give you a dozen units of spare parts for fighting, and a Volcanic Lance weapon if you can beat me. Do we have a deal?",
+			},
 		"Choices": 
 			[
 			"Not interested. It would be wasteful and dangerous.",
@@ -39,7 +31,7 @@
 	"Response-Negotiate":
 		{
 		"Player": "A public spectacle match could be entertaining. We'll do it, but only if you agree to still give us the weapon if you win.",
-		"Nasha": "Sure, whatever. We have a deal as long as I get to blast someone. Just make sure they can put up a fight before I wreck 'em."
+		"Nasha": "Sure, whatever. We have a deal as long as I get to blast someone. Just make sure they can put up a fight before I wreck 'em.",
 		"Choices":
 			[
 			"Alright then.",
@@ -49,7 +41,7 @@
 	"Response-Confident":
 		{
 		"Player": "You don't stand a chance. I can guarantee that any one of my pilots will be more than a match for you.",
-		"Nasha": "Big talk. Guess we'll see if you can back it up."
+		"Nasha": "Big talk. Guess we'll see if you can back it up.",
 		"Choices":
 			[
 			"Alright then.",
@@ -58,7 +50,7 @@
 		},
 	"(locked)": 
 		{
-		"Player-1": "Why fight each other? If you want to see some real combat then come join us on a mission some time."
+		"Player-1": "Why fight each other? If you want to see some real combat then come join us on a mission some time.",
 		"Note": "This is locked for now because it will require some extra game functionality."
 		}
 	},
@@ -93,7 +85,7 @@
 			"Understandable. We'll respect the company's need for confidentiality.",
 			"Fine, but if that's the case then I think an additional [2,000] credits is reasonable."
 			]
-		}
+		},
 	"Reject Mission":
 		{
 			"Roger": "Then I'm afraid the Baal Corporation will need to explore our other options. Thank you for your time."
@@ -107,7 +99,7 @@
 		{
 		"Player": "Fine, but if that's the case then I think an additional [2,000] credits is reasonable.",
 		"Roger": "[8,000] is acceptable and still within the allocated budget."
-		}
+		},
 	"Response-Ask about threats":
 		{
 		"Player": "Do you anticipate any threats to the team while retreiving the data?",
@@ -144,28 +136,29 @@
 	"Select topic":
 		{
 		"speaker.mood": "surprised",
-		"Kite": "Oh okay, great. What would you like to know?"
+		"Kite": "Oh okay, great. What would you like to know?",
 		"Choices":
 			[
 			"I saw on your profile you spent most of your life on Tulia. What made you decide to come here?",
 			"What do you think of the other pilots?"
+			]
 		},	
 	"Reason for joining":
 		{
-		"Player": "I saw on your profile you spent most of your life on Tulia. What made you decide to come here?"
+		"Player": "I saw on your profile you spent most of your life on Tulia. What made you decide to come here?",
 		"speaker.mood": "upset",
 		"Kite": 
 			[
 			"After the crash hit... We didn't get the full picture from the news, but I knew there were so many people who needed help.",
 			"I'd done some racing on a team through school, so I figured I had a bit piloting experience already.",
-			"When the planetary government asked for volunteers... I thought I could help. That I had a responsability to do so.",
+			"When the planetary government asked for volunteers... I thought I could help. That I had a responsibility to do so.",
 			],
 		"Choices":
 			[
 			"When you got here was it what you were expecting?",
 			"Let's talk about something else"
 			]
-		}
+		},
 	"Experience after joining":
 		{
 		"Player": "When you got here was it what you were expecting?",
@@ -181,7 +174,7 @@
 			"What happened after that?",
 			"Let's talk about something else"
 			],
-		}
+		},
 	"The other pilot":
 		{
 		"Kite": 
@@ -199,7 +192,8 @@
 			"It's good if you feel like you can communicate with me honestly and openly. Don't worry about it being too much.",
 			"Everyone gets a little carried away sometimes.",
 			"Perhaps you can keep this in mind the next time you're asked about something."
-		}
+			]
+		},
 	"Response-Reassure":
 		{
 		"Player":
@@ -229,7 +223,7 @@
 			],
 		"speaker.mood": "stern",
 		"Kite": "Thank you, I'll try to remember that for next time." 
-		}			
+		},			
 	"The other pilots":
 		{
 		"Player": "What do you think of the other pilots?",
@@ -279,7 +273,7 @@
 		},
 	"Stalker":
 		{
-		"Player": "What do you think of Stalker?"
+		"Player": "What do you think of Stalker?",
 		"Kite": 
 			[
 			"I have trouble answering that question in a way that is polite and respectful.",

@@ -1,0 +1,261 @@
+{
+	"Nasha demands a duel":{
+		"scene_id":"Nasha demands a duel",
+		"intro":{
+			"section_id":"intro",
+			"line 1":{"speaker":"Nasha","mood":"default","text":"Hey, what's up? The name's Nasha. Nasha Sallowar."},
+			"line 2":{"speaker":"Nasha","mood":"default","text":"I'm a pretty hot pilot and I've been just destroying practice runs in the Sim. What I need is an actually challenge, so here's the offer:"},
+			"line 3":{"speaker":"Nasha","mood":"default","text":"Let me duel one of your pilots. Public exhibition match in the Sallowar stadium."},
+			"line 4":{"speaker":"Nasha","mood":"default","text":"I give you a dozen units of spare parts for fighting, and a Volcanic Lance weapon if you can beat me. Do we have a deal?"},
+			"line 5":{"speaker":"Player","available_choice":"True","choice_id":"respond_to_offer","choices":[
+					{
+					"text":"Not interested. It would be wasteful and dangerous.",
+					"next_section":"not interested",
+					"game_effects":"none"
+					},
+					{
+					"text":"A public spectacle match could be entertaining. We'll do it, but only if you agree to still give us the weapon if you win.",
+					"next_section":"negotiate",
+					"game_effects":"none"
+					},
+					{
+					"text":"You don't stand a chance. I can guarantee that any one of my pilots will be more than a match for you.",
+					"next_section":"threaten",
+					"game_effects":"none"
+					}
+				]
+			}
+		},
+		"not interested":{
+			"section_id":"not_interested",
+			"line 1":{"speaker":"Player","text":"Not interested. It would be wasteful and dangerous."},
+			"line 2":{"speaker":"Nasha","mood":"default","text":"Fine, if you're not going to give me an opponent I'll find someone who isn't a coward."},
+			"line 3":{"speaker":"Player","available_choice":"True","choice_id":"confirm_reject", "choices":[
+					{"text":"Alright then.","next_section":"intro","next_line":5,"game_effects":"none"},
+					{"text":"Wait, I've changed my mind...","next_section":"intro","next_line":5,"game_effects":"none"}
+					]
+			}
+		},
+		"negotiate":{
+			"section_id":"negotiate",
+			"line 1":{"speaker":"Player", "text":"A public spectacle match could be entertaining. We'll do it, but only if you agree to still give us the weapon if you win."},
+			"line 2":{"speaker":"Nasha","text":"Sure, whatever. We have a deal as long as I get to blast someone. Just make sure they can put up a fight before I wreck 'em."},
+			"line 3":{"speaker":"Player","available_choice":"True","choice_id":"confirm_accept", "choices":[
+					{"text":"Alright then.","next_section":"intro","next_line":5,"game_effects":"none"},
+					{"text":"Wait, I've changed my mind...","next_section":"intro","next_line":5,"game_effects":"none"}
+			]}
+		},
+		"threaten":{
+			"section_id":"threaten",
+			"line 1":{"speaker":"Player","text":"You don't stand a chance. I can guarantee that any one of my pilots will be more than a match for you."},
+			"line 2":{"speaker":"Nasha","text":"Big talk. Guess we'll see if you can back it up."},
+			"line 3":{"speaker":"Player","available_choice":"True","choice_id":"confirm_accept", "choices":[
+					{"text":"Alright then.","next_section":"intro","next_line":5,"game_effects":"none"},
+					{"text":"Wait, I've changed my mind...","next_section":"intro","next_line":5,"game_effects":"none"}
+			]}
+		}
+	},
+	"Baal's satellite crash":{
+		"scene_id":"Baal's satellite crash",
+		"intro":{
+			"section_id":"intro",
+			"line 1":{"speaker":"Roger","text":"Good afternoon. My name is Roger Ore, acting on behalf of the Baal Corporation. We'd like to offer you a job."},
+			"line 2":{"speaker":"Roger","text":"We have a crashed satellite north of Warbuk Station containing important data that the company wishes to recover."},
+			"line 3":{"speaker":"Roger","text":"While the company does have the option of sending an in-house team the crash site is in a remote location."},
+			"line 4":{"speaker":"Roger","text":"Your travel network would allow the task to be completed in significantly less time."},
+			"line 5":{"speaker":"Roger","text":"I can offer you [6,000] credits, payable upon completion of the job."},
+			"line 6":{"speaker":"Roger","text":"The information stored on the satellite is confidential and is the exclusive property of the Baal Corporation."},
+			"line 7":{"speaker":"Roger","text":"Any attempt to view or duplicate the information will result in a fine of up to [10,000] credits for breach of contract."},
+			"line 8":{"speaker":"Player","available_choice":"True","choices":[
+				{"text":"What kind of information does the satellite hold?","next_section":"ask_about_info"},
+				{"text":"Do you anticipate any threats to the team while retrieving the data?","next_section":"ask_about_threats"},
+				{"text":"Alright, we'll accept the job.","next_section":"confirm_accept"},
+				{"text":"Sorry, I'm afraid we'll have to decline","next_section":"confirm_reject"}
+			]}
+		},
+		"ask_about_info":{
+			"section_id":"ask_about_info",
+			"line 1":{"speaker":"Player","text":"What kind of information does the satellite hold?"},
+			"line 2":{"speaker":"Roger", "text":"Company policy prevents me from disclosing the content of that data. What it contains is not relevant to your mission."},
+			"line 3":{"speaker":"Player","available_choice":"True","choices":[
+				{"text":"I won't accept the job without knowing what it is we're retrieving.","next_section":"reject_mission"},
+				{"text":"Understandable. We'll respect the company's need for confidentiality.","next_section":"confirm_accept"},
+				{"text":"If that's the case then I think an additional [2,000] credits is reasonable.","next_section":"negotiate"},
+				{"text":"Sorry, I'm afraid we'll have to decline","next_section":"confirm_reject"}
+			]
+			}
+		},
+		"ask_about_threats":{
+			"section_id":"ask_about_threats",
+			"line 1":{"speaker":"Player","text":"Do you anticipate any threats to the team while retrieving the data?"},
+			"line 2":{"speaker":"Roger","text":"Defensive weapons on the satellite may still be active. Destruction of Baal Corporation property is permitted in this instance."},
+			"line 3":{"speaker":"Roger","text":"There is also a minor Hive presence in the area, and the crash is likely to have drawn their attention."},
+			"line 4":{"speaker":"Roger","text":"We don't anticipate them appearing in significant numbers, but this is one of the reasons why the company would prefer a more immediate resolution."},
+			"line 5":{"speaker":"Player","available_choice":"True","choices":[
+				{"text":"Alright, we'll accept the job.","next_section":"confirm_accept"},
+				{"text":"If that's the case then I think an additional [2,000] credits is reasonable.","next_section":"negotiate"},
+				{"text":"Sorry, I'm afraid we'll have to decline","next_section":"confirm_reject"}
+			]}
+		},
+		"negotiate":{
+			"section_id":"negotiate",
+			"line 1":{"speaker":"Player","text":"If that's the case then I think an additional [2,000] credits is reasonable."},
+			"line 2":{"speaker":"Roger","text":"[8,000] is acceptable and still within the allocated budget."},
+			"line 3":{"speaker":"Player","available_choice":"True","choices":[
+				{"text":"Alright, we'll accept the job.","next_section":"confirm_accept"},
+				{"text":"Sorry, I'm afraid we'll have to decline","next_section":"confirm_reject"}
+			]}
+		},
+		"confirm_accept":{
+			"section_id":"confirm_accept",
+			"line 1":{"speaker":"Player","text":"Alright, we'll accept the job."},
+			"line 2":{"speaker":"Roger","text":"Excellent, I've marked the coordinates on your map."},
+			"line 3":{"speaker":"Player","available_choice":"True","choices":[
+				{"text":"[Accept mission]","next_section":"intro"},
+				{"text":"[Ask something else]","next_section":"intro","next_line":8}
+			]}
+		},
+		"confirm_reject":{
+			"section_id":"confirm_reject",
+			"line 1":{"speaker":"Player","text":"Sorry, I'm afraid we'll have to decline"},
+			"line 2":{"speaker":"Roger","text":"Then I'm afraid the Baal Corporation will need to explore our other options. Thank you for your time."},
+			"line 3":{"speaker":"Player","available_choice":"True","choices":[
+				{"text":"[Reject mission]","next_section":"intro"},
+				{"text":"[Ask something else]","next_section":"intro","next_line":8}
+			]}
+		}
+	},
+	"Kite social intro":{
+		"scene_id":"Kite social intro",
+		"intro":{
+			"section_id":"intro",
+			"line 1":{"speaker":"Kite","mood":"surprised","text":"Hey, hi, it's Kite. I'm Kite, I mean. You wanted to see me?"},
+			"line 2":{"speaker":"Player","text":"I just want to spend a little time getting to know the pilots I'm working with."},
+			"line 3":{"speaker":"Kite","mood":"surprised","text":"Oh okay, great. What would you like to know?"},
+			"line 4":{"speaker": "Player", "available_choice": "True","choices": [
+				{"text": "I saw on your profile you spent most of your life on Tulia. What made you decide to come here?", "next_section": "motivation"},
+				{"text": "What do you think of the other pilots?", "next_section": "other_pilots"},
+				{"text": "What combat role to you prefer?", "next_section": "combat_role"}
+			]}
+		},
+		"motivation": {
+			"section_id": "motivation",
+			"line 1": {"speaker": "Player", "text": "I saw on your profile you spent most of your life on Tulia. What made you decide to come here?"},
+			"line 2": {"speaker": "Kite", "mood": "upset", "text": "After the crash hit... We didn't get the full picture from the news, but I knew there were so many people who needed help."},
+			"line 3": {"speaker": "Kite", "mood": "upset", "text": "I'd done some racing on the school team, so I figured I had a bit piloting experience already."},
+			"line 4": {"speaker": "Kite", "mood": "upset", "text": "When the planetary government asked for volunteers... I thought I could help. That I had a responsibility to do so."},
+			"line 5": {"speaker": "Player", "available_choice": "True", "choices": [
+				{"text": "When you got here was it what you were expecting?", "next_section": "experience"},
+				{"text": "I'd like to ask you about something else.", "next_section": "intro", "next_line": 4}
+			]}
+		},
+		"experience": {
+			"section_id": "experience",
+			"line 1": {"speaker": "Player", "text": "When you got here was it what you were expecting?"},
+			"line 2": {"speaker": "Kite", "mood": "upset", "text": "It was... it was a lot worse."},
+			"line 3": {"speaker": "Kite", "mood": "upset", "text": "I realized how badly out of my depth I was. I wanted to go home."},
+			"line 4": {"speaker": "Kite", "text": "My flying was alright, but I'd never fired a weapon before. I sucked. The first time I went against some Hive drones I almost died."},
+			"line 5": {"speaker": "Kite", "mood": "default", "text": "Another pilot covered me. Taught me how to shoot afterwards. Not as well as he could, he could aim like a god, but well enough to hold my own."},
+			"line 6": {"speaker": "Player", "available_choice": "True", "choices": [
+				{"text": "What happened after that?", "next_section": "loss"},
+				{"text": "I'd like to ask you about something else.", "next_section": "intro", "next_line": 4}
+			]}
+		},
+		"loss": {
+			"section_id": "loss",
+			"line 1": {"speaker": "Kite", "mood": "upset", "text": "It... things didn't work out for him."},
+			"line 2": {"speaker": "Kite", "mood": "embarrassed", "text": "Sorry, I didn't mean for this to get really heavy. You asked why I came to this planet..."},
+			"line 3": {"speaker": "Kite", "text": "I should have just said it was to help people. That was probably way more than you were looking for."},
+			"line 4": {"speaker": "Player", "available_choice": "True", "choices": [
+				{"text": "You can always talk to me about whatever is on your mind.", "next_section": "reassure", "effect": {"loyalty": 1, "mood": "happy"}},
+				{"text": "Everyone gets a little carried away sometimes.", "next_section": "accept", "effect": {"mood": "default"}},
+				{"text": "Try to give shorter answers to my questions. If I want to know something else I'll ask.", "next_section": "disapprove", "effect": {"loyalty": -1, "mood": "stern"}}
+			]}
+		},
+		"reassure": {
+			"section_id": "reassure",
+			"line 1": {"speaker": "Player", "text": "You can always talk to me about whatever is on your mind."},
+			"line 2": {"speaker": "Kite", "mood": "happy", "text": "Thank you, I'll try to remember that for next time."},
+			"line 3": {"speaker": "Player", "available_choice": "True", "choices": [
+				{"text": "That's enough for now. Thank you for your time."},
+				{"text": "I'd like to ask you about something else.", "next_section": "intro", "next_line": 4}
+			]}
+		},
+		"accept": {
+			"section_id": "accept",
+			"line 1": {"speaker": "Player", "text": "Everyone gets a little carried away sometimes."},
+			"line 2": {"speaker": "Kite", "mood": "default", "text": "Thank you, I'll try to remember that for next time."},
+			"line 3": {"speaker": "Player", "available_choice": "True", "choices": [
+				{"text": "That's enough for now. Thank you for your time."},
+				{"text": "I'd like to ask you about something else.", "next_section": "intro", "next_line": 4}
+			]}
+		},
+		"disapprove": {
+			"section_id": "disapprove",
+			"line 1": {"speaker": "Player", "text": "Try to give shorter answers to my questions. If I want to know something else I'll ask."},
+			"line 2": {"speaker": "Kite", "mood": "default", "text": "Thank you, I'll try to remember that for next time."},
+			"line 3": {"speaker": "Player", "available_choice": "True", "choices": [
+				{"text": "That's enough for now. Thank you for your time.", "next_section": "intro"},
+				{"text": "I'd like to ask you about something else.", "next_section": "intro", "next_line": 4}
+			]}
+		},
+		"other_pilots": {
+			"section_id": "other_pilots",
+			"line 1": {"speaker": "Player", "text": "What do you think of the other pilots?"},
+			"line 2": {"speaker": "Kite", "mood": "default", "text": "There are some really good people on the team. There are also a few I'd say are... less than ideal."},
+			"line 3": {"speaker": "Kite", "text": "I dont want to name names... you'll see what I mean."},
+			"line 4": {"speaker": "Player", "available_choice": "True", "choices": [
+				{"text": "[Ask about a specific pilot]", "next_section": "specific_pilots"},
+				{"text": "I'd like to ask you about something else.", "next_section": "intro", "next_line": 4}
+			]}
+		},
+		"specific_pilots": {
+			"section_id": "specific_pilots",
+			"line 1": {"speaker": "Player", "available_choice": "True", "choices": [
+				{"text": "What do you think of Deadlift?", "next_section": "opinion-deadlift", "effect": {"loyalty": 1}},
+				{"text": "What do you think of Stalker?", "next_section": "opinion-stalker", "effect": {"loyalty": 1}},
+				{"text": "What do you think of Nighthawk?", "next_section": "opinion-nighthawk", "effect": {"loyalty": 1}}
+			]}
+		},
+		"opinion-deadlift": {
+			"section_id": "opinion-deadlift",
+			"line 1": {"speaker": "Player", "text": "What do you think of Deadlift?"},
+			"line 2": {"speaker": "Kite", "mood": "happy", "text": "I think he's a really good person to have on the team."},
+			"line 3": {"speaker": "Kite", "text": "He seems a little intimidating at first but he's actually really kind and caring."},
+			"line 4": {"speaker": "Player", "available_choice": "True", "choices": [
+				{"text": "[Ask about another pilot]", "next_section": "specific_pilots"},
+				{"text": "I'd like to ask you about something else.", "next_section": "intro", "next_line": 4}
+			]}
+		},
+		"opinion-stalker": {
+			"section_id": "opinion-stalker",
+			"line 1": {"speaker": "Player", "text": "What do you think of Stalker?"},
+			"line 2": {"speaker": "Kite", "mood": "serious", "text": "I have trouble answering that question in a way that is polite and respectful."},
+			"line 3": {"speaker": "Kite", "mood": "stern", "text": "There are a lot of people she does not get along with. I'm definitely one of them."},
+			"line 4": {"speaker": "Player", "available_choice": "True", "choices": [
+				{"text": "[Ask about another pilot]", "next_section": "specific_pilots"},
+				{"text": "I'd like to ask you about something else.", "next_section": "intro", "next_line": 4}
+			]}
+			},
+		"opinion-nighthawk": {
+			"section_id": "opinion-nighthawk",
+			"line 1": {"speaker": "Player", "text": "What do you think of Nighthawk?"},
+			"line 2": {"speaker": "Kite", "mood": "default", "text": "She's a good pilot and she takes things really seriously."},
+			"line 3": {"speaker": "Kite", "text": "Aside from missions I haven't really interacted with her much though."},
+			"line 4": {"speaker": "Player", "available_choice": "True", "choices": [
+				{"text": "[Ask about another pilot]", "next_section": "specific_pilots"},
+				{"text": "I'd like to ask you about something else.", "next_section": "intro", "next_line": 4}
+			]},
+		"combat_role": {
+			"section_id": "combat_role",
+			"line 1": {"speaker": "Player", "text": "What combat role to you prefer?"},
+			"line 2": {"speaker": "Kite", "mood": "happy", "text": "I'm pretty mobile and I think I do best when providing support fire for an ally."},
+			"line 3": {"speaker": "Kite", "text": "I'm also pretty good at rapid retrieval and evacuation if the objective is small and portable."},
+			"line 4": {"speaker": "Player", "available_choice": "True", "choices": [
+				{"text": "That's enough for now. Thank you for your time.", "next_section": "intro"},
+				{"text": "I'd like to ask you about something else.", "next_section": "intro", "next_line": 4}
+			]}
+		}
+		}
+	}
+}

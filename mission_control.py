@@ -1,4 +1,3 @@
-#clean version to test from
 import pygame
 import random
 from sys import exit
@@ -11,6 +10,7 @@ from math import atan2, degrees, pi
 BLACK = (0,0,0)
 continue_button = False
 debug_mode = False
+resources = "json data file to be imported"
 
 #game.paused = False
 
@@ -394,6 +394,8 @@ if startup: #load classes
             self.shielded = True
             self.damaged = False
             self.severely_damaged = False
+            self.pos_x = 0
+            self.pos_y = 0
             if type == "majestic":
                 self.name = "Majestic"
                 self.mobility = 1
@@ -502,7 +504,7 @@ if startup: #load classes
                 
                 
             self.image = self.frames[self.animation_index]
-            #offset rect from pilot
+            #offset rect from Pilot
             self.rect = self.image.get_rect(center = (self.pos_x, self.pos_y - screen_height*0.05))
     
     class Terrain_Piece(pygame.sprite.Sprite):
@@ -531,7 +533,7 @@ if startup: #load classes
         def repel(self):
             for pilot in mission.pilots:
                 if self.rect.collidepoint((pilot.pos_x, pilot.pos_y)):
-                    #keep pilot's momentum but direct away from the terrain object
+                    #keep Pilot's momentum but direct away from the terrain object
                     if pilot.pos_x < self.pos_x: pilot.momentum_x = abs(pilot.momentum_x)
                     else: pilot.momentum_x = abs(pilot.momentum_x) * -1    
     
@@ -540,14 +542,16 @@ if startup: #load classes
             super().__init__()
             self.name = name
             self.team = team
-            self.function = "pilot"
+            self.function = "Pilot"
             self.lines = []
             self.rank = 1
-            self.type = "pilot"
+            self.type = "Pilot"
             self.slot_number = slot_number
             self.active = False
             self.dispatching = False
             self.on_mission = False
+            self.pos_x = 0
+            self.pos_y = 0
             
             # combat settings
             self.checkpoint = 0
@@ -594,11 +598,11 @@ if startup: #load classes
             self.rect = self.image.get_rect(center = (self.pos_x,self.pos_y))
         
         def find_target(self, type):
-            #placeholder for train functioning as pilot
+            #placeholder for train functioning as Pilot
             if self.type == "train" and type == "move":
                 self.move_target = mission.waypoints[self.checkpoint]
                 
-            elif self.type == "pilot":
+            elif self.type == "Pilot":
                 #find attack target
                 if type == "attack":
                     
@@ -677,7 +681,7 @@ if startup: #load classes
                         if debug_mode == True: print("Error: invalid orders", self.name, self.orders)
                         else: pass
                                 
-        #find the distance between the pilot and their target, returned as a value                     
+        #find the distance between the Pilot and their target, returned as a value
         def find_distance(self, origin, target):
             distance_x = target.pos_x - origin.pos_x
             distance_y = target.pos_y - origin.pos_y
@@ -697,7 +701,7 @@ if startup: #load classes
                     if abs(self.momentum_x) > 6: self.momentum_x *= 0.9
                     if abs(self.momentum_y) > 6: self.momentum_y *= 0.9  
                 
-                #check range, whether pilot is already carrying something, and whether the object is being held by someone already
+                #check range, whether Pilot is already carrying something, and whether the object is being held by someone already
                 if objective.carried == False and self.carrying == "none" and abs(self.move_distance) < screen_width*0.02:
                     #slow down stage 2 to stay in range of the objective instead of flying past
                     if abs(self.momentum_x) > 4: self.momentum_x *= 0.9
@@ -713,7 +717,7 @@ if startup: #load classes
                         #carry the supply crate away from battle
                         self.orders = "evac"
                         
-        #probably no longer need to keep the distances as variables for the pilot, but currently that's how the data is managed
+        #probably no longer need to keep the distances as variables for the Pilot, but currently that's how the data is managed
         # def targeting_distance(self,type):
             # if type == "attack":
                 # distance_x_ = self.attack_target.pos_x - self.pos_x
@@ -742,7 +746,7 @@ if startup: #load classes
             return angle
                 
         def maintain_shields(self):
-            #update visual if pilot is alive
+            #update visual if Pilot is alive
             if self.alive and self.battlesuit.shielded: self.animation_index = 2
             elif self.alive and self.battlesuit.shielded == False: self.animation_index = 1
             self.image = self.frames[self.animation_index]
@@ -1055,7 +1059,7 @@ if startup: #load classes
                 self.height = screen_height*0.07
                 self.pos_x = screen_width*0.75
                 self.pos_y = screen_height*0.2 + self.slot_number*self.height
-            if type == "pilot":
+            if type == "Pilot":
                 self.pilot = group.pilot_roster[self.slot_number]
                 self.name = self.pilot.name
                 self.width = screen_width*0.235
@@ -1146,7 +1150,7 @@ if startup: #load classes
                     self.name = group.inventory[self.slot_number].name
                     self.image = text_font_small.render(f"{self.name}",False,(111,196,169))
                 
-            elif self.type == "pilot":
+            elif self.type == "Pilot":
                 if overlay.type == "inventory":
                     self.image = text_font_small.render(f"{self.name}",False,(111,196,169))
                     self.rect = pygame.Rect(self.pos_x, self.pos_y,self.width,self.height) 
@@ -1557,7 +1561,7 @@ if startup: #load classes
                 else: self.active = False
             
             elif self.type == "continue_button":
-                # make the continue button active if at least one pilot is dispatching
+                # make the continue button active if at least one Pilot is dispatching
                 if overlay.type == "pilot_select":
                     self.active = False
                     for pilot in group.pilot_roster:
@@ -1610,7 +1614,7 @@ if startup: #load classes
                         selected.loadout_slot = -1
                         selected.inventory_slot = -1 
                         
-                    # assign pilot to mission
+                    # assign Pilot to mission
                     elif self.type == "dispatch_button":
                         if selected.pilot.dispatching == False: selected.pilot.dispatching = True
                         else: selected.pilot.dispatching = False
@@ -2074,10 +2078,10 @@ if startup: #load classes
                     if debug_mode == True: print("Error: scene queue is empty")
                     else: pass
             
-            # advance to combat if no scenes remain in queue and at least one pilot is on_mission
+            # advance to combat if no scenes remain in queue and at least one Pilot is on_mission
             # if len(scene.scene_queue) == 0:
-                # for pilot in group.pilot_roster:
-                    # if pilot.on_mission: overlay.type = "combat"
+                # for Pilot in group.pilot_roster:
+                    # if Pilot.on_mission: overlay.type = "combat"
             
             #update overlay to pilot_select
             if self.current_scene == "pilot_select": overlay.type = "pilot_select"
@@ -2201,11 +2205,11 @@ if startup: #load classes
                 #acknowledge choice
                 if choice_number > 0: 
                     
-                    # specific for mission 1, advance to pilot select
+                    # specific for mission 1, advance to Pilot select
                     if scene.current_scene == "Mission 1 welcome" and choice_number == 1:
                             dialogue.choices_available = False
                             
-                            #update current scene to pilot select
+                            #update current scene to Pilot select
                             scene.scene_queue.append("pilot_select")
                             scene.scene_queue.remove("Mission 1 welcome")
                             scene.current_scene = scene.scene_queue[0]
@@ -2251,10 +2255,10 @@ if startup: #load classes
                 if debug_mode == True: print("Error: speaker name or lines are invalid")
                 else: pass
             
-            # update portrait by making the selected pilot = the current speaking npc
+            # update portrait by making the selected Pilot = the current speaking npc
             try: selected.pilot = dialogue.speaker
             except: 
-                if debug_mode == True: print("Error: dialogue.speaker is invalid choice for selected.pilot portrait")
+                if debug_mode == True: print("Error: dialogue.speaker is invalid choice for selected.Pilot portrait")
                 else: pass
             # try: self.portrait = image.portrait[f"{dialogue.speaker.name}"]
             # except: print("Error: invalid portrait")
@@ -2277,7 +2281,7 @@ if startup: #load classes
                 else: pass
             # if scene.scene_queue[0] == f"{self.speaker.name} unavailable": dialogue.npc_line_number = 2
             
-            # unassign pilot from the mission if they are unavailable
+            # unassign Pilot from the mission if they are unavailable
             if scene.current_scene == f"{selected.pilot.name} unavailable":
                 selected.pilot.dispatching = False
                 selected.pilot.on_mission = False
@@ -2344,16 +2348,16 @@ if startup: #load classes
                     "repair_bay 6":"empty"
                 }
 
-                def perform_repairs(self):
-                    for suit in self.repair_bays:
-                        if resources["spare parts"] > 0 and suit != "empty":
-                         if suit.damaged == True:
-                            resources["spare parts"] -= 1
-                            percentile_roll = random.ranint(0,100)/100
-                            if percentile_roll > self.failure_rate:
-                                if suit.severely_damaged == True: suit.severely_damaged = False
-                                elif suit.damaged == True: suit.damaged = False
-                        if suit.damaged == False: suit = "empty"
+                # def perform_repairs(self):
+                #     for suit in self.repair_bays:
+                #         if resources["spare parts"] > 0 and suit != "empty":
+                #          if suit.damaged == True:
+                #             resources["spare parts"] -= 1
+                #             percentile_roll = random.ranint(0,100)/100
+                #             if percentile_roll > self.failure_rate:
+                #                 if suit.severely_damaged == True: suit.severely_damaged = False
+                #                 elif suit.damaged == True: suit.damaged = False
+                #         if suit.damaged == False: suit = "empty"
 
             if self.type == "infirmary":
                 self.capacity = self.rank
@@ -2366,8 +2370,8 @@ if startup: #load classes
                     "bed 6":"empty",
                 }
 
-                # #placeholder writing out pilot health conditions
-                # pilot.health = {
+                # #placeholder writing out Pilot health conditions
+                # Pilot.health = {
                 # 	"bleeding":"blood loss",
                 # 	"disease":"illness",
                 # 	"pain":7/10,
@@ -2379,8 +2383,8 @@ if startup: #load classes
                 # 	"right arm":"lacerated"
                 # 	"right leg":"maimed"
                 # }
-                # for condition in pilot.health: condition = "empty"
-                # #placeholder writing out pilot health conditions
+                # for condition in Pilot.health: condition = "empty"
+                # #placeholder writing out Pilot health conditions
 
 
 
@@ -2500,7 +2504,7 @@ if startup: #load specifics
         tower_1 = Pilot("Tower",1,copy.deepcopy(tower),"enemy")
         benny = Pilot(" ",-1,copy.deepcopy(null_suit),"vanguard")
         samuel = Pilot(" ",-1,copy.deepcopy(null_suit),"vanguard")
-    if startup: #load pilot sprites
+    if startup: #load Pilot sprites
         mission.pilots.add(unassigned_pilot)
         mission.pilots.add(nighthawk)
         mission.pilots.add(rose)
@@ -2552,11 +2556,11 @@ if startup: #load specifics
         group.islands.add(Island("island",5))
         group.islands.add(Island("island",6))
     if startup: #add text names
-        group.pilot_text_names.add(Short_Text("pilot",1))
-        group.pilot_text_names.add(Short_Text("pilot",2))
-        group.pilot_text_names.add(Short_Text("pilot",3))
-        group.pilot_text_names.add(Short_Text("pilot",4))
-        group.pilot_text_names.add(Short_Text("pilot",5))
+        group.pilot_text_names.add(Short_Text("Pilot",1))
+        group.pilot_text_names.add(Short_Text("Pilot",2))
+        group.pilot_text_names.add(Short_Text("Pilot",3))
+        group.pilot_text_names.add(Short_Text("Pilot",4))
+        group.pilot_text_names.add(Short_Text("Pilot",5))
         group.pilot_text_names.add(Short_Text("dispatch_button",0))
         
         group.pilot_text_stats.add(Short_Text("stats",1))
@@ -2573,11 +2577,11 @@ if startup: #load specifics
         
         group.inventory_text_names.add(Short_Text("inventory",1))
         
-        group.pilot_combat_names.add(Short_Text("pilot",1))
-        group.pilot_combat_names.add(Short_Text("pilot",2))
-        group.pilot_combat_names.add(Short_Text("pilot",3))
-        group.pilot_combat_names.add(Short_Text("pilot",4))
-        group.pilot_combat_names.add(Short_Text("pilot",5))
+        group.pilot_combat_names.add(Short_Text("Pilot",1))
+        group.pilot_combat_names.add(Short_Text("Pilot",2))
+        group.pilot_combat_names.add(Short_Text("Pilot",3))
+        group.pilot_combat_names.add(Short_Text("Pilot",4))
+        group.pilot_combat_names.add(Short_Text("Pilot",5))
     if startup: #add health icons
         for pilot in mission.pilots:
             if pilot.slot_number > 0:

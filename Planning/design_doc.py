@@ -63,8 +63,8 @@ class Pilot_Characterization:
         elif pilot == "Lightbringer":
             self.pilot_bio = {
                                 "Name":"Mickael",
-                                "Origin":"A semi-local who took a contract for corporate security on the frontier world a decade ago and was promoted to pilot.",
-                                "Begins as":"Team's most experienced pilot.",
+                                "Origin":"A semi-local who took a contract for corporate security on the frontier world a decade ago and was promoted to Pilot.",
+                                "Begins as":"Team's most experienced Pilot.",
                                 "During the collapse":"Took his battlesuit and went mercenary, making a small fortune defending supply ships from bandits.",
                                 "Dependant on":"A steady flow of drinks and victories, being seen as a hero.",
                                 "Willing to":"Walk away if the job's not worth it."
@@ -83,7 +83,7 @@ class Pilot_Characterization:
         elif pilot == "Kite":
             self.pilot_bio = {
                                 "Name":"Kaito",
-                                "Origin":"Professional racing pilot from off-world.",
+                                "Origin":"Professional racing Pilot from off-world.",
                                 "Begins as":"Polite but private about his personal life and prefers to keep others at a professional distance.",
                                 "During the collapse":"Came seeking information following the dissapearance of a friend, who was found hospitalized and comatose.",
                                 "Dependant on":"The hope that their friend will recover.",
@@ -105,17 +105,17 @@ class Pilot_Characterization:
                                 "Name":"Adam",
                                 "Origin":"Local construction suit operator",
                                 "Begins as":"Boastful stalwart",
-                                "During the collapse":"Encountered a dead pilot and assumed their identity as an off-world security contractor. Things were so disorganized at the time that nobody questioned it, and his experience piloting construction suits was enough for him to handle at least basic movement.",
+                                "During the collapse":"Encountered a dead Pilot and assumed their identity as an off-world security contractor. Things were so disorganized at the time that nobody questioned it, and his experience piloting construction suits was enough for him to handle at least basic movement.",
                                 "Dependant on":"Maintaining his fake identity.",
                                 "Willing to":"Be blackmailed by shadowstalker so she doesn't reveal his secret."
                                 }
                                 
 Events = {
             "1":"You discover a relationship between a superior and their subordinate. Not necesarilly problematic, but there is a power imbalance.",
-            "2":"A pilot is making heavy use of stimmulants to elevate their performance in the field.",
-            "3":"A pilot holds a personal grudge against a faction and wants you to devote more resources to taking them down.",
-            "4":"A pilot is personal friends with a pilot in an enemy faction and is reluctant to engage in combat with them.",
-            "5":"While on patrol a pilot encounters a situation where someone is in danger. They want to intervene immediately instead of waiting for reinforcements, but doing so is dangerous for them."
+            "2":"A Pilot is making heavy use of stimmulants to elevate their performance in the field.",
+            "3":"A Pilot holds a personal grudge against a faction and wants you to devote more resources to taking them down.",
+            "4":"A Pilot is personal friends with a Pilot in an enemy faction and is reluctant to engage in combat with them.",
+            "5":"While on patrol a Pilot encounters a situation where someone is in danger. They want to intervene immediately instead of waiting for reinforcements, but doing so is dangerous for them."
             "6":"You discover an immense trove of wealth that is difficult to transport quietly. Others are going to notice and try to take it for themselves if you move it.",
             "7":"A young prince from the Cascadian Royal Families has run away from home to the planet. They wish for him to be returned whether he likes it or not, and quietly to avoid tarnishing the Family's reputation.",
             "8":"One of the pilots has a history they're ashamed of and wish to keep secret. There's nothing morally wrong with it, but their upbringing makes them ashamed and the Church would start shit if they knew.",

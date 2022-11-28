@@ -1,52 +1,83 @@
 {
-	"damage_types": ["thermal","cold","piercing","concussive","magnetic","shock","sonic","gravity"],
-	"attributes": ["reflex", "focus", "insight" ,"daring", "precision", "finesse"],
-	
-	"weapon_data": [
-		{
-		"name": "Default Weapon",
-		"tier": 0,
-		"attribute": "focus",
-		"weapon_type": "beam",
-		"damage_type": "thermal",
-		"range": ["short", "medium"],
-		"cooldown": 200,
-		"accuracy": 0
+	"key_attributes": [
+		"reflex",
+		"focus",
+		"insight",
+		"daring",
+		"precision",
+		"finesse"
+	],
+	"damage_types": [
+		"thermal",
+		"cold",
+		"piercing",
+		"concussive",
+		"magnetic",
+		"shock",
+		"sonic",
+		"gravity"
+	],
+	"weapon_data": {
+		"burst_laser": {
+			"accuracy": 0,
+			"key_attribute": "focus",
+			"cooldown": 200,
+			"damage_type": "thermal",
+			"name": "Burst Laser",
+			"range": [
+				"short",
+				"medium"
+			],
+			"tier": 0,
+			"type": "beam"
 		},
-		{
-		"name": "Burst Laser",
-		"tier": 0,
-		"attribute": "focus",
-		"weapon_type": "beam",
-		"damage_type": "thermal",
-		"range": ["short", "medium"],
-		"cooldown": 200,
-		"accuracy": 0
+		"cryo-ray": {
+			"accuracy": 0,
+			"key_attribute": "precision",
+			"cooldown": 200,
+			"damage_type": "cold",
+			"name": "Cryo-ray",
+			"range": [
+				"short",
+				"medium"
+			],
+			"tier": 0,
+			"type": "beam"
 		},
-		{
-		"name": "Cryo-Ray",
-		"tier": 0,
-		"attribute": "precision",
-		"weapon_type": "beam",
-		"damage_type": "cold",
-		"range": ["short", "medium"],
-		"cooldown": 200,
-		"accuracy": 0
+		"default_weapon": {
+			"accuracy": 0,
+			"key_attribute": "focus",
+			"cooldown": 200,
+			"damage_type": "thermal",
+			"name": "Default Weapon",
+			"range": [
+				"short",
+				"medium"
+			],
+			"tier": 0,
+			"type": "beam"
 		},
-		{
-		"name": "Volcanic Lance",
-		"tier": 1,
-		"weapon_type": "beam",
-		"damage_type": "thermal",
-		"range": ["medium"],
-		"cooldown": 300,
-		"accuracy": 1
+		"lightning_chain": {
+			"accuracy": 0,
+			"cooldown": 200,
+			"damage_type": "shock",
+			"name": "Lightning Chain",
+			"range": [
+				"short"
+			],
+			"tier": 1,
+			"type": "beam"
 		},
-		{
-		"name": "Lightning Chain",
-		"tier": 1,
-		"weapon_type": "beam",
-		"damage_type": "shock",
-		"range": ["short"],
-		"cooldown": 200,
-		"accuracy": 0
+		"volcanic_lance": {
+			"accuracy": 1,
+			"cooldown": 300,
+			"damage_type": "thermal",
+			"name": "Volcanic Lance",
+			"range": [
+				"medium"
+			],
+			"tier": 1,
+			"type": "beam"
+		}
+	}
+}

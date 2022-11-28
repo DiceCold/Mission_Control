@@ -63,8 +63,8 @@ class facilities():
 				"bed 6":"empty",
 			}
 
-			# #placeholder writing out pilot health conditions
-			# pilot.health = {
+			# #placeholder writing out Pilot health conditions
+			# Pilot.health = {
 			# 	"bleeding":"blood loss",
 			# 	"disease":"illness",
 			# 	"pain":7/10,
@@ -76,8 +76,8 @@ class facilities():
 			# 	"right arm":"lacerated"
 			# 	"right leg":"maimed"
 			# }
-			# for condition in pilot.health: condition = "empty"
-			# #placeholder writing out pilot health conditions
+			# for condition in Pilot.health: condition = "empty"
+			# #placeholder writing out Pilot health conditions
 
 
 
