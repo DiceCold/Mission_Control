@@ -1,0 +1,84 @@
+{
+	"media": [
+		{
+			"name": "The Behemoth Returns",
+			"world": "Isoria",
+			"type": "film"
+		},
+		{
+			"name": "Two Heavens",
+			"world": "Zexade",
+			"type": "novel"
+		},
+		{
+			"name": "Celebrity Hunter Located!",
+			"world": "Isoria",
+			"type": "news"
+		},
+		{
+			"name": "Wilderness Excursion Scandal!",
+			"world": "Isoria",
+			"type": "news"
+		},
+		{
+			"name": "Blackest Nights",
+			"world": "Minstram",
+			"type": "music"
+		},
+		{
+			"name": "My Forbidden Desire",
+			"world": "Minstram",
+			"type": "film"
+		},
+		{
+			"name": "My Forbidden Desire",
+			"world": "Minstram",
+			"type": "novel"
+		},
+		{
+			"name": "Festival Proceeds Despite Opposition",
+			"world": "Minstram",
+			"type": "news"
+		},
+		{
+			"name": "Hot Men Making Out in the Jungle",
+			"world": "Isoria",
+			"type": "film"
+		},
+		{
+			"name": "A Literary Analysis of 'Hot Men Making Out in the Jungle'",
+			"world": "Zexade",
+			"type": "novel"
+		},
+		{
+			"name": "Hypermind Repair Faces Delay",
+			"world": "Zexade",
+			"type": "news"
+		},
+		{
+			"name": "Royal Prince Missing After Masquerade",
+			"world": "Tulia",
+			"type": "news"
+		},
+		{
+			"name": "Diamond Symphony",
+			"world": "Tulia",
+			"type": "music"
+		},
+		{
+			"name": "Righteous Armor - Part III",
+			"world": "Tulia",
+			"type": "Film"
+		},
+		{
+			"name": "I, Monarch.",
+			"world": "Tulia",
+			"type": "novel"
+		},
+		{
+			"name": "Can Darkness be Darker?",
+			"world": "Zexade",
+			"type": "film"
+		}
+	]
+}

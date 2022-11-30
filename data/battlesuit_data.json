@@ -2,7 +2,13 @@
 	"majestic":{
 		"speed": 10,
 		"health": 100,
-		"default_loadout": ["burst_laser", "burst_laser","shield_generator","thrusters","tactical_teleporter"],
-		"evasion": 0
+		"evasion": 0,
+		"default_loadout": [
+			"burst_laser",
+			"burst_laser",
+			"shield_generator",
+			"thrusters",
+			"tactical_teleporter"
+		]
 	}
 }
