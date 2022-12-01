@@ -13,6 +13,12 @@ class CompletionTracker:
 
         self.weapons_completed = 1
         self.weapons_total = 5
+        self.shields_completed = 1
+        self.shields_total = 3
+        self.jets_completed = 1
+        self.jets_total = 3
+        self.active_abilities_completed = 0
+        self.active_abilities_total = 5
 
         self.pilot_list = ["Kite", "Nighthawk", "Deadlift", "Stalker", "Saint"]
         self.mood_list = ["Default", "Happy", "Excited", "Serious", "Angry", "Worried", "Impressed", "Sad", "Scared"]
@@ -22,6 +28,15 @@ class CompletionTracker:
             "Deadlift": 3,
             "Stalker": 5,
             "Saint": 0
+        }
+
+        self.npc_list = {
+            "Roger": "Baal Corporation",
+            "Martino": "Cabarelli Family",
+            "Miranda": "Pinnacle Research Ltd",
+            "Nasha": "Sallowar Enterprises",
+            "Desmond": "Baal Corporation",
+            "Kail - Undefined": "The Bravos Gang"
         }
 
 

@@ -5,32 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="711c8494-9fd2-4d26-a466-16b6722da02b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Planning/experimental.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Planning/Checklist.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Planning/design_doc.py" beforeDir="false" afterPath="$PROJECT_DIR$/Planning/design_doc.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/battlesuit_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/battlesuit_data.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/blue_dot_icon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/deadlift_standing.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite_standing.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/lightbringer_standing.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/nighthawk_standing.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/player_placeholder.psd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/red_dot_icon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/renegade_standing.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/rose_standing.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/rose_standing0.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/rose_standing2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/rose_standing3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/shadowstalker_standing.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/unassigned_standing.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stalker/concerned.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stalker/default.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stalker/fierce.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stalker/happy.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stalker/happy2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stalker/shadowstalker.psd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stalker/shadowstalker_standing.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stalker/stern.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,7 +28,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectId" id="2I6FhK5FakoUD1OH6ImCDIkhWpY" />
   <component name="ProjectViewState">
