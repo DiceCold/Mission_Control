@@ -5,9 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="711c8494-9fd2-4d26-a466-16b6722da02b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/shop_sandbox.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Planning/Checklist.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Planning/design_doc.py" beforeDir="false" afterPath="$PROJECT_DIR$/Planning/design_doc.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/item_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/item_data.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,12 +39,16 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "last_opened_file_path": "C:/Users/dicec/OneDrive/Documents/GitHub/Mission_Control/Planning",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "C:/Users/dicec/OneDrive/Documents/GitHub/Mission_Control/data",
     "run.code.analysis.last.selected.profile": "pProject Default"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\dicec\OneDrive\Documents\GitHub\Mission_Control\data" />
+      <recent name="C:\Users\dicec\OneDrive\Documents\GitHub\Mission_Control" />
       <recent name="C:\Users\dicec\OneDrive\Documents\GitHub\Mission_Control\Planning" />
     </key>
   </component>

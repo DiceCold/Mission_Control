@@ -19,6 +19,7 @@ class CompletionTracker:
         self.jets_total = 3
         self.active_abilities_completed = 0
         self.active_abilities_total = 5
+        self.active_abilities_list = ["Skybeam", "Teleport", "Stealth", "Tether", "Blind"]
 
         self.pilot_list = ["Kite", "Nighthawk", "Deadlift", "Stalker", "Saint"]
         self.mood_list = ["Default", "Happy", "Excited", "Serious", "Angry", "Worried", "Impressed", "Sad", "Scared"]
@@ -38,6 +39,10 @@ class CompletionTracker:
             "Desmond": "Baal Corporation",
             "Kail - Undefined": "The Bravos Gang"
         }
+
+        self.terrain_objects_list = ["Mountain", "Cloud", "Vortex"]
+
+        self.battlesuit_types = ["Majestic (default)", "Drone", "Turret"]
 
 
 colonization_year: -17

@@ -17,8 +17,8 @@
 		"sonic",
 		"gravity"
 	],
-	"weapons": [
-		{
+	"weapons": {
+		"burst_laser": {
 			"accuracy": 0,
 			"key_attribute": "focus",
 			"cooldown": 200,
@@ -31,7 +31,7 @@
 			"tier": 0,
 			"type": "beam"
 		},
-		{
+		"cryo-ray": {
 			"accuracy": 0,
 			"key_attribute": "precision",
 			"cooldown": 200,
@@ -44,7 +44,7 @@
 			"tier": 0,
 			"type": "beam"
 		},
-		{
+		"default_weapon": {
 			"accuracy": 0,
 			"key_attribute": "focus",
 			"cooldown": 200,
@@ -57,7 +57,7 @@
 			"tier": 0,
 			"type": "beam"
 		},
-		{
+		"lightning_chain": {
 			"accuracy": 0,
 			"cooldown": 200,
 			"damage_type": "shock",
@@ -68,7 +68,7 @@
 			"tier": 1,
 			"type": "beam"
 		},
-		{
+		"volcanic_lance": {
 			"accuracy": 1,
 			"cooldown": 300,
 			"damage_type": "thermal",
@@ -79,7 +79,7 @@
 			"tier": 1,
 			"type": "beam"
 		}
-	],
+	},
 	"media": [
 		{
 			"name": "The Behemoth Returns",
