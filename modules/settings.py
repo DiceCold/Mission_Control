@@ -1,10 +1,17 @@
-#settings
+# settings
 import pygame
 
+# load screen
 screen_width = 1280
 screen_height = 720
-centerpoint = ((screen_width)/2, (screen_height)/2)
+centerpoint = (screen_width / 2, screen_height / 2)
+pygame.init()
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("mission_control")
+text_font = pygame.font.Font("font/Pixeltype.ttf", 50)
+text_font_small = pygame.font.Font("font/Pixeltype.ttf", 30)
+text_font_micro = pygame.font.Font("font/Pixeltype.ttf", 20)
+clock = pygame.time.Clock()
 
-screen = pygame.display.set_mode((screen_width,screen_height))
-
-debug_mode = True
+BLACK = (0, 0, 0)
+continue_button = False
