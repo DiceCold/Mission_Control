@@ -6,6 +6,7 @@ text_font = pygame.font.Font("font/Pixeltype.ttf", 50)
 text_font_small = pygame.font.Font("font/Pixeltype.ttf", 30)
 text_font_micro = pygame.font.Font("font/Pixeltype.ttf", 20)
 
+
 class ShopManager:
     def __init__(self):
         self.brand = "Baal Corporation"
@@ -35,7 +36,6 @@ class ShopManager:
 
         self.load_shop_items()
 
-
     def load_shop_items(self):
         slot = 0
         for basic in self.basics_list:
@@ -48,21 +48,11 @@ class ShopManager:
             self.shop_items.add(item)
             slot += 1
 
-    def highlight_shop_items(self):
-        try:
-            self.shop_items.highlight()
-        except:
-            pass
-
-    def draw_shop_item_text(self):
-        try:
-            self.shop_items.draw_text()
-        except: pass
-
     def update_shop_items(self):
         self.shop_items.update()
-    # def draw_shop_items(self):
-    #     self.shop_items.draw()
+
+    def add_to_cart(self, game):
+        self.shop_items.add_to_cart()
 
 
 class ShopItems(pygame.sprite.Sprite):
@@ -72,8 +62,8 @@ class ShopItems(pygame.sprite.Sprite):
         self.slot_number = slot_number
         self.item = item
         self.highlighted = False
-        self.width = screen_width*0.2
-        self.height = screen_height*0.05
+        self.width = screen_width * 0.2
+        self.height = screen_height * 0.05
         self.name = item["name"]
         try:
             self.price = item["price"]
@@ -83,14 +73,15 @@ class ShopItems(pygame.sprite.Sprite):
             self.quantity = item["quantity"]
         except:
             self.quantity = -1
+        finally:
+            pass
         if self.type == "Basics":
-            self.pos_x = screen_width*0.05
-            self.pos_y = screen_height*0.35 + self.height*self.slot_number
+            self.pos_x = screen_width * 0.05
+            self.pos_y = screen_height * 0.35 + self.height * self.slot_number
         if self.type == "Equipment":
-            self.pos_x = screen_width*0.05
-            self.pos_y = screen_height*0.65 + self.height*self.slot_number
+            self.pos_x = screen_width * 0.05
+            self.pos_y = screen_height * 0.65 + self.height * self.slot_number
         self.rect = pygame.Rect(self.pos_x, self.pos_y, self.width, self.height)
-
 
     def highlight(self):
         mouse_pos = pygame.mouse.get_pos()
@@ -106,7 +97,7 @@ class ShopItems(pygame.sprite.Sprite):
 
     def draw_text(self):
         name_image = text_font.render(self.name, False, (255, 255, 255))
-        screen.blit(name_image, (self.pos_x+screen_width*0.01, self.pos_y+screen_height*0.01))
+        screen.blit(name_image, (self.pos_x + screen_width * 0.01, self.pos_y + screen_height * 0.01))
 
         price_image = text_font.render(f"{self.price}", False, (255, 255, 255))
         screen.blit(price_image, (self.pos_x + screen_width * 0.22, self.pos_y + screen_height * 0.01))
@@ -141,23 +132,23 @@ class ShopItems(pygame.sprite.Sprite):
         self.highlight()
         self.draw_text()
 
-    def add_to_cart(self, game):
-            if self.highlighted and game.player_resources["Credits"] > self.price and self.quantity != 0:
-                game.click_cooldown = game.click_cooldown_max
-                # pay for item
-                game.player_resources["Credits"] -= self.price
-                # decrease supply if limited
-                if self.quantity > 0:
-                    self.quantity -= 1
-                # add to cart
-                if self.name in self.cart.keys():
-                    item = self.cart[f"{self.name}"]
-                    item["quantity"] += 1
-                    item["total_cost"] = self.price*item["quantity"]
-                else:
-                    self.cart["self.name"] = {
-                        "name": f"self.name",
-                        "price": self.price,
-                        "quantity": 1,
-                        "total_cost": self.price
-                    }
+    def add_to_cart(self, game, shop):
+        if self.highlighted and game.player_resources["Credits"] > self.price and self.quantity != 0:
+            game.click_cooldown = game.click_cooldown_max
+            # pay for item
+            game.player_resources["Credits"] -= self.price
+            # decrease supply if limited
+            if self.quantity > 0:
+                self.quantity -= 1
+            # add to cart
+            if self.name in shop.cart.keys():
+                item = shop.cart[f"{self.name}"]
+                item["quantity"] += 1
+                item["total_cost"] = self.price * item["quantity"]
+            else:
+                shop.cart["self.name"] = {
+                    "name": f"self.name",
+                    "price": self.price,
+                    "quantity": 1,
+                    "total_cost": self.price
+                }

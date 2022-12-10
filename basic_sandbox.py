@@ -7,9 +7,12 @@ import os
 import copy
 from math import atan2, degrees, pi
 import json
-import modules.interface as interface
+import modules.interface as module_interface
 from modules.settings import *
 import modules.shop as module_shop
+
+# press q to toggle debug mode
+# press s to toggle shop if debug mode is enabled
 
 
 def create_rect(x, y, width, height):
@@ -38,8 +41,8 @@ class GameManager:
         if self.shop_active:
             graphics.draw_window_frames()
             graphics.draw_shop_headers()
-            shop.highlight_shop_items()
-            shop.draw_shop_item_text()
+            # shop.highlight_shop_items()
+            # shop.draw_shop_item_text()
             shop.update_shop_items()
 
         graphics.draw_green()
@@ -49,6 +52,7 @@ class GameManager:
             self.click_cooldown -= 1
         self.update_graphics()
 
+
 class Pilot:
     def __init__(self, name):
         self.name = name
@@ -57,7 +61,7 @@ class Pilot:
 
 game = GameManager()
 shop = module_shop.ShopManager()
-graphics = interface.GraphicsManager()
+graphics = module_interface.GraphicsManager()
 
 # pilots
 kite = Pilot("Kite")
@@ -73,14 +77,24 @@ while True:  # game Cycle
         if event.type == pygame.KEYDOWN:
             # toggle debug mode
             if event.key == pygame.K_q:
-                if game.debug_mode == False:
+                if not game.debug_mode:
                     game.debug_mode = True
                     print("debug_mode enabled")
-                elif game.debug_mode == True:
+                elif game.debug_mode:
                     game.debug_mode = False
                     print("debug_mode disabled")
+            if game.debug_mode:
+                if event.key == pygame.K_s:
+                    if not game.shop_active:
+                        game.shop_active = True
+                        print("shop enabled with debug_mode")
+                    else:
+                        game.shop_active = False
+                        print("shop disabled with debug_mode")
+
         if event.type == pygame.MOUSEBUTTONDOWN and game.click_cooldown == 0:
-            shop.shop_items.add_to_cart()
+            for item in shop.shop_items:
+                item.add_to_cart(game, shop)
 
     game.update()
     pygame.display.update()
