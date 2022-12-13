@@ -1,4 +1,4 @@
-import pygame
+# import pygame
 from settings import *
 
 pygame.init()
@@ -11,6 +11,7 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 text_font = pygame.font.Font("font/Pixeltype.ttf", 50)
 text_font_small = pygame.font.Font("font/Pixeltype.ttf", 30)
 text_font_micro = pygame.font.Font("font/Pixeltype.ttf", 20)
+
 
 def draw_text(surface, text, color, rect, font, aa=False, bkg=None):
     y = rect.top
@@ -41,10 +42,11 @@ def draw_text(surface, text, color, rect, font, aa=False, bkg=None):
 
     return text
 
-class text_label(pygame.sprite.Sprite):
-    def __init__(self, type, list_index, text=""):
+
+class TextLabel(pygame.sprite.Sprite):
+    def __init__(self, label_type, list_index, text=""):
         super().__init__()
-        self.type = type
+        self.label_type = label_type
         self.list_index = list_index
         self.text = text
         self.active = False
@@ -52,37 +54,40 @@ class text_label(pygame.sprite.Sprite):
 
         # set text
         try:
-            if self.type == "Pilot":
+            if self.label_type == "Pilot":
                 self.reference = pilot_roster[self.list_index]
                 self.text = self.reference.name
-            elif self.type == "button":
+            elif self.label_type == "button":
                 self.text = text
-        except:
+        except (Exception, ):
             self.text = "error: invalid text"
 
     def update_text(self):
         try:
-            if self.type == "Pilot":
+            if self.label_type == "Pilot":
                 self.reference = pilot_roster[self.list_index]
                 self.text = self.reference.name
-            elif self.type == "button":
+            elif self.label_type == "button":
                 self.text = "text"
-        except:
+        except (Exception, ):
             self.text = "error: invalid text"
 
 
 text_label_group = pygame.sprite.Group()
-pilot_roster = pygame.sprite.Group()
+pilot_roster = []
 
 
 class GraphicsManager:
     def __init__(self):
+        self.visual_effects_list = []
+
         # self.fullscreen_rect = pygame.Rect((screen_width, screen_height), (center=(screen_width/2,screen_height/2)))
         self.green_filter = pygame.image.load("graphics/interface/green_filter_65.png").convert_alpha()
         self.full_window_frame = pygame.image.load("graphics/interface/frames/full_frame.png").convert_alpha()
         self.vertical_bar = pygame.image.load("graphics/interface/frames/vertical_bar.png")
         self.vertical_bar = pygame.image.load("graphics/interface/frames/vertical_bar.png")
         self.horizontal_bar = pygame.image.load("graphics/interface/frames/horizontal_bar.png")
+        self.cockpit_background = pygame.image.load("graphics/interface/cockpit/cockpit1_1.png")
 
         self.green_filter = pygame.transform.scale(self.green_filter, (screen_width * 1, screen_height * 1))
         self.full_window_frame = self.resize(self.full_window_frame, (screen_width * 0.95, screen_height * 0.95))
@@ -90,6 +95,7 @@ class GraphicsManager:
         self.vertical_bar = self.resize(self.vertical_bar, (screen_width * 0.01, screen_height * 0.92))
         self.vertical_bar2 = self.resize(self.vertical_bar, (screen_width * 0.01, screen_height * 0.75))
         self.horizontal_bar = self.resize(self.horizontal_bar, (screen_width * 0.68, screen_height * 0.03))
+        self.cockpit_background = self.resize(self.cockpit_background, (screen_width, screen_height))
 
     def resize(self, image, size):
         image = pygame.transform.scale(image, size)
@@ -102,6 +108,9 @@ class GraphicsManager:
         screen.blit(self.vertical_bar2, (screen_width * 0.45, screen_height * 0.22))
 
     # screen.blit(self.right_window_frame, (screen_width*0.6, screen_height*0))
+
+    def draw_cockpit(self):
+        screen.blit(self.cockpit_background, (0, 0))
 
     def draw_black(self):
         screen.fill((0, 0, 0))
@@ -119,24 +128,29 @@ class GraphicsManager:
         screen.blit(equipment_header_image, (screen_width * 0.05, screen_height * 0.6))
         screen.blit(media_header_image, (screen_width * 0.47, screen_height * 0.3))
         screen.blit(luxury_header_image, (screen_width * 0.47, screen_height * 0.6))
-        # self.basic_rect = pygame.Rect(screen_width * 0.05, screen_height * 0.3, screen_width * 0.4, screen_height * 0.2)
-        # self.equipment_rect = pygame.Rect(screen_width * 0.05, screen_height * 0.6, screen_width * 0.4,
-        #                                   screen_height * 0.2)
-        # self.media_rect = pygame.Rect(screen_width * 0.5, screen_height * 0.3, screen_width * 0.4, screen_height * 0.2)
-        # self.luxury_rect = pygame.Rect(screen_width * 0.5, screen_height * 0.6, screen_width * 0.4, screen_height * 0.2)
 
-        # rect = self.basic_rect  # default catchall
-        # for header in self.headers:
-        #     if header == "Basics":
-        #         rect = self.basic_rect
-        #         font = text_font
-        #     elif header == "Equipment":
-        #         rect = self.equipment_rect
-        #         font = text_font
-        #     elif header == "Offworld Media":
-        #         rect = self.media_rect
-        #         font = text_font_small
-        #     elif header == "Luxury Goods":
-        #         rect = self.luxury_rect
-        #         font = text_font_small
-        #     interface.draw_text(screen, header, (255, 255, 255), rect, text_font)
+
+# class Visual_Effect:
+#     def __init__(self, type, name, origin, target):
+#         self.type = type
+#         self.name = name
+#         self.origin = origin
+#         self.target = target
+#
+#         # set defaults
+#         self.length = find_distance(self.origin, self.target)
+#         self.angle = find_angle(self.origin, self.target)
+#         self.countdown = 60
+#
+#         if self.type == "beam":
+#             self.length = find_distance(self.origin, self.target)
+#             self.width = screen_width * 0.01
+#
+#         elif self.type == "projectile":
+#             pass
+#
+#     def update(self):
+#         if self.countdown > 0:
+#             self.countdown -= 1
+#         elif self.countdown == 0:
+#             self.kill()

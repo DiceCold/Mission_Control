@@ -24,7 +24,7 @@
 			"cooldown": 200,
 			"damage_type": "thermal",
 			"name": "Burst Laser",
-			"range": [
+			"attack_range": [
 				"short",
 				"medium"
 			],
@@ -37,7 +37,7 @@
 			"cooldown": 200,
 			"damage_type": "cold",
 			"name": "Cryo-ray",
-			"range": [
+			"attack_range": [
 				"short",
 				"medium"
 			],
@@ -50,7 +50,7 @@
 			"cooldown": 200,
 			"damage_type": "thermal",
 			"name": "Default Weapon",
-			"range": [
+			"attack_range": [
 				"short",
 				"medium"
 			],
@@ -62,7 +62,7 @@
 			"cooldown": 200,
 			"damage_type": "shock",
 			"name": "Lightning Chain",
-			"range": [
+			"attack_range": [
 				"short"
 			],
 			"tier": 1,
@@ -73,7 +73,7 @@
 			"cooldown": 300,
 			"damage_type": "thermal",
 			"name": "Volcanic Lance",
-			"range": [
+			"attack_range": [
 				"medium"
 			],
 			"tier": 1,

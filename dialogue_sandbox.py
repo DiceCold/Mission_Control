@@ -95,6 +95,7 @@ class DialogueManager:
     def __init__(self):
         self.scene = "null"
         self.line_number = 1
+        self.line = " "
         self.speaker = "null"
         self.mood = "default"
         self.text = "null"
@@ -113,25 +114,25 @@ class DialogueManager:
             choice = choices[choice_number - 1]
             print(choices)
             print(choice["text"])
-        except:
+        except(Exception, ):
             print("Error: something went wrong while selecting a choice")
 
         try:
             section = choice["next_section"]
             self.section = self.scene[section]
             print(section)
-        except:
+        except(Exception, ):
             self.section = "intro"
 
         try:
             self.line_number = choice["next_line"]
-        except:
+        except(Exception, ):
             self.line_number = 1
         print(self.line_number)
 
         try:
             game_effects = choice["game_effects"]
-        except:
+        except(Exception, ):
             game_effects = "none"
 
     def update(self):
@@ -140,11 +141,12 @@ class DialogueManager:
             self.line = line
             name = line["speaker"]
             self.available_choice = False
+            mood = "default"
             if name != "Player":
                 try:
                     self.mood = line["mood"]
                     mood = self.mood
-                except:
+                except(Exception, ):
                     mood = self.mood
             elif name == "Player":
                 try:
@@ -153,26 +155,26 @@ class DialogueManager:
                         self.available_choice = False
                     elif self.available_choice == "True":
                         self.available_choice = True
-                except:
+                except(Exception, ):
                     pass
 
             # update portrait
             try:
                 try:
                     self.portrait = pygame.image.load(f"graphics/pilots/{name}/{mood}.png")
-                except:
+                except(Exception, ):
                     self.portrait = pygame.image.load(f"graphics/pilots/{name}/default.png")
                 self.portrait = pygame.transform.scale(self.portrait, (screen_height * 0.45, screen_height * 0.9))
                 screen.blit(self.portrait, (screen_width * 0.7, screen_height * 0.07))
-            except:
+            except(Exception, ):
                 print("unable to update portrait")
 
             # update text
             try:
-                if self.available_choice == False:
+                if not self.available_choice:
                     self.text = line["text"]
                     draw_text(screen, self.text, (255, 255, 255), self.text_box, text_font_small)
-                elif self.available_choice == True:
+                elif self.available_choice:
                     choices = line["choices"]
                     choice_number = 1
                     for choice in choices:
@@ -185,9 +187,9 @@ class DialogueManager:
 
                 else:
                     print("something went wrong")
-            except:
+            except(Exception, ):
                 print("unable to draw text")
-        except:
+        except(Exception, ):
             pass
         # print("Error: unable to update dialogue")
 
@@ -216,10 +218,10 @@ while True:  # game Cycle
         if event.type == pygame.KEYDOWN:
             # toggle debug mode
             if event.key == pygame.K_q:
-                if game.debug_mode == False:
+                if not game.debug_mode:
                     game.debug_mode = True
                     print("debug_mode enabled")
-                elif game.debug_mode == True:
+                elif game.debug_mode:
                     game.debug_mode = False
                     print("debug_mode disabled")
 
@@ -241,35 +243,39 @@ while True:  # game Cycle
             if event.key == pygame.K_c:
                 try:
                     print(dialogue.scene["scene_id"])
-                except:
+                except(Exception, ):
                     print("Error: invalid scene_id")
                 try:
                     print(dialogue.section["section_id"])
-                except:
+                except(Exception,):
                     print("Error: invalid section_id")
                 try:
                     print(dialogue.line_number)
-                except:
+                except(Exception,):
                     print("Error: invalid line_number somehow")
 
             # dialogue choices
-            if dialogue.available_choice == False:
+            if not dialogue.available_choice:
                 if event.key == pygame.K_d:
                     try:
                         dialogue.line_number += 1
-                    except:
+                    except(Exception, ):
                         print("Error: unable to advance dialogue line")
                 if event.key == pygame.K_a:
                     try:
                         dialogue.line_number -= 1
-                    except:
+                    except(Exception, ):
                         print("Error: unable to reverse dialogue line")
 
-            if dialogue.available_choice == True:
-                if event.key == pygame.K_1: dialogue.select_choice(1)
-                elif event.key == pygame.K_2: dialogue.select_choice(2)
-                elif event.key == pygame.K_3: dialogue.select_choice(3)
-                elif event.key == pygame.K_4: dialogue.select_choice(4)
+            if dialogue.available_choice:
+                if event.key == pygame.K_1:
+                    dialogue.select_choice(1)
+                elif event.key == pygame.K_2:
+                    dialogue.select_choice(2)
+                elif event.key == pygame.K_3:
+                    dialogue.select_choice(3)
+                elif event.key == pygame.K_4:
+                    dialogue.select_choice(4)
 
     graphics.update()
     pygame.display.update()

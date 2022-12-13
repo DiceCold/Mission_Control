@@ -5,8 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="711c8494-9fd2-4d26-a466-16b6722da02b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/mission_manager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/basic_sandbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic_sandbox.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/equipment_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/equipment_data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/pilot_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/pilot_data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dialogue_sandbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/dialogue_sandbox.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/graphics/pilots/saint/Saint_default.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mission_control.py" beforeDir="false" afterPath="$PROJECT_DIR$/mission_control.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/navigation_module.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/piloting.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/shop.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/shop.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -35,14 +44,14 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/dicec/OneDrive/Documents/GitHub/Mission_Control/data",
-    "run.code.analysis.last.selected.profile": "pProject Default"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/dicec/OneDrive/Documents/GitHub/Mission_Control/data&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\dicec\OneDrive\Documents\GitHub\Mission_Control\data" />

@@ -51,14 +51,14 @@ class ShopManager:
     def update_shop_items(self):
         self.shop_items.update()
 
-    def add_to_cart(self, game):
+    def add_to_cart(self):
         self.shop_items.add_to_cart()
 
 
 class ShopItems(pygame.sprite.Sprite):
-    def __init__(self, type, slot_number, item):
+    def __init__(self, item_type, slot_number, item):
         super().__init__()
-        self.type = type
+        self.item_type = item_type
         self.slot_number = slot_number
         self.item = item
         self.highlighted = False
@@ -67,18 +67,18 @@ class ShopItems(pygame.sprite.Sprite):
         self.name = item["name"]
         try:
             self.price = item["price"]
-        except:
+        except(Exception, ):
             self.price = 100
         try:
             self.quantity = item["quantity"]
-        except:
+        except(Exception, ):
             self.quantity = -1
         finally:
             pass
-        if self.type == "Basics":
+        if self.item_type == "Basics":
             self.pos_x = screen_width * 0.05
             self.pos_y = screen_height * 0.35 + self.height * self.slot_number
-        if self.type == "Equipment":
+        if self.item_type == "Equipment":
             self.pos_x = screen_width * 0.05
             self.pos_y = screen_height * 0.65 + self.height * self.slot_number
         self.rect = pygame.Rect(self.pos_x, self.pos_y, self.width, self.height)

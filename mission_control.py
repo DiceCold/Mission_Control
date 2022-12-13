@@ -92,11 +92,11 @@ if startup: #load screen
 
 blank_frame = pygame.image.load("graphics/blank.png").convert_alpha()
 blank_frame = pygame.transform.scale(blank_frame, (10,10))
-explosion_sheet_1 = pygame.image.load("graphics/weapons/explosion_sprite_1.png").convert_alpha()
-explosion_sheet_2 = pygame.image.load("graphics/weapons/explosion_sprite_2.png").convert_alpha()
-explosion_sheet_3 = pygame.image.load("graphics/weapons/explosion_sprite_3.png").convert_alpha()
-explosion_sheet_4 = pygame.image.load("graphics/weapons/explosion_sprite_4.png").convert_alpha()
-teleport_sheet = pygame.image.load("graphics/weapons/teleport_explosion.png").convert_alpha()
+explosion_sheet_1 = pygame.image.load("graphics/effects/explosion_sprite_1.png").convert_alpha()
+explosion_sheet_2 = pygame.image.load("graphics/effects/explosion_sprite_2.png").convert_alpha()
+explosion_sheet_3 = pygame.image.load("graphics/effects/explosion_sprite_3.png").convert_alpha()
+explosion_sheet_4 = pygame.image.load("graphics/effects/explosion_sprite_4.png").convert_alpha()
+teleport_sheet = pygame.image.load("graphics/effects/teleport_explosion.png").convert_alpha()
 
 def drawText(surface, text, color, rect, font, aa=False, bkg=None):
     y = rect.top
@@ -227,7 +227,7 @@ if startup: #load classes
             #red laser
             if self.form == "beam" and self.damage_type == "thermal":
                 self.name = "thermal beam"
-                self.frame_1 = pygame.image.load("graphics/weapons/laserbeam_thin_half.png").convert_alpha()
+                self.frame_1 = pygame.image.load("graphics/effects/laserbeam_thin_half.png").convert_alpha()
                 self.frame_0 = blank_frame
                 self.frames = [self.frame_0,self.frame_1]
                 self.image = self.frames[self.animation_index]
@@ -239,7 +239,7 @@ if startup: #load classes
             if self.form == "beam" and self.damage_type == "cold":
                 self.name = "cryo beam"
                 self.frame_0 = blank_frame
-                self.frame_1 = pygame.image.load("graphics/weapons/ice_laser.png").convert_alpha()
+                self.frame_1 = pygame.image.load("graphics/effects/ice_laser.png").convert_alpha()
                 self.frames = [self.frame_0,self.frame_1]
                 self.image = self.frames[self.animation_index]
                 self.width = 20
@@ -250,14 +250,14 @@ if startup: #load classes
             if self.form == "burst" and self.damage_type == "thermal":
                 self.name = "flamer"
                 self.frame_0 = blank_frame
-                self.frame_1 = pygame.image.load("graphics/weapons/fire1.png").convert_alpha()
-                self.frame_2 = pygame.image.load("graphics/weapons/fire2.png").convert_alpha()
-                self.frame_3 = pygame.image.load("graphics/weapons/fire3.png").convert_alpha()
-                self.frame_4 = pygame.image.load("graphics/weapons/fire4.png").convert_alpha()
-                self.frame_5 = pygame.image.load("graphics/weapons/fire5.png").convert_alpha()
-                self.frame_6 = pygame.image.load("graphics/weapons/fire6.png").convert_alpha()
-                self.frame_7 = pygame.image.load("graphics/weapons/fire7.png").convert_alpha()
-                self.frame_8 = pygame.image.load("graphics/weapons/fire8.png").convert_alpha()
+                self.frame_1 = pygame.image.load("graphics/effects/fire1.png").convert_alpha()
+                self.frame_2 = pygame.image.load("graphics/effects/fire2.png").convert_alpha()
+                self.frame_3 = pygame.image.load("graphics/effects/fire3.png").convert_alpha()
+                self.frame_4 = pygame.image.load("graphics/effects/fire4.png").convert_alpha()
+                self.frame_5 = pygame.image.load("graphics/effects/fire5.png").convert_alpha()
+                self.frame_6 = pygame.image.load("graphics/effects/fire6.png").convert_alpha()
+                self.frame_7 = pygame.image.load("graphics/effects/fire7.png").convert_alpha()
+                self.frame_8 = pygame.image.load("graphics/effects/fire8.png").convert_alpha()
                 self.frames = [self.frame_0, self.frame_1, self.frame_2, self.frame_3, self.frame_4, self.frame_5, self.frame_6, self.frame_7, self.frame_8]
                 self.countdown_max = 60
                 self.image = self.frames[self.animation_index]
@@ -277,7 +277,7 @@ if startup: #load classes
             #teleport
             if self.form == "teleport":
                 self.name = "teleport"
-                teleport_sheet = pygame.image.load("graphics/weapons/teleport_explosion.png").convert_alpha()
+                teleport_sheet = pygame.image.load("graphics/effects/teleport_explosion.png").convert_alpha()
                 self.animation_index = 0
                 # self.frames = explosion_frames
                 # self.image = blank_frame
@@ -1672,13 +1672,13 @@ if startup: #load classes
     class Image_Holder:
         def __init__(self):
             self.portrait = {
-                "Nighthawk":pygame.image.load("graphics/pilots/nighthawk_standing.png").convert_alpha(),
-                "Rose":pygame.image.load("graphics/pilots/rose_standing.png").convert_alpha(),
-                "Lightbringer":pygame.image.load("graphics/pilots/lightbringer_standing.png").convert_alpha(),
-                "Deadlift":pygame.image.load("graphics/pilots/deadlift_standing.png").convert_alpha(),
-                "Azure_Kite":pygame.image.load("graphics/pilots/kite_standing.png").convert_alpha(),
-                "Shadowstalker":pygame.image.load("graphics/pilots/shadowstalker_standing.png").convert_alpha(),
-                "Unassigned":pygame.image.load("graphics/pilots/unassigned_standing.png").convert_alpha()
+                "Nighthawk":pygame.image.load("graphics/pilots/nighthawk/default.png").convert_alpha(),
+                "kite":pygame.image.load("graphics/pilots/kite/default.png").convert_alpha(),
+                "saint":pygame.image.load("graphics/pilots/saint/default.png").convert_alpha(),
+                "Deadlift":pygame.image.load("graphics/pilots/deadlift/default.png").convert_alpha(),
+                "Azure_Kite":pygame.image.load("graphics/pilots/kite/default.png").convert_alpha(),
+                "Shadowstalker":pygame.image.load("graphics/pilots/stalker/default.png").convert_alpha(),
+                "Unassigned":pygame.image.load("graphics/pilots/kite/default.png").convert_alpha()
                 }
     
     class Overlay_Manager:
@@ -1727,13 +1727,13 @@ if startup: #load classes
             self.small_frame_right_image = pygame.image.load("graphics/interface/frames/small_frame_flipped.png").convert_alpha()
             self.small_frame_right_image = pygame.transform.scale(self.small_frame_right_image, (screen_width*0.24,screen_height*0.82))
             self.small_frame_right_rect = self.small_frame_right_image.get_rect(topright = (self.large_frame_rect.right, screen_height*0.13))
-            self.nighthawk_portrait = pygame.image.load("graphics/pilots/nighthawk_standing.png").convert_alpha()
-            self.rose_portrait = pygame.image.load("graphics/pilots/rose_standing.png").convert_alpha()
-            self.lightbringer_portrait = pygame.image.load("graphics/pilots/lightbringer_standing.png").convert_alpha()
-            self.deadlift_portrait = pygame.image.load("graphics/pilots/deadlift_standing.png").convert_alpha()
-            self.kite_portrait = pygame.image.load("graphics/pilots/kite_standing.png").convert_alpha()
-            self.shadowstalker_portrait = pygame.image.load("graphics/pilots/shadowstalker_standing.png").convert_alpha()
-            self.unassigned_portrait = pygame.image.load("graphics/pilots/unassigned_standing.png").convert_alpha()
+            self.nighthawk_portrait = pygame.image.load("graphics/pilots/nighthawk/default.png").convert_alpha()
+            self.kite_portrait = pygame.image.load("graphics/pilots/kite/default.png").convert_alpha()
+            self.saint_portrait = pygame.image.load("graphics/pilots/saint/default.png").convert_alpha()
+            self.deadlift_portrait = pygame.image.load("graphics/pilots/deadlift/default.png").convert_alpha()
+            self.kite_portrait = pygame.image.load("graphics/pilots/kite/default.png").convert_alpha()
+            self.shadowstalker_portrait = pygame.image.load("graphics/pilots/stalker/default.png").convert_alpha()
+            self.unassigned_portrait = pygame.image.load("graphics/pilots/kite/default.png").convert_alpha()
         def draw_selected_pilot_name(self):
             selected.pilot_name_image = text_font.render(f"{selected.pilot.name}",False,(111,196,169))
             selected.pilot_name_rect = selected.pilot_name_image.get_rect(center = (screen_width*0.5,screen_height*0.25))
@@ -1761,10 +1761,10 @@ if startup: #load classes
         def draw_portrait(self, pilot):
             if selected.pilot == nighthawk:
                 portrait = self.nighthawk_portrait
-            elif selected.pilot == rose:
-                portrait = self.rose_portrait
-            elif selected.pilot == lightbringer:
-                 portrait = self.lightbringer_portrait
+            elif selected.pilot == kite:
+                portrait = self.kite_portrait
+            elif selected.pilot == saint:
+                 portrait = self.saint_portrait
             elif selected.pilot == deadlift:
                 portrait = self.deadlift_portrait
             elif selected.pilot == kite:
@@ -2020,13 +2020,13 @@ if startup: #load classes
                             if debug_mode == True: print(pilot.name, "assigned to mission:", selected.active_mission_number)
                             pilot.orders = "objective"
                             mission.pilots.add(pilot)
-                    rose.orders = "objective"
-                    rose.active = True
+                    kite.orders = "objective"
+                    kite.active = True
                     nighthawk.orders = "objective"
                     nighthawk.active = True
-                    lightbringer.active = True
-                    rose.pos_x = random.randint(-screen_width*0.2+train_objective.pos_x,screen_width*0.2+train_objective.pos_x)
-                    rose.pos_y = random.randint(-screen_height*0.2+train_objective.pos_y, 0)
+                    saint.active = True
+                    kite.pos_x = random.randint(-screen_width*0.2+train_objective.pos_x,screen_width*0.2+train_objective.pos_x)
+                    kite.pos_y = random.randint(-screen_height*0.2+train_objective.pos_y, 0)
                     for pilot in mission.pilots: 
                         pilot.move_target = mission.train_roster[0]
                     for pilot in mission.enemies: 
@@ -2043,9 +2043,9 @@ if startup: #load classes
                 mission.spawn_terrain ("rock", screen_width*0.5, screen_height*0.5, screen_width*0.3, screen_height*0.3)
                 
                 #placeholder to add multiple pilots to mission 2
-                rose.on_mission = True
+                kite.on_mission = True
                 nighthawk.on_mission = True
-                lightbringer.on_mission = True
+                saint.on_mission = True
                 kite.on_mission = True
                 
                 #prep pilots
@@ -2059,11 +2059,11 @@ if startup: #load classes
                             pilot.pos_x = screen_width/2 - 150 + random.randint(0,300)
                             mission.pilots.add(pilot)
                 
-                rose.orders = "objective"
-                rose.active = True
+                kite.orders = "objective"
+                kite.active = True
                 nighthawk.orders = "objective"
                 nighthawk.active = True
-                lightbringer.active = True
+                saint.active = True
     
     class Scene_Manager:
         def __init__(self):
@@ -2130,12 +2130,12 @@ if startup: #load classes
                                     "   Alright, showtime."
                                         ],  
                         
-                        "Rose":[
+                        "kite":[
                                     " ",
                                     "   Nighthawk needs help? No problem, I'm on my way!"
                                         ],
                         
-                        "Lightbringer":[
+                        "saint":[
                                     " ",
                                     "   Understood, I've been itching for a chance to test out a new weapon."
                                         ],
@@ -2491,13 +2491,13 @@ if startup: #load specifics
     if startup: #load pilots
         unassigned_pilot = Pilot("Unassigned",0,copy.deepcopy(tower),"vanguard")
         nighthawk = Pilot("Nighthawk",1,copy.deepcopy(majestic),"vanguard")
-        rose = Pilot("Rose",2,copy.deepcopy(majestic),"vanguard")
-        lightbringer = Pilot("Lightbringer",3,copy.deepcopy(majestic),"vanguard")
+        kite = Pilot("kite",2,copy.deepcopy(majestic),"vanguard")
+        saint = Pilot("saint",3,copy.deepcopy(majestic),"vanguard")
         deadlift = Pilot("Deadlift",4,copy.deepcopy(majestic),"vanguard")
         kite = Pilot("Azure_Kite",5,copy.deepcopy(majestic),"vanguard")
         shadowstalker = Pilot("Shadowstalker",6,copy.deepcopy(majestic),"vanguard")
         null_pilot = Pilot(" ",-1,copy.deepcopy(null_suit),"vanguard")
-        group.pilot_roster = [unassigned_pilot, nighthawk, rose, lightbringer, deadlift, kite,shadowstalker]
+        group.pilot_roster = [unassigned_pilot, nighthawk, kite, saint, deadlift, kite,shadowstalker]
         selected.pilot = group.pilot_roster[0]
         null_pilot.pos_x = -1
         null_pilot.pos_y = -1
@@ -2507,13 +2507,13 @@ if startup: #load specifics
     if startup: #load Pilot sprites
         mission.pilots.add(unassigned_pilot)
         mission.pilots.add(nighthawk)
-        mission.pilots.add(rose)
-        mission.pilots.add(lightbringer)
+        mission.pilots.add(kite)
+        mission.pilots.add(saint)
         mission.pilots.add(deadlift)
         mission.pilots.add(kite)
         mission.pilots.add(tower_1)
         nighthawk.battlesuit.loadout[1] = cryo_shot
-        rose.battlesuit.loadout[1] = cryo_shot
+        kite.battlesuit.loadout[1] = cryo_shot
     #update inventory
     if startup: #load inventory
         group.inventory = [fusion_core, beam_cannon, light_shield, light_shield, null_weapon, null_weapon, null_weapon]
