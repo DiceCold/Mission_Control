@@ -1,6 +1,6 @@
 {
-	"pilot_data": [
-		{
+	"pilot_data": {
+		"default": {
 			"name": "default",
 			"pilot_id": 0,
 			"faction": "vanguard",
@@ -13,9 +13,14 @@
 			},
 			"feats": "none",
 			"chassis": "majestic",
-			"loadout": ["jet booster", "burst laser", "burst laser", "light shield"]
+			"loadout": [
+				"jet booster",
+				"burst laser",
+				"burst laser",
+				"light shield"
+			]
 		},
-		{
+		"nighthawk": {
 			"name": "Nighthawk",
 			"pilot_id": 1,
 			"faction": "vanguard",
@@ -27,21 +32,26 @@
 				"precision": 0
 			},
 			"chassis": "majestic",
-			"loadout": ["jet booster", "burst laser", "burst laser", "light shield"]
+			"loadout": [
+				"jet booster",
+				"burst laser",
+				"burst laser",
+				"light shield"
+			]
 		},
-		{
-			"name": "Kite",
-			"pilot_id": 1,
-			"faction": "vanguard",
-			"attributes": {
-				"reflex": 0,
-				"focus": 0,
-				"insight": 1,
-				"daring": 0,
-				"precision": 0
+	"kite": {
+		"name": "Kite",
+		"pilot_id": 1,
+		"faction": "vanguard",
+		"attributes": {
+			"reflex": 0,
+			"focus": 0,
+			"insight": 1,
+			"daring": 0,
+			"precision": 0
 			},
-			"chassis": "majestic",
-			"loadout": ["jet booster", "burst laser", "burst laser", "light shield"]
+		"chassis": "majestic",
+		"loadout": ["jet booster", "burst laser", "burst laser", "light shield"]
 		}
-	]
+	}
 }

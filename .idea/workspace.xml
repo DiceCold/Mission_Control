@@ -5,18 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="711c8494-9fd2-4d26-a466-16b6722da02b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/mission_manager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/basic_sandbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic_sandbox.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/equipment_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/equipment_data.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/pilot_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/pilot_data.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dialogue_sandbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/dialogue_sandbox.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/saint/Saint_default.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mission_control.py" beforeDir="false" afterPath="$PROJECT_DIR$/mission_control.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/interface.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/navigation_module.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/piloting.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/shop.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/shop.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mission_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/mission_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/mission_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/mission_module.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/pilot_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/pilot_module.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

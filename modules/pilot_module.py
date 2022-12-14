@@ -2,11 +2,12 @@ import pygame
 from settings import *
 from math import atan2, degrees, pi, inf
 import random
+import json
 
 
 def find_distance(origin, target):
     distance_x = target.pos_x - origin.pos_x
-    distance_y = target.pox_y - origin.pos_y
+    distance_y = target.pos_y - origin.pos_y
     distance_h = (distance_x**2 + distance_y**2)**0.5
     return distance_h
 
@@ -21,28 +22,26 @@ def find_angle(origin, target):
     return angle
 
 
-class Waypoint:
-    def __init__(self, pos_x, pos_y):
-        self.type = "waypoint"
-        self.pos_x = pos_x
-        self.pos_y = pos_y
-
-
 class Pilot(pygame.sprite.Sprite):
-    def __init__(self, name, data_file):
+    def __init__(self, name):
         super().__init__()
         self.name = name
-        # import core information from data file
+        # import information from data file
+        data_file = json.load(open("data/pilot_data.json", "r"))
+        pilot_data = data_file["pilot_data"]
         try:
-            data = data_file[f"{self.name}"]
+            data = pilot_data[f"{self.name}"]
         except(Exception, ):
-            data = data_file["default"]
+            data = pilot_data["default"]
         self.pilot_id = data["pilot_id"]
         self.faction = data["faction"]
+
         # determine dot color based on faction
         if self.faction == "vanguard":
-            self.image = pygame.image.load("graphics/interface/blue_dot.png").convert_alpha()
-            self.image = pygame.transform.scale(self.image, (screen_width*0.01, screen_width*0.01))
+            self.image = pygame.image.load("graphics/icons/blue_dot_icon.png").convert_alpha()
+        else:
+            self.image = pygame.image.load("graphics/icons/red_dot_icon.png").convert_alpha()
+        self.image = pygame.transform.scale(self.image, (screen_width * 0.01, screen_width * 0.01))
 
         self.feats = data["feats"]
         self.chassis = data["chassis"]
@@ -102,16 +101,25 @@ class Pilot(pygame.sprite.Sprite):
 
     def find_target(self, target_list):
         # checks to find the closest target
+        print(f"{self.name} is searching for target")
         new_target = None
         new_target_distance = float(inf)
+        # try:
         for target in target_list:
+            print(target.name)
             distance = find_distance(self, target)
+            print(target.name, distance)
             if distance <= new_target_distance:
                 new_target = target
                 new_target_distance = distance
+        # except(Exception, ):
+        #     new_target = None
+
         return new_target
 
     def maneuver(self, multiplier = 1):
+        print(self.name, self.target["move"])
+        print(self.target_list["enemies"])
         # update velocity
         if self.target["move"] is not None:
             if self.pos_x < self.target["move"].pos_x:
@@ -201,55 +209,20 @@ class Pilot(pygame.sprite.Sprite):
         # movement
         if self.targeting_mode == "automatic":
             self.target["move"] = self.find_target(self.target_list["enemies"])
-            self.target["attack"] = self.find_target("attack")
+            self.target["attack"] = self.find_target(self.target_list["enemies"])
         self.maneuver()
 
-
-class MissionManager:
-    def __init__ (self):
-        self.pilots = pygame.sprite.Group()
-
-        
-
-        
-    
-            
-    # def spawn_drones(quantity, pos_x, pos_y, position_variance, team):
-    #     if quantity == "1d6": quantity = random.randint(1,6)
-    #     while quantity > 0:
-    #         drone = Navigator("drone", copy.deepcopy(drone_suit), team)
-    #         drone.pos_x = pos_x + random.randint(-position_offset, position_variance)
-    #         drone.pos_y = pos_y + random.ranint(-position_offset, position_variance)
-    #         self.pilots.add(drone)
-            
-    def spawn_waypoint(self, pos_x, pos_y):
-        self.waypoints.add(Waypoint(pos_x, pos_y))
-        
-    # def spawn_train(pos_x, pos_y):
-    #     train = Navigator("train", "train", copy.deepcopy(train_suit), "vanguard")
-    #     train.pos_x = pos_x
-    #     train.pos_y = pos_y
-    #     self.pilots.add(train)
-            
-    def reset(self):
-        self.pilots.empty()
-        self.objectives.empty()
-        self.waypoints.empty()
-        self.terrain.empty()
-        self.biome = "desert"
-        # for pilot in game.pilot_roster: pilot.on_mission = False
-        
-    def load(self, name):
-        if name == "mission 1: train attack":
-            #  waypoints for train
-            self.spawn_waypoint(screen_width*0.2, screen_height*0.2)
-            self.spawn_waypoint(screen_width*0.6, screen_height*0.3)
-            self.spawn_waypoint(screen_width*0.3, screen_height*0.5)
-            self.spawn_waypoint(screen_width*0.6, screen_height*0.6)
-            self.spawn_waypoint(screen_width*0.2, screen_height*0.9)
-            self.spawn_waypoint(screen_width*1.2, screen_height*0.7)
-            # spawn train
-            self.spawn_train(screen_width*0.15, screen_height*0.15)
+    # def load(self, name):
+    #     if name == "mission 1: train attack":
+    #         #  waypoints for train
+    #         self.spawn_waypoint(screen_width*0.2, screen_height*0.2)
+    #         self.spawn_waypoint(screen_width*0.6, screen_height*0.3)
+    #         self.spawn_waypoint(screen_width*0.3, screen_height*0.5)
+    #         self.spawn_waypoint(screen_width*0.6, screen_height*0.6)
+    #         self.spawn_waypoint(screen_width*0.2, screen_height*0.9)
+    #         self.spawn_waypoint(screen_width*1.2, screen_height*0.7)
+    #         # spawn train
+    #         self.spawn_train(screen_width*0.15, screen_height*0.15)
 
 
-#
+target_dummy = Pilot("target_dummy")

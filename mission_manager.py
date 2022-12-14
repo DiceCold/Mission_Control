@@ -1,6 +1,18 @@
 import pygame
 import random
+import json
+import modules.pilot_module as pilot_module
 from settings import *
+
+pilot_data = json.load(open("data/pilot_data.json", "r"))
+
+
+class Waypoint:
+    def __init__(self, pos_x, pos_y):
+        super().__init__()
+        self.type = "waypoint"
+        self.pos_x = pos_x
+        self.pos_y = pos_y
 
 
 class MissionManager:
@@ -18,7 +30,11 @@ class MissionManager:
         self.map_offset_y = 0
 
     def reset(self):
-        pass
+        self.objectives.empty()
+        self.waypoints.empty()
+        self.enemies.empty()
+        self.terrain.empty()
+        self.biome = "desert"
 
     def spawn_random_crates(self, quantity):
         while quantity > 0:
@@ -26,6 +42,24 @@ class MissionManager:
             pos_y = random.randint(screen_height*0.2, screen_height*0.8)
             self.objectives.add(Objective("pickup", "supply_crate", pos_x, pos_y))
             quantity -= 1
+
+    def spawn_drones(self, quantity_min, quantity_max, pos_x, pos_y, position_variance, team):
+        quantity = random.randint[quantity_min, quantity_max]
+        while quantity > 0:
+            drone = pilot_module.Pilot("drone", pilot_data)
+            drone.pos_x = pos_x + random.randint(-position_variance, position_variance)
+            drone.pos_y = pos_y + random.randint(-position_variance, position_variance)
+            self.enemies.add(drone)
+
+    def spawn_waypoint(self, pos_x, pos_y):
+        waypoint = Waypoint(pos_x, pos_y)
+        self.waypoints.add(waypoint)
+
+    def spawn_train(self, pos_x, pos_y):
+        train = pilot_module.Pilot("train", pilot_data)
+        train.pos_x = pos_x
+        train.pos_y = pos_y
+        self.objectives.add(train)
 
 
 class Objective:

@@ -8,6 +8,8 @@ from sys import exit
 from math import atan2, degrees, pi
 import json
 import modules.interface as module_interface
+import modules.pilot_module as pilot_module
+import modules.mission_module as mission_module
 from modules.settings import *
 import modules.shop as module_shop
 
@@ -17,6 +19,7 @@ print("Welcome to the Mission Control Demo")
 print("To toggle debug mode, press 'q'")
 print("To toggle shop while debug is enabled, press 's'")
 print("To toggle combat while debug is enabled, press 'x'")
+print("To set combat to the testing setup press 'z' while combat is enabled.")
 print("To return to cockpit while debug is enabled, press 'c'")
 
 
@@ -63,6 +66,10 @@ class GameManager:
             "Meds": 10
         }
 
+    def run_combat(self):
+        if self.focus == "combat":
+            mission.pilots.update()
+            mission.enemies.update()
 
     def update_graphics(self):
         graphics.draw_black()
@@ -74,12 +81,21 @@ class GameManager:
             shop.update_shop_items()
         elif self.focus == "cockpit":
             graphics.draw_cockpit()
+        elif self.focus == "combat":
+            # mission.pilots.draw_dot()
+            # mission.enemies.draw_dot()
+            for pilot in mission.pilots:
+                pygame.draw.circle(screen, pilot.color, (pilot.pos_x, pilot.pos_y), screen_width * 0.005)
+            for pilot in mission.enemies:
+                pygame.draw.circle(screen, pilot.color, (pilot.pos_x, pilot.pos_y), screen_width * 0.005)
+
         if game.focus != "cockpit":
             graphics.draw_green()
 
     def update(self):
         if self.click_cooldown > 0:
             self.click_cooldown -= 1
+        mission.update()
         self.update_graphics()
 
 
@@ -103,6 +119,7 @@ class GameManager:
 
 
 game = GameManager()
+mission = mission_module.MissionManager()
 shop = module_shop.ShopManager()
 graphics = module_interface.GraphicsManager()
 
@@ -110,12 +127,13 @@ graphics = module_interface.GraphicsManager()
 pilot_data = json.load(open("data/pilot_data.json", "r"))
 
 
-kite = Pilot("Kite", pilot_data)
-nasha = Pilot("Nasha", pilot_data)
-roger = Pilot("Roger", pilot_data)
+kite = pilot_module.Pilot("Kite")
+nasha = pilot_module.Pilot("Nasha")
+roger = pilot_module.Pilot("Roger")
 game.pilot_roster.add(kite)
 game.pilot_roster.add(nasha)
 game.pilot_roster.add(roger)
+
 
 while True:  # game Cycle
     for event in pygame.event.get():
@@ -149,6 +167,13 @@ while True:  # game Cycle
                         print("combat disabled with debug_mode")
                 elif event.key == pygame.K_c:
                     game.focus = "cockpit"
+
+            # load combat test
+            if game.debug_mode and game.focus == "combat":
+                if event.key == pygame.K_z:
+                    mission.load_pilot_for_test_mission(kite)
+                    mission.load_pilot_for_test_mission(nasha)
+                    mission.load_enemy_for_test_mission(roger)
 
         if event.type == pygame.MOUSEBUTTONDOWN and game.click_cooldown == 0:
             for item in shop.shop_items:
