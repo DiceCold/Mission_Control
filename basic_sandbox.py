@@ -21,6 +21,7 @@ print("To toggle shop while debug is enabled, press 's'")
 print("To toggle combat while debug is enabled, press 'x'")
 print("To set combat to the testing setup press 'z' while combat is enabled.")
 print("To return to cockpit while debug is enabled, press 'c'")
+print("To pause or unpause combat press space")
 
 
 def create_rect(x, y, width, height):
@@ -50,6 +51,7 @@ class GameManager:
         self.focus = "cockpit"
         self.scene_id = "intro"
         self.debug_mode = False
+        self.paused = False
 
         self.click_cooldown_max = 15
         self.click_cooldown = self.click_cooldown_max
@@ -67,9 +69,19 @@ class GameManager:
         }
 
     def run_combat(self):
-        if self.focus == "combat":
+        if self.focus == "combat" and game.paused is False:
             mission.pilots.update()
             mission.enemies.update()
+        if self.focus == "combat" and game.paused:
+            if mission.selected_pilot is None:
+                mission.highlight_pilot()
+                if event.type == pygame.MOUSEBUTTONDOWN and self.click_cooldown == 0:
+                    self.click_cooldown = self.click_cooldown_max
+                    mission.select_pilot()
+            if mission.selected_pilot is not None:
+                if event.type == pygame.MOUSEBUTTONDOWN and self.click_cooldown == 0:
+                    self.click_cooldown = self.click_cooldown_max
+                    mission.issue_orders("waypoint")
 
     def update_graphics(self):
         graphics.draw_black()
@@ -84,10 +96,16 @@ class GameManager:
         elif self.focus == "combat":
             # mission.pilots.draw_dot()
             # mission.enemies.draw_dot()
-            for pilot in mission.pilots:
-                pygame.draw.circle(screen, pilot.color, (pilot.pos_x, pilot.pos_y), screen_width * 0.005)
+            # for pilot in mission.pilots:
+                # pygame.draw.circle(screen, pilot.color, (pilot.pos_x, pilot.pos_y), screen_width * 0.005)
+            mission.pilots.draw(screen)
             for pilot in mission.enemies:
                 pygame.draw.circle(screen, pilot.color, (pilot.pos_x, pilot.pos_y), screen_width * 0.005)
+
+            # draw crosshair
+            if self.paused and mission.selected_pilot is not None:
+                mouse_pos = pygame.mouse.get_pos()
+                graphics.draw_crosshair(mouse_pos[0], mouse_pos[1])
 
         if game.focus != "cockpit":
             graphics.draw_green()
@@ -95,7 +113,10 @@ class GameManager:
     def update(self):
         if self.click_cooldown > 0:
             self.click_cooldown -= 1
-        mission.update()
+        if game.focus == "combat":
+            # mission.update()
+            self.run_combat()
+
         self.update_graphics()
 
 
@@ -126,14 +147,12 @@ graphics = module_interface.GraphicsManager()
 # pilots
 pilot_data = json.load(open("data/pilot_data.json", "r"))
 
-
 kite = pilot_module.Pilot("Kite")
 nasha = pilot_module.Pilot("Nasha")
 roger = pilot_module.Pilot("Roger")
 game.pilot_roster.add(kite)
 game.pilot_roster.add(nasha)
 game.pilot_roster.add(roger)
-
 
 while True:  # game Cycle
     for event in pygame.event.get():
@@ -174,6 +193,17 @@ while True:  # game Cycle
                     mission.load_pilot_for_test_mission(kite)
                     mission.load_pilot_for_test_mission(nasha)
                     mission.load_enemy_for_test_mission(roger)
+
+            # pause and unpause combat
+            if event.key == pygame.K_SPACE and game.focus == "combat":
+                if not game.paused:
+                    game.paused = True
+                    print("Combat has been paused")
+                else:
+                    game.paused = False
+                    for pilot in mission.pilots:
+                        pilot.selected = False
+                    print("Combat has been unpaused")
 
         if event.type == pygame.MOUSEBUTTONDOWN and game.click_cooldown == 0:
             for item in shop.shop_items:

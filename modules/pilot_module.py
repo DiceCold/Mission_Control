@@ -61,6 +61,8 @@ class Pilot(pygame.sprite.Sprite):
         self.on_mission = False
         self.targeting_mode = "automatic"
         self.orders = "aggressive_focus"
+        self.highlighted = False
+        self.selected = False
 
         self.pos_x = -1
         self.pos_y = -1
@@ -71,11 +73,18 @@ class Pilot(pygame.sprite.Sprite):
         # set color of the pilots dot based on faction
         if self.faction == "vanguard":
             self.color = (0, 0, 255)
+            self.image = pygame.image.load("graphics/icons/blue_dot_icon.png").convert_alpha()
         elif self.faction == "hive":
             self.color = (255, 0, 0)
+            self.image = pygame.image.load("graphics/icons/red_dot_icon.png").convert_alpha()
         else:
             self.color = (255, 255, 255)
-        
+            self.image = pygame.image.load("graphics/icons/red_dot_icon.png").convert_alpha()
+        self.width = screen_width*0.01
+        self.height = screen_width*0.01
+        self.image = pygame.transform.scale(self.image, (self.width, self.height))
+        self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
+
         # set health status
         self.injured = False
         self.suit_damaged = False
@@ -101,14 +110,11 @@ class Pilot(pygame.sprite.Sprite):
 
     def find_target(self, target_list):
         # checks to find the closest target
-        print(f"{self.name} is searching for target")
         new_target = None
         new_target_distance = float(inf)
         # try:
         for target in target_list:
-            print(target.name)
             distance = find_distance(self, target)
-            print(target.name, distance)
             if distance <= new_target_distance:
                 new_target = target
                 new_target_distance = distance
@@ -118,8 +124,6 @@ class Pilot(pygame.sprite.Sprite):
         return new_target
 
     def maneuver(self, multiplier = 1):
-        print(self.name, self.target["move"])
-        print(self.target_list["enemies"])
         # update velocity
         if self.target["move"] is not None:
             if self.pos_x < self.target["move"].pos_x:
@@ -141,6 +145,7 @@ class Pilot(pygame.sprite.Sprite):
         # update position
         self.pos_x = self.pos_x + self.velocity_x * multiplier
         self.pos_y = self.pos_y + self.velocity_y * multiplier
+        self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
 
     def attack(self, item, target):
         # reset item cooldown
@@ -203,7 +208,11 @@ class Pilot(pygame.sprite.Sprite):
             self.kill()
 
     def draw_dot(self):
-        pygame.draw.circle(screen, self.color, (self.pos_x, self.pos_y), screen_width*0.01)
+        # if self.highlighted:
+        #     pygame.draw.circle(screen, (255, 255, 255), (self.pos_x, self.pos_y), screen_width * 0.01)
+        # else:
+        #     pygame.draw.circle(screen, self.color, (self.pos_x, self.pos_y), screen_width*0.01)
+        pass
 
     def update(self):
         # movement
@@ -211,6 +220,7 @@ class Pilot(pygame.sprite.Sprite):
             self.target["move"] = self.find_target(self.target_list["enemies"])
             self.target["attack"] = self.find_target(self.target_list["enemies"])
         self.maneuver()
+
 
     # def load(self, name):
     #     if name == "mission 1: train attack":

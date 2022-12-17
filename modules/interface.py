@@ -1,4 +1,6 @@
 # import pygame
+import pygame.transform
+
 from settings import *
 
 pygame.init()
@@ -84,10 +86,11 @@ class GraphicsManager:
         # self.fullscreen_rect = pygame.Rect((screen_width, screen_height), (center=(screen_width/2,screen_height/2)))
         self.green_filter = pygame.image.load("graphics/interface/green_filter_65.png").convert_alpha()
         self.full_window_frame = pygame.image.load("graphics/interface/frames/full_frame.png").convert_alpha()
-        self.vertical_bar = pygame.image.load("graphics/interface/frames/vertical_bar.png")
-        self.vertical_bar = pygame.image.load("graphics/interface/frames/vertical_bar.png")
-        self.horizontal_bar = pygame.image.load("graphics/interface/frames/horizontal_bar.png")
-        self.cockpit_background = pygame.image.load("graphics/interface/cockpit/cockpit1_1.png")
+        self.vertical_bar = pygame.image.load("graphics/interface/frames/vertical_bar.png").convert_alpha()
+        self.vertical_bar = pygame.image.load("graphics/interface/frames/vertical_bar.png").convert_alpha()
+        self.horizontal_bar = pygame.image.load("graphics/interface/frames/horizontal_bar.png").convert_alpha()
+        self.cockpit_background = pygame.image.load("graphics/interface/cockpit/cockpit1_1.png").convert_alpha()
+        self.crosshair = pygame.image.load("graphics/icons/crosshair.png").convert_alpha()
 
         self.green_filter = pygame.transform.scale(self.green_filter, (screen_width * 1, screen_height * 1))
         self.full_window_frame = self.resize(self.full_window_frame, (screen_width * 0.95, screen_height * 0.95))
@@ -96,6 +99,7 @@ class GraphicsManager:
         self.vertical_bar2 = self.resize(self.vertical_bar, (screen_width * 0.01, screen_height * 0.75))
         self.horizontal_bar = self.resize(self.horizontal_bar, (screen_width * 0.68, screen_height * 0.03))
         self.cockpit_background = self.resize(self.cockpit_background, (screen_width, screen_height))
+        self.crosshair = pygame.transform.scale(self.crosshair, (screen_width*0.05, screen_width*0.05))
 
     def resize(self, image, size):
         image = pygame.transform.scale(image, size)
@@ -128,6 +132,11 @@ class GraphicsManager:
         screen.blit(equipment_header_image, (screen_width * 0.05, screen_height * 0.6))
         screen.blit(media_header_image, (screen_width * 0.47, screen_height * 0.3))
         screen.blit(luxury_header_image, (screen_width * 0.47, screen_height * 0.6))
+
+    def draw_crosshair(self, pos_x, pos_y):
+        image = self.crosshair
+        rect = image.get_rect(center=(pos_x, pos_y))
+        screen.blit(image, rect)
 
 
 # class Visual_Effect:

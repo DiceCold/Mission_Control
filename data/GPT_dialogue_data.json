@@ -1,0 +1,96 @@
+{
+	"Stalker's Home": {
+		"line 1": {
+			"speaker": "Player",
+			"mood": "neutral",
+			"text": "Hey, Stalker. Can you tell me a little bit about your home planet?"
+		},
+		"line 2": {
+			"speaker": "Stalker",
+			"mood": "arrogant",
+			"text": "Yeah, sure. I'm from Minstram, a world that values strength and power above all else. Our culture is shaped by the harsh conditions of our environment and the constant struggle to survive."
+		},
+		"line 3": {
+			"speaker": "Player",
+			"mood": "neutral",
+			"text": "How does the environment of Minstram shape your culture?"
+		},
+		"line 4": {
+			"speaker": "Stalker",
+			"mood": "arrogant",
+			"text": "Let's just say that we don't get a lot of sunshine on Minstram. It's always kind of gloomy and moody. But we've learned to embrace it and turn it into a source of strength."
+		},
+		"line 5": {
+			"speaker": "Player",
+			"mood": "neutral",
+			"text": "What kind of technology do you have on Minstram?"
+		},
+		"line 6": {
+			"speaker": "Stalker",
+			"mood": "arrogant",
+			"text": "We've developed some pretty advanced technologies to help us survive in such a harsh environment. But we also rely on brute strength and sheer determination. That's what sets us apart from the weaker, softer worlds out there."
+		},
+		"line 7": {
+			"speaker": "Player",
+			"mood": "neutral",
+			"text": "Are there any major cities or landmarks on Minstram that I should know about?"
+		},
+		"line 8": {
+			"speaker": "Stalker",
+			"mood": "arrogant",
+			"text": "Our capital city, Shadowfall, is a place of great power and influence. It's known for its imposing architecture and shadowy streets. There are also many ancient ruins scattered throughout the planet, remnants of civilizations long gone."
+		},
+		"line 9": {
+			"speaker": "Player",
+			"mood": "neutral",
+			"text": "That all sounds really interesting. It must be a unique place to call home."
+		},
+		"line 10": {
+			"speaker": "Stalker",
+			"mood": "arrogant",
+			"text": "Yeah, it's not for everyone. But if you've got what it takes to survive on Minstram, it can be a pretty rewarding place to be. Just don't expect anyone to hold your hand or coddle you. We only respect strength and determination here."
+		}
+	},
+	"Rose's home": {
+		"line 1": {
+			"speaker": "Player",
+			"mood": "neutral",
+			"text": "Hello, Rose. Can you tell me a little bit about the planet you come from?"
+		},
+		"line 2": {
+			"speaker": "Rose",
+			"mood": "friendly",
+			"text": "Of course. I'm from Elysium, a planet that values honor and chivalry above all else. Our culture is heavily influenced by the knights and royalty of the past, and we have a strong connection to our cultural heritage."
+		},
+		"line 3": {
+			"speaker": "Player",
+			"mood": "neutral",
+			"text": "That sounds really interesting. Can you tell me more about the technology on Elysium?"
+		},
+		"line 4": {
+			"speaker": "Rose",
+			"mood": "friendly",
+			"text": "Elysium has made significant strides in a number of areas, including advanced medical treatments, interstellar travel, and the design of mecha suits like the one I pilot. However, we also recognize the importance of preserving our cultural heritage and traditions."
+		},
+		"line 5": {
+			"speaker": "Player",
+			"mood": "neutral",
+			"text": "Are there any notable cities or landmarks on Elysium that I should know about?"
+		},
+		"line 6": {
+			"speaker": "Rose",
+			"mood": "friendly",
+			"text": "Our capital city, Avalon, is a hub of commerce and culture. It boasts beautiful architecture and a rich history. The Crystal Palace is another popular destination, serving as both a museum and cultural center. Elysium is also home to numerous gardens, parks, forests, and mountains, offering something for every type of outdoor enthusiast."
+		},
+		"line 7": {
+			"speaker": "Player",
+			"mood": "neutral",
+			"text": "It sounds like Elysium is a very well-developed and sophisticated planet."
+		},
+		"line 8": {
+			"speaker": "Rose",
+			"mood": "friendly",
+			"text": "Yes, it is. Elysium has a high standard of living and a strong sense of community. We are committed to helping those in need and strive to maintain a harmonious society. It's a wonderful place to call home."
+		}
+	}
+}
