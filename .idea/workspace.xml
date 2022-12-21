@@ -5,13 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="711c8494-9fd2-4d26-a466-16b6722da02b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/data/GPT_dialogue_data.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/chat_gpt_pilot_module.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/basic_sandbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic_sandbox.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/interface.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/mission_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/mission_module.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/pilot_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/pilot_module.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/graphics/icons/crosshair.png" beforeDir="false" afterPath="$PROJECT_DIR$/graphics/icons/crosshair.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/interface.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

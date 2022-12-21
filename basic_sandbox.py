@@ -7,7 +7,7 @@ from sys import exit
 # import copy
 from math import atan2, degrees, pi
 import json
-import modules.interface as module_interface
+import modules.graphics_module as graphics_module
 import modules.pilot_module as pilot_module
 import modules.mission_module as mission_module
 from modules.settings import *
@@ -104,8 +104,11 @@ class GameManager:
 
             # draw crosshair
             if self.paused and mission.selected_pilot is not None:
-                mouse_pos = pygame.mouse.get_pos()
-                graphics.draw_crosshair(mouse_pos[0], mouse_pos[1])
+                try:
+                    target = mission.selected_pilot.target["move"]
+                    graphics.draw_crosshair(target.pos_x, target.pos_y)
+                except(Exception,):
+                    pass
 
         if game.focus != "cockpit":
             graphics.draw_green()
@@ -142,7 +145,7 @@ class GameManager:
 game = GameManager()
 mission = mission_module.MissionManager()
 shop = module_shop.ShopManager()
-graphics = module_interface.GraphicsManager()
+graphics = graphics_module.GraphicsManager()
 
 # pilots
 pilot_data = json.load(open("data/pilot_data.json", "r"))

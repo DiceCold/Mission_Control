@@ -10,6 +10,7 @@ screen_width = 1280
 screen_height = 720
 centerpoint = (screen_width / 2, screen_height / 2)
 screen = pygame.display.set_mode((screen_width, screen_height))
+greenscreen_layer = pygame.display.set_mode((screen_width, screen_height))
 text_font = pygame.font.Font("font/Pixeltype.ttf", 50)
 text_font_small = pygame.font.Font("font/Pixeltype.ttf", 30)
 text_font_micro = pygame.font.Font("font/Pixeltype.ttf", 20)
@@ -120,7 +121,7 @@ class GraphicsManager:
         screen.fill((0, 0, 0))
 
     def draw_green(self):
-        screen.blit(self.green_filter, (0, 0))
+        greenscreen_layer.blit(self.green_filter, (0, 0))
 
     def draw_shop_headers(self):
         basic_header_image = text_font.render("BASICS", False, (255, 255, 255))
