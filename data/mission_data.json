@@ -47,5 +47,55 @@
 			"pos_y": 0.4
 			}
 		}
-	}
+	},
+"test_mission": {
+	"mission_id": 0,
+	"terrain_objects": [
+		{
+			"object_type": "mountain",
+			"pos_x": 0.1,
+			"pos_y": 0.8
+		},
+		{
+			"object_type": "mountain",
+			"pos_x": 0.2,
+			"pos_y": 0.8
+		},
+		{
+			"object_type": "mountain",
+			"pos_x": 0.3,
+			"pos_y": 0.8
+		},
+		{
+			"object_type": "mountain",
+			"pos_x": 0.4,
+			"pos_y": 0.8
+		},
+		{
+			"object_type": "mountain",
+			"pos_x": 0.5,
+			"pos_y": 0.8
+		},
+		{
+			"object_type": "mountain",
+			"pos_x": 0.6,
+			"pos_y": 0.8
+		},
+		{
+			"object_type": "mountain",
+			"pos_x": 0.7,
+			"pos_y": 0.8
+		},
+		{
+			"object_type": "mountain",
+			"pos_x": 0.8,
+			"pos_y": 0.8
+		},
+		{
+			"object_type": "mountain",
+			"pos_x": 0.9,
+			"pos_y": 0.8
+		}
+	]
+}
 }

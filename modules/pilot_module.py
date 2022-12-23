@@ -26,6 +26,7 @@ class Pilot(pygame.sprite.Sprite):
     def __init__(self, name):
         super().__init__()
         self.name = name
+
         # import information from data file
         data_file = json.load(open("data/pilot_data.json", "r"))
         pilot_data = data_file["pilot_data"]
@@ -36,16 +37,18 @@ class Pilot(pygame.sprite.Sprite):
         self.pilot_id = data["pilot_id"]
         self.faction = data["faction"]
 
-        # determine dot color based on faction
-        if self.faction == "vanguard":
-            self.image = pygame.image.load("graphics/icons/blue_dot_icon.png").convert_alpha()
-        else:
-            self.image = pygame.image.load("graphics/icons/red_dot_icon.png").convert_alpha()
-        self.image = pygame.transform.scale(self.image, (screen_width * 0.01, screen_width * 0.01))
-
-        self.feats = data["feats"]
-        self.chassis = data["chassis"]
-        self.loadout = data["loadout"]
+        try:
+            self.feats = data["feats"]
+        except(Exception, ):
+            self.feats = []
+        try:
+            self.chassis = data["chassis"]
+        except(Exception, ):
+            self.chassis = "majestic"
+        try:
+            self.loadout = data["loadout"]
+        except(Exception, ):
+            self.loadout = []
         self.mood = "default"
 
         self.attributes = data["attributes"]
@@ -69,19 +72,25 @@ class Pilot(pygame.sprite.Sprite):
         self.velocity_x = 0
         self.velocity_y = 0
         self.max_speed = 12
+
+        self.width = screen_width * 0.01
+        self.height = screen_width * 0.01
         
         # set color of the pilots dot based on faction
         if self.faction == "vanguard":
             self.color = (0, 0, 255)
-            self.image = pygame.image.load("graphics/icons/blue_dot_icon.png").convert_alpha()
+            self.image_blue = pygame.image.load("graphics/icons/blue_dot_icon.png").convert_alpha()
+            self.image_blue = pygame.transform.scale(self.image_blue, (self.width, self.height))
+            self.image_white = pygame.image.load("graphics/icons/blue_dot_icon.png").convert_alpha()
+            self.image_white = pygame.transform.scale(self.image_white, (self.width, self.height))
+            self.image = self.image_blue
         elif self.faction == "hive":
             self.color = (255, 0, 0)
             self.image = pygame.image.load("graphics/icons/red_dot_icon.png").convert_alpha()
         else:
             self.color = (255, 255, 255)
             self.image = pygame.image.load("graphics/icons/red_dot_icon.png").convert_alpha()
-        self.width = screen_width*0.01
-        self.height = screen_width*0.01
+
         self.image = pygame.transform.scale(self.image, (self.width, self.height))
         self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
 
@@ -103,7 +112,9 @@ class Pilot(pygame.sprite.Sprite):
             "enemies": [],
             "objectives": []
         }
-
+    def reset_color(self):
+        if self.faction == "vanguard" and self.image != self.image_blue:
+            self.image = self.image_blue
     def tick_invulnerable_timer(self):
         if self.invulnerable_timer > 0:
             self.invulnerable_timer -= 1
@@ -215,11 +226,13 @@ class Pilot(pygame.sprite.Sprite):
         pass
 
     def update(self):
+        self.reset_color()
         # movement
         if self.targeting_mode == "automatic":
             self.target["move"] = self.find_target(self.target_list["enemies"])
             self.target["attack"] = self.find_target(self.target_list["enemies"])
         self.maneuver()
+        print(self.name, self.selected, self.highlighted, self.color)
 
 
     # def load(self, name):

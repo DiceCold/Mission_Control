@@ -39,8 +39,8 @@
 				"light shield"
 			]
 		},
-	"kite": {
-		"name": "Kite",
+	"rose": {
+		"name": "Rose",
 		"pilot_id": 1,
 		"faction": "vanguard",
 		"attributes": {

@@ -3,6 +3,7 @@ import random
 import modules.pilot_module as pilot_module
 from settings import *
 
+
 class Waypoint:
     def __init__(self, pos_x, pos_y):
         self.pos_x = pos_x
@@ -18,7 +19,6 @@ class MissionManager:
         self.terrain = pygame.sprite.Group()
         self.ally_factions = ["vanguard"]
         self.enemy_factions = ["iron_hive"]
-        self.selected_pilot = None
 
         self.map_momentum_x = 0
         self.map_momentum_y = 0
@@ -41,6 +41,16 @@ class MissionManager:
         print(f"Adding enemy pilot {enemy.name} to scene at ({enemy.pos_x}, {enemy.pos_y})")
         self.enemies.add(enemy)
 
+    def load_mission(self, mission_name, data_file):
+        mission_data = data_file[mission_name]
+        self.terrain.empty()
+        terrain_objects_data = mission_data["terrain_objects"]
+        for terrain_object in terrain_objects_data:
+            object_type = terrain_object["object_type"]
+            pos_x = terrain_object["pos_x"]*screen_width
+            pos_y = terrain_object["pos_y"]*screen_height
+            self.terrain.add(TerrainObject(self, object_type, pos_x, pos_y))
+
     def reset(self):
         for pilot in self.pilots:
             pilot.on_mission = False
@@ -49,33 +59,7 @@ class MissionManager:
         self.waypoints.empty()
         self.terrain.empty()
 
-    def highlight_pilot(self):
-        mouse_pos = pygame.mouse.get_pos()
-        # print(mouse_pos)
-        for pilot in self.pilots:
-            if pilot.rect.left < mouse_pos[0] < pilot.rect.right and pilot.rect.top < mouse_pos[1] < pilot.rect.bottom:
-                if pilot.highlighted == False:
-                    pilot.highlighted = True
-            else:
-                if pilot.highlighted:
-                    pilot.highlighted = False
-
-            if pilot.highlighted or pilot.selected:
-                pilot.image = pygame.image.load("graphics/icons/white_dot_icon.png").convert_alpha()
-                pilot.image = pygame.transform.scale(pilot.image, (pilot.width, pilot.height))
-            else:
-                pilot.image = pygame.image.load("graphics/icons/blue_dot_icon.png").convert_alpha()
-                pilot.image = pygame.transform.scale(pilot.image, (pilot.width, pilot.height))
-
-    def select_pilot(self):
-        for pilot in self.pilots:
-            if pilot.highlighted:
-                pilot.selected = True
-                self.selected_pilot = pilot
-                print(f"{pilot.name} selected")
-
-    def issue_orders(self, target_type):
-        pilot = self.selected_pilot
+    def issue_orders(self, pilot, target_type):
         pilot.targeting_mode = "manual"
         if target_type == "waypoint":
             mouse_pos = pygame.mouse.get_pos()
@@ -98,3 +82,42 @@ class MissionObjective:
 
         self.pos_x = pos_x
         self.pos_y = pos_y
+
+
+class TerrainObject(pygame.sprite.Sprite):
+    def __init__(self, manager, object_type, pos_x, pos_y, width=screen_width*0.1, height=screen_width*0.1):
+        super().__init__()
+
+        self.manager = manager
+        self.type = object_type
+        self.pos_x = pos_x
+        self.pos_y = pos_y
+        self.width = width
+        self.height = height
+        self.animation_index = 1
+        self.repel_force = 4
+
+        self.frame_0 = pygame.image.load("graphics/blank.png").convert_alpha()
+
+        if self.type == "mountain":
+            self.frame_1 = pygame.image.load("graphics/icons/mountain.png").convert_alpha()
+            self.frames = [self.frame_0, self.frame_1]
+
+        self.image = self.frames[self.animation_index]
+        self.image = pygame.transform.scale(self.image, (self.width, self.height))
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
+
+    def repel(self, pilot_list):
+        for pilot in list:
+            if self.rect.collidepoint((pilot.pos_x, pilot.pos_y)):
+                # keep Pilot's momentum but direct away from the terrain object
+                if pilot.pos_x < self.pos_x:
+                    pilot.momentum_x = abs(pilot.momentum_x)
+                else:
+                    pilot.momentum_x = abs(pilot.momentum_x) * -1
+
+    def update(self):
+        # self.repel(self.manager.pilots)
+        # self.repel(self.manager.enemies)
+        pass

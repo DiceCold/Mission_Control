@@ -1,0 +1,269 @@
+import pygame
+from settings import *
+
+focus = None
+
+
+class TextLabel(pygame.sprite.Sprite):
+    def __init__(self, label_type, reference, text=""):
+        super().__init__()
+        self.label_type = label_type
+        self.reference = reference
+        self.text = text
+        self.active = True
+        self.status = "default"
+        self.pos_x = reference.pos_x
+        self.pos_y = reference.pos_y
+        self.font = text_font
+        self.color = (0, 0, 0)
+        self.image = self.font.render(self.text, False, self.color)
+        self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
+
+    def update(self):
+        if self.label_type == "button":
+            # update based on reference
+            self.status = self.reference.status
+            self.pos_x = self.reference.pos_x
+            self.pos_y = self.reference.pos_y
+            self.active = self.reference.active
+            # update image
+            self.image = self.font.render(self.text, False, self.color)
+            self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
+
+
+
+
+class Button(pygame.sprite.Sprite):
+    def __init__(self, button_type, pos_x=0, pos_y=0, width=screen_width*0.1, height=screen_width*0.1):
+        super().__init__()
+        self.button_type = button_type
+        self.pos_x = pos_x
+        self.pos_y = pos_y
+        self.width = width
+        self.height = height
+        self.active = True
+        # set status between default, hidden, and highlight
+        self.status = "default"
+        # set cooldown/max
+        self.cooldown_max = 25
+        self.cooldown = self.cooldown_max
+
+
+
+        if self.button_type == "x_button":
+            self.frame_1 = pygame.image.load("graphics/icons/x_button.png").convert_alpha()
+            self.frame_1 = pygame.transform.scale(self.frame_1, (screen_width*0.05,screen_height*0.05))
+            self.pos_x = screen_width*0.2
+            self.pos_y - screen_height*0.2
+        
+        elif self.button_type == "dashboard_map":
+            self.animation_index = 1
+            self.pos_x = screen_width*0.1
+            self.pos_y = screen_height*0.15
+            self.frame_1 = pygame.image.load("graphics/interface/cockpit/clickscreen.png").convert_alpha()
+            self.frame_1 = pygame.transform.scale(self.frame_1, (screen_width*0.2,screen_height*0.2))
+        
+        elif self.button_type == "continue_button":
+            self.pos_x = screen_width*0.15
+            self.pos_y = screen_height*0.14
+            self.width = screen_width*0.2
+            self.height = screen_height*0.07
+            self.frame_1 = pygame.image.load("graphics/interface/labels/continue_button.png")
+            self.frame_1 = pygame.transform.scale(self.frame_1, (self.width,self.height))
+        
+        elif button_type == "swap_button":
+            self.width = screen_width*0.2
+            self.height = screen_height*0.15
+            self.pos_x = screen_width*0.5
+            self.pos_y = screen_height*0.85 
+            self.match = False
+            self.frame_1 = pygame.image.load("graphics/interface/labels/label_white_selected_lowres.png").convert_alpha()
+            self.frame_1 = pygame.transform.scale(self.frame_1,(self.width,self.height))
+            self.frame_2 = pygame.image.load("graphics/interface/labels/noswap_label.png").convert_alpha()
+            self.frame_2 = pygame.transform.scale(self.frame_2,(self.width,self.height))
+        
+        elif button_type == "dispatch_button":
+            self.width = screen_width*0.2
+            self.height = screen_height*0.15
+            self.pos_x = screen_width*0.5
+            self.pos_y = screen_height*0.85 
+            self.frame_1 = pygame.image.load("graphics/interface/labels/label_white_selected_lowres.png").convert_alpha()
+            self.frame_1 = pygame.transform.scale(self.frame_1,(self.width,self.height))
+
+        elif button_type == "default_button":
+            # set dimensions
+            self.width = screen_width * 0.2
+            self.height = screen_height * 0.15
+
+            # set images
+            self.image_hidden = pygame.image.load("graphics/blank.png").convert_alpha()
+            self.image_hidden = pygame.transform.scale(self.image_hidden, (self.width, self.height))
+            self.image_default = pygame.image.load("graphics/buttons/button1_default.png").convert_alpha()
+            self.image_default = pygame.transform.scale(self.image_default, (self.width, self.height))
+            self.image_highlight = pygame.image.load("graphics/buttons/button1_highlight.png").convert_alpha()
+            self.image_highlight = pygame.transform.scale(self.image_highlight, (self.width, self.height))
+            self.images = {
+                "hidden": self.image_hidden,
+                "default": self.image_default,
+                "highlight": self.image_highlight
+            }
+            self.image = self.image_default
+            self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
+
+    def update_image(self):
+        # self.image = self.images(self.status)
+        self.image = self.images[self.status]
+        self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
+
+    def click_button(self):
+        # reset cooldown
+        self.cooldown = self.cooldown_max
+        print("You clicked a button")
+    # def check_active(self):
+    #     # determine if active
+    #     if self.button_type == "dashboard_map":
+    #         if focus == "cockpit":
+    #             self.active = True
+    #         else:
+    #             self.active = False
+    #
+    #     elif self.button_type == "swap_button":
+    #         if focus != "inventory":
+    #             self.active = False
+    #         elif selected.inventory_slot > -1 and selected.pilot_slot > -1 and selected.loadout_slot > -1:
+    #             self.active = True
+    #             if group.inventory[selected.inventory_slot].function != selected.pilot.battlesuit.loadout[
+    #                 selected.loadout_slot].function:
+    #                 self.match = False
+    #             else:
+    #                 self.match = True
+    #         else:
+    #             self.active = False
+    #
+    #     elif self.button_type == "dispatch_button":
+    #         if focus == "pilot_select" and selected.pilot_slot > 0 and selected.pilot.on_mission == False:
+    #             self.active = True
+    #         else:
+    #             self.active = False
+    #
+    #     elif self.button_type == "continue_button":
+    #         # make the continue button active if at least one Pilot is dispatching
+    #         if focus == "pilot_select":
+    #             self.active = False
+    #             for pilot in group.pilot_roster:
+    #                 if pilot.dispatching: self.active = True
+    #
+    #         # make the continue button active if there are scenes in queue and game is not awaiting a choice
+    #         elif focus == "dialogue":
+    #             if len(scene.scene_queue) > 0 and dialogue.choices_available == False: self.active = True
+    #
+    #         # always hide continue button on world map
+    #         elif focus == "map":
+    #             self.active = False
+    #
+    #         # always hide continue button during combat
+    #         elif focus == "combat":
+    #             self.active = False
+    #
+    #         # make the continue button visible if active and hidden otherwise
+    #         if self.active == True:
+    #             self.animation_index = 1
+    #         else:
+    #             self.animation_index = 0
+    #
+    #     elif self.button_type == "x_button":
+    #         pass
+    #
+    #     else:
+    #         if debug_mode:
+    #             print("Error: unrecognized button type when checking if active", self.button_type)
+    #         else:
+    #             pass
+
+    def update(self):
+        # reduce cooldown
+        if self.cooldown > 0:
+            self.cooldown -= 1
+        # update image based on status
+        self.update_image()
+        # mouse inputs
+        # if event.type == pygame.MOUSEBUTTONDOWN:
+        #     if self.rect.collidepoint(event.pos) and self.active == True and self.cooldown == 0:
+        #
+        #         # reset cooldown
+        #         self.cooldown = self.cooldown_max
+        #
+        #         # close ui window
+        #         if self.button_type == "x_button" and focus != "cockpit":
+        #             focus = "cockpit"
+        #
+        #         # show world map
+        #         elif focus == "cockpit" and self.button_type == "dashboard_map":
+        #             focus = "map"
+        #
+        #         # swap loadout and inventory items
+        #         elif self.button_type == "swap_button" and self.match == True:
+        #             # swap items
+        #             new_loadout_item = group.inventory[selected.inventory_slot]
+        #             new_inventory_item = selected.pilot.battlesuit.loadout[selected.loadout_slot]
+        #             selected.pilot.battlesuit.loadout[selected.loadout_slot] = new_loadout_item
+        #             group.inventory[selected.inventory_slot] = new_inventory_item
+        #             # reset which items are currently selected
+        #             selected.loadout_slot = -1
+        #             selected.inventory_slot = -1
+        #
+        #         # assign Pilot to mission
+        #         elif self.button_type == "dispatch_button":
+        #             if selected.pilot.dispatching == False: selected.pilot.dispatching = True
+        #             else: selected.pilot.dispatching = False
+        #
+        #         # load the departing messages and return to dialogue screen. This should probably be a method like overlay.continue().
+        #         elif self.button_type == "continue_button" and self.active == True and focus == "pilot_select":
+        #             scene.scene_queue.clear()
+        #             focus = "dialogue"
+        #             for pilot in group.pilot_roster:
+        #                 if pilot.dispatching:
+        #                     pilot.dispatching = False
+        #                     pilot.on_mission = True
+        #                 if pilot.on_mission:
+        #                     scene.scene_queue.append(f"{pilot.name} departing")
+        #
+        #             # conclude npcs with nighthawk and making sure she speaks last
+        #             if len(scene.scene_queue) > 1 and scene.scene_queue[0] == "Nighthawk departing":
+        #                 scene.scene_queue.append("Nighthawk departing")
+        #                 scene.scene_queue.remove("Nighthawk departing")
+        #
+        #             scene.scene_queue.append("combat")
+        #
+        #             if debug_mode == True: print(scene.scene_queue)
+        #                 # mission.mission_setup(selected.active_mission_number)
+        #
+        #         # advance to next scene if queue is not empty
+        #         elif self.button_type == "continue_button" and self.active == True and focus == "dialogue" and dialogue.choices_available == False:
+        #             try:
+        #                 if debug_mode == True:
+        #                     print(" ")
+        #                     print(scene.scene_queue)
+        #                     print("removing scene: ", scene.scene_queue[0])
+        #                     print("advancing to scene:", scene.scene_queue[1])
+        #                 dialogue.advance_scene(-1)
+        #                 if debug_mode == True:
+        #                     print("current scene is now:", scene.scene_queue[0])
+        #                     print("next scene in queue:", scene.scene_queue[1])
+        #                     print(scene.scene_queue)
+        #                     print(" ")
+        #             except:
+        #                 if debug_mode == True: print("Error: no scenes in queue to remove")
+        #                 else: pass
+        #
+        #         # if none of the above button is not activated
+        #         else: self.active = False
+        #
+        # # update image
+        # if self.active == False: self.animation_index = 0
+        # else: self.animation_index = 1
+        # if self.type == "swap_button" and self.active == True:
+        #     if self.match == False: self.animation_index = 2
+        # self.image = self.frames[self.animation_index]
+        # self.rect = self.image.get_rect(center = (self.pos_x,self.pos_y))
+        

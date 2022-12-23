@@ -125,13 +125,13 @@
 			]}
 		}
 	},
-	"Kite social intro":{
-		"scene_id":"Kite social intro",
+	"Rose social intro":{
+		"scene_id":"Rose social intro",
 		"intro":{
 			"section_id":"intro",
-			"line 1":{"speaker":"Kite","mood":"surprised","text":"Hey, hi, it's Kite. I'm Kite, I mean. You wanted to see me?"},
+			"line 1":{"speaker":"Rose","mood":"surprised","text":"Hey, hi, it's Rose. I'm Rose, I mean. You wanted to see me?"},
 			"line 2":{"speaker":"Player","text":"I just want to spend a little time getting to know the pilots I'm working with."},
-			"line 3":{"speaker":"Kite","mood":"surprised","text":"Oh okay, great. What would you like to know?"},
+			"line 3":{"speaker":"Rose","mood":"surprised","text":"Oh okay, great. What would you like to know?"},
 			"line 4":{"speaker": "Player", "available_choice": "True","choices": [
 				{"text": "I saw on your profile you spent most of your life on Tulia. What made you decide to come here?", "next_section": "motivation"},
 				{"text": "What do you think of the other pilots?", "next_section": "other_pilots"},
@@ -141,9 +141,9 @@
 		"motivation": {
 			"section_id": "motivation",
 			"line 1": {"speaker": "Player", "text": "I saw on your profile you spent most of your life on Tulia. What made you decide to come here?"},
-			"line 2": {"speaker": "Kite", "mood": "upset", "text": "After the crash hit... We didn't get the full picture from the news, but I knew there were so many people who needed help."},
-			"line 3": {"speaker": "Kite", "mood": "upset", "text": "I'd done some racing on the school team, so I figured I had a bit piloting experience already."},
-			"line 4": {"speaker": "Kite", "mood": "upset", "text": "When the planetary government asked for volunteers... I thought I could help. That I had a responsibility to do so."},
+			"line 2": {"speaker": "Rose", "mood": "upset", "text": "After the crash hit... We didn't get the full picture from the news, but I knew there were so many people who needed help."},
+			"line 3": {"speaker": "Rose", "mood": "upset", "text": "I'd done some racing on the school team, so I figured I had a bit piloting experience already."},
+			"line 4": {"speaker": "Rose", "mood": "upset", "text": "When the planetary government asked for volunteers... I thought I could help. That I had a responsibility to do so."},
 			"line 5": {"speaker": "Player", "available_choice": "True", "choices": [
 				{"text": "When you got here was it what you were expecting?", "next_section": "experience"},
 				{"text": "I'd like to ask you about something else.", "next_section": "intro", "next_line": 4}
@@ -152,10 +152,10 @@
 		"experience": {
 			"section_id": "experience",
 			"line 1": {"speaker": "Player", "text": "When you got here was it what you were expecting?"},
-			"line 2": {"speaker": "Kite", "mood": "upset", "text": "It was... it was a lot worse."},
-			"line 3": {"speaker": "Kite", "mood": "upset", "text": "I realized how badly out of my depth I was. I wanted to go home."},
-			"line 4": {"speaker": "Kite", "text": "My flying was alright, but I'd never fired a weapon before. I sucked. The first time I went against some Hive drones I almost died."},
-			"line 5": {"speaker": "Kite", "mood": "default", "text": "Another pilot covered me. Taught me how to shoot afterwards. Not as well as he could, he could aim like a god, but well enough to hold my own."},
+			"line 2": {"speaker": "Rose", "mood": "upset", "text": "It was... it was a lot worse."},
+			"line 3": {"speaker": "Rose", "mood": "upset", "text": "I realized how badly out of my depth I was. I wanted to go home."},
+			"line 4": {"speaker": "Rose", "text": "My flying was alright, but I'd never fired a weapon before. I sucked. The first time I went against some Hive drones I almost died."},
+			"line 5": {"speaker": "Rose", "mood": "default", "text": "Another pilot covered me. Taught me how to shoot afterwards. Not as well as he could, he could aim like a god, but well enough to hold my own."},
 			"line 6": {"speaker": "Player", "available_choice": "True", "choices": [
 				{"text": "What happened after that?", "next_section": "loss"},
 				{"text": "I'd like to ask you about something else.", "next_section": "intro", "next_line": 4}
@@ -163,9 +163,9 @@
 		},
 		"loss": {
 			"section_id": "loss",
-			"line 1": {"speaker": "Kite", "mood": "upset", "text": "It... things didn't work out for him."},
-			"line 2": {"speaker": "Kite", "mood": "embarrassed", "text": "Sorry, I didn't mean for this to get really heavy. You asked why I came to this planet..."},
-			"line 3": {"speaker": "Kite", "text": "I should have just said it was to help people. That was probably way more than you were looking for."},
+			"line 1": {"speaker": "Rose", "mood": "upset", "text": "It... things didn't work out for him."},
+			"line 2": {"speaker": "Rose", "mood": "embarrassed", "text": "Sorry, I didn't mean for this to get really heavy. You asked why I came to this planet..."},
+			"line 3": {"speaker": "Rose", "text": "I should have just said it was to help people. That was probably way more than you were looking for."},
 			"line 4": {"speaker": "Player", "available_choice": "True", "choices": [
 				{"text": "You can always talk to me about whatever is on your mind.", "next_section": "reassure", "effect": {"loyalty": 1, "mood": "happy"}},
 				{"text": "Everyone gets a little carried away sometimes.", "next_section": "accept", "effect": {"mood": "default"}},
@@ -175,7 +175,7 @@
 		"reassure": {
 			"section_id": "reassure",
 			"line 1": {"speaker": "Player", "text": "You can always talk to me about whatever is on your mind."},
-			"line 2": {"speaker": "Kite", "mood": "happy", "text": "Thank you, I'll try to remember that for next time."},
+			"line 2": {"speaker": "Rose", "mood": "happy", "text": "Thank you, I'll try to remember that for next time."},
 			"line 3": {"speaker": "Player", "available_choice": "True", "choices": [
 				{"text": "That's enough for now. Thank you for your time."},
 				{"text": "I'd like to ask you about something else.", "next_section": "intro", "next_line": 4}
@@ -184,7 +184,7 @@
 		"accept": {
 			"section_id": "accept",
 			"line 1": {"speaker": "Player", "text": "Everyone gets a little carried away sometimes."},
-			"line 2": {"speaker": "Kite", "mood": "default", "text": "Thank you, I'll try to remember that for next time."},
+			"line 2": {"speaker": "Rose", "mood": "default", "text": "Thank you, I'll try to remember that for next time."},
 			"line 3": {"speaker": "Player", "available_choice": "True", "choices": [
 				{"text": "That's enough for now. Thank you for your time."},
 				{"text": "I'd like to ask you about something else.", "next_section": "intro", "next_line": 4}
@@ -193,7 +193,7 @@
 		"disapprove": {
 			"section_id": "disapprove",
 			"line 1": {"speaker": "Player", "text": "Try to give shorter answers to my questions. If I want to know something else I'll ask."},
-			"line 2": {"speaker": "Kite", "mood": "default", "text": "Thank you, I'll try to remember that for next time."},
+			"line 2": {"speaker": "Rose", "mood": "default", "text": "Thank you, I'll try to remember that for next time."},
 			"line 3": {"speaker": "Player", "available_choice": "True", "choices": [
 				{"text": "That's enough for now. Thank you for your time.", "next_section": "intro"},
 				{"text": "I'd like to ask you about something else.", "next_section": "intro", "next_line": 4}
@@ -202,8 +202,8 @@
 		"other_pilots": {
 			"section_id": "other_pilots",
 			"line 1": {"speaker": "Player", "text": "What do you think of the other pilots?"},
-			"line 2": {"speaker": "Kite", "mood": "default", "text": "There are some really good people on the team. There are also a few I'd say are... less than ideal."},
-			"line 3": {"speaker": "Kite", "text": "I dont want to name names... you'll see what I mean."},
+			"line 2": {"speaker": "Rose", "mood": "default", "text": "There are some really good people on the team. There are also a few I'd say are... less than ideal."},
+			"line 3": {"speaker": "Rose", "text": "I dont want to name names... you'll see what I mean."},
 			"line 4": {"speaker": "Player", "available_choice": "True", "choices": [
 				{"text": "[Ask about a specific pilot]", "next_section": "specific_pilots"},
 				{"text": "I'd like to ask you about something else.", "next_section": "intro", "next_line": 4}
@@ -220,8 +220,8 @@
 		"opinion-deadlift": {
 			"section_id": "opinion-deadlift",
 			"line 1": {"speaker": "Player", "text": "What do you think of Deadlift?"},
-			"line 2": {"speaker": "Kite", "mood": "happy", "text": "I think he's a really good person to have on the team."},
-			"line 3": {"speaker": "Kite", "text": "He seems a little intimidating at first but he's actually really kind and caring."},
+			"line 2": {"speaker": "Rose", "mood": "happy", "text": "I think he's a really good person to have on the team."},
+			"line 3": {"speaker": "Rose", "text": "He seems a little intimidating at first but he's actually really kind and caring."},
 			"line 4": {"speaker": "Player", "available_choice": "True", "choices": [
 				{"text": "[Ask about another pilot]", "next_section": "specific_pilots"},
 				{"text": "I'd like to ask you about something else.", "next_section": "intro", "next_line": 4}
@@ -230,8 +230,8 @@
 		"opinion-stalker": {
 			"section_id": "opinion-stalker",
 			"line 1": {"speaker": "Player", "text": "What do you think of Stalker?"},
-			"line 2": {"speaker": "Kite", "mood": "serious", "text": "I have trouble answering that question in a way that is polite and respectful."},
-			"line 3": {"speaker": "Kite", "mood": "stern", "text": "There are a lot of people she does not get along with. I'm definitely one of them."},
+			"line 2": {"speaker": "Rose", "mood": "serious", "text": "I have trouble answering that question in a way that is polite and respectful."},
+			"line 3": {"speaker": "Rose", "mood": "stern", "text": "There are a lot of people she does not get along with. I'm definitely one of them."},
 			"line 4": {"speaker": "Player", "available_choice": "True", "choices": [
 				{"text": "[Ask about another pilot]", "next_section": "specific_pilots"},
 				{"text": "I'd like to ask you about something else.", "next_section": "intro", "next_line": 4}
@@ -240,8 +240,8 @@
 		"opinion-nighthawk": {
 			"section_id": "opinion-nighthawk",
 			"line 1": {"speaker": "Player", "text": "What do you think of Nighthawk?"},
-			"line 2": {"speaker": "Kite", "mood": "default", "text": "She's a good pilot and she takes things really seriously."},
-			"line 3": {"speaker": "Kite", "text": "Aside from missions I haven't really interacted with her much though."},
+			"line 2": {"speaker": "Rose", "mood": "default", "text": "She's a good pilot and she takes things really seriously."},
+			"line 3": {"speaker": "Rose", "text": "Aside from missions I haven't really interacted with her much though."},
 			"line 4": {"speaker": "Player", "available_choice": "True", "choices": [
 				{"text": "[Ask about another pilot]", "next_section": "specific_pilots"},
 				{"text": "I'd like to ask you about something else.", "next_section": "intro", "next_line": 4}
@@ -249,8 +249,8 @@
 		"combat_role": {
 			"section_id": "combat_role",
 			"line 1": {"speaker": "Player", "text": "What combat role to you prefer?"},
-			"line 2": {"speaker": "Kite", "mood": "happy", "text": "I'm pretty mobile and I think I do best when providing support fire for an ally."},
-			"line 3": {"speaker": "Kite", "text": "I'm also pretty good at rapid retrieval and evacuation if the objective is small and portable."},
+			"line 2": {"speaker": "Rose", "mood": "happy", "text": "I'm pretty mobile and I think I do best when providing support fire for an ally."},
+			"line 3": {"speaker": "Rose", "text": "I'm also pretty good at rapid retrieval and evacuation if the objective is small and portable."},
 			"line 4": {"speaker": "Player", "available_choice": "True", "choices": [
 				{"text": "That's enough for now. Thank you for your time.", "next_section": "intro"},
 				{"text": "I'd like to ask you about something else.", "next_section": "intro", "next_line": 4}

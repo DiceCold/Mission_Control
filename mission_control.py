@@ -1673,12 +1673,12 @@ if startup: #load classes
         def __init__(self):
             self.portrait = {
                 "Nighthawk":pygame.image.load("graphics/pilots/nighthawk/default.png").convert_alpha(),
-                "kite":pygame.image.load("graphics/pilots/kite/default.png").convert_alpha(),
+                "Rose":pygame.image.load("graphics/pilots/Rose/default.png").convert_alpha(),
                 "saint":pygame.image.load("graphics/pilots/saint/default.png").convert_alpha(),
                 "Deadlift":pygame.image.load("graphics/pilots/deadlift/default.png").convert_alpha(),
-                "Azure_Kite":pygame.image.load("graphics/pilots/kite/default.png").convert_alpha(),
+                "Azure_Rose":pygame.image.load("graphics/pilots/Rose/default.png").convert_alpha(),
                 "Shadowstalker":pygame.image.load("graphics/pilots/stalker/default.png").convert_alpha(),
-                "Unassigned":pygame.image.load("graphics/pilots/kite/default.png").convert_alpha()
+                "Unassigned":pygame.image.load("graphics/pilots/Rose/default.png").convert_alpha()
                 }
     
     class Overlay_Manager:
@@ -1728,12 +1728,12 @@ if startup: #load classes
             self.small_frame_right_image = pygame.transform.scale(self.small_frame_right_image, (screen_width*0.24,screen_height*0.82))
             self.small_frame_right_rect = self.small_frame_right_image.get_rect(topright = (self.large_frame_rect.right, screen_height*0.13))
             self.nighthawk_portrait = pygame.image.load("graphics/pilots/nighthawk/default.png").convert_alpha()
-            self.kite_portrait = pygame.image.load("graphics/pilots/kite/default.png").convert_alpha()
+            self.Rose_portrait = pygame.image.load("graphics/pilots/Rose/default.png").convert_alpha()
             self.saint_portrait = pygame.image.load("graphics/pilots/saint/default.png").convert_alpha()
             self.deadlift_portrait = pygame.image.load("graphics/pilots/deadlift/default.png").convert_alpha()
-            self.kite_portrait = pygame.image.load("graphics/pilots/kite/default.png").convert_alpha()
+            self.Rose_portrait = pygame.image.load("graphics/pilots/Rose/default.png").convert_alpha()
             self.shadowstalker_portrait = pygame.image.load("graphics/pilots/stalker/default.png").convert_alpha()
-            self.unassigned_portrait = pygame.image.load("graphics/pilots/kite/default.png").convert_alpha()
+            self.unassigned_portrait = pygame.image.load("graphics/pilots/Rose/default.png").convert_alpha()
         def draw_selected_pilot_name(self):
             selected.pilot_name_image = text_font.render(f"{selected.pilot.name}",False,(111,196,169))
             selected.pilot_name_rect = selected.pilot_name_image.get_rect(center = (screen_width*0.5,screen_height*0.25))
@@ -1761,14 +1761,14 @@ if startup: #load classes
         def draw_portrait(self, pilot):
             if selected.pilot == nighthawk:
                 portrait = self.nighthawk_portrait
-            elif selected.pilot == kite:
-                portrait = self.kite_portrait
+            elif selected.pilot == Rose:
+                portrait = self.Rose_portrait
             elif selected.pilot == saint:
                  portrait = self.saint_portrait
             elif selected.pilot == deadlift:
                 portrait = self.deadlift_portrait
-            elif selected.pilot == kite:
-                portrait = self.kite_portrait
+            elif selected.pilot == Rose:
+                portrait = self.Rose_portrait
             elif selected.pilot == shadowstalker:
                 portrait = self.shadowstalker_portrait
             else:
@@ -2020,13 +2020,13 @@ if startup: #load classes
                             if debug_mode == True: print(pilot.name, "assigned to mission:", selected.active_mission_number)
                             pilot.orders = "objective"
                             mission.pilots.add(pilot)
-                    kite.orders = "objective"
-                    kite.active = True
+                    Rose.orders = "objective"
+                    Rose.active = True
                     nighthawk.orders = "objective"
                     nighthawk.active = True
                     saint.active = True
-                    kite.pos_x = random.randint(-screen_width*0.2+train_objective.pos_x,screen_width*0.2+train_objective.pos_x)
-                    kite.pos_y = random.randint(-screen_height*0.2+train_objective.pos_y, 0)
+                    Rose.pos_x = random.randint(-screen_width*0.2+train_objective.pos_x,screen_width*0.2+train_objective.pos_x)
+                    Rose.pos_y = random.randint(-screen_height*0.2+train_objective.pos_y, 0)
                     for pilot in mission.pilots: 
                         pilot.move_target = mission.train_roster[0]
                     for pilot in mission.enemies: 
@@ -2043,10 +2043,10 @@ if startup: #load classes
                 mission.spawn_terrain ("rock", screen_width*0.5, screen_height*0.5, screen_width*0.3, screen_height*0.3)
                 
                 #placeholder to add multiple pilots to mission 2
-                kite.on_mission = True
+                Rose.on_mission = True
                 nighthawk.on_mission = True
                 saint.on_mission = True
-                kite.on_mission = True
+                Rose.on_mission = True
                 
                 #prep pilots
                 if mission_setup == True:
@@ -2059,8 +2059,8 @@ if startup: #load classes
                             pilot.pos_x = screen_width/2 - 150 + random.randint(0,300)
                             mission.pilots.add(pilot)
                 
-                kite.orders = "objective"
-                kite.active = True
+                Rose.orders = "objective"
+                Rose.active = True
                 nighthawk.orders = "objective"
                 nighthawk.active = True
                 saint.active = True
@@ -2130,7 +2130,7 @@ if startup: #load classes
                                     "   Alright, showtime."
                                         ],  
                         
-                        "kite":[
+                        "Rose":[
                                     " ",
                                     "   Nighthawk needs help? No problem, I'm on my way!"
                                         ],
@@ -2145,7 +2145,7 @@ if startup: #load classes
                                     "  Fine. Just let me know who needs killing."
                                         ],
                         
-                        "Azure_Kite":[
+                        "Azure_Rose":[
                                     " ",
                                     "   Currently assigned on another mission. Try contacting anyway?",
                                     "   Currently unavailable."
@@ -2491,13 +2491,13 @@ if startup: #load specifics
     if startup: #load pilots
         unassigned_pilot = Pilot("Unassigned",0,copy.deepcopy(tower),"vanguard")
         nighthawk = Pilot("Nighthawk",1,copy.deepcopy(majestic),"vanguard")
-        kite = Pilot("kite",2,copy.deepcopy(majestic),"vanguard")
+        Rose = Pilot("Rose",2,copy.deepcopy(majestic),"vanguard")
         saint = Pilot("saint",3,copy.deepcopy(majestic),"vanguard")
         deadlift = Pilot("Deadlift",4,copy.deepcopy(majestic),"vanguard")
-        kite = Pilot("Azure_Kite",5,copy.deepcopy(majestic),"vanguard")
+        Rose = Pilot("Azure_Rose",5,copy.deepcopy(majestic),"vanguard")
         shadowstalker = Pilot("Shadowstalker",6,copy.deepcopy(majestic),"vanguard")
         null_pilot = Pilot(" ",-1,copy.deepcopy(null_suit),"vanguard")
-        group.pilot_roster = [unassigned_pilot, nighthawk, kite, saint, deadlift, kite,shadowstalker]
+        group.pilot_roster = [unassigned_pilot, nighthawk, Rose, saint, deadlift, Rose,shadowstalker]
         selected.pilot = group.pilot_roster[0]
         null_pilot.pos_x = -1
         null_pilot.pos_y = -1
@@ -2507,13 +2507,13 @@ if startup: #load specifics
     if startup: #load Pilot sprites
         mission.pilots.add(unassigned_pilot)
         mission.pilots.add(nighthawk)
-        mission.pilots.add(kite)
+        mission.pilots.add(Rose)
         mission.pilots.add(saint)
         mission.pilots.add(deadlift)
-        mission.pilots.add(kite)
+        mission.pilots.add(Rose)
         mission.pilots.add(tower_1)
         nighthawk.battlesuit.loadout[1] = cryo_shot
-        kite.battlesuit.loadout[1] = cryo_shot
+        Rose.battlesuit.loadout[1] = cryo_shot
     #update inventory
     if startup: #load inventory
         group.inventory = [fusion_core, beam_cannon, light_shield, light_shield, null_weapon, null_weapon, null_weapon]

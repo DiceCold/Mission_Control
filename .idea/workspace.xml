@@ -7,8 +7,26 @@
     <list default="true" id="711c8494-9fd2-4d26-a466-16b6722da02b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/basic_sandbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic_sandbox.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/icons/crosshair.png" beforeDir="false" afterPath="$PROJECT_DIR$/graphics/icons/crosshair.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/interface.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/dialogue_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/dialogue_data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/mission_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/mission_data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/pilot_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/pilot_data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/concerned.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/default.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/happy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/impressed.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/serious.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/stern.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/surprised - Copy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/surprised.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/unused/default_old.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/unused/kite_standing_shocked1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/unused/kite_standing_shocked2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/unused/kite_standing_shocked_wip.psd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mission_control.py" beforeDir="false" afterPath="$PROJECT_DIR$/mission_control.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/graphics_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/graphics_module.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/mission_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/mission_module.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/pilot_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/pilot_module.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
