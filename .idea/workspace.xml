@@ -5,28 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="711c8494-9fd2-4d26-a466-16b6722da02b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/basic_sandbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/basic_sandbox.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/dialogue_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/dialogue_data.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/mission_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/mission_data.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/pilot_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/pilot_data.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/concerned.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/default.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/happy.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/impressed.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/serious.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/stern.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/surprised - Copy.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/surprised.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/unused/default_old.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/unused/kite_standing_shocked1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/unused/kite_standing_shocked2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/pilots/kite/unused/kite_standing_shocked_wip.psd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mission_control.py" beforeDir="false" afterPath="$PROJECT_DIR$/mission_control.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/graphics_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/graphics_module.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/mission_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/mission_module.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/pilot_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/pilot_module.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/ui_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/ui_module.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,22 +33,25 @@
     <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectId" id="2I6FhK5FakoUD1OH6ImCDIkhWpY" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/dicec/OneDrive/Documents/GitHub/Mission_Control/data&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "C:/Users/dicec/OneDrive/Documents/GitHub/Mission_Control",
+    "run.code.analysis.last.selected.profile": "pProject Default"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\dicec\OneDrive\Documents\GitHub\Mission_Control\data" />
       <recent name="C:\Users\dicec\OneDrive\Documents\GitHub\Mission_Control" />
+      <recent name="C:\Users\dicec\OneDrive\Documents\GitHub\Mission_Control\data" />
       <recent name="C:\Users\dicec\OneDrive\Documents\GitHub\Mission_Control\Planning" />
     </key>
   </component>

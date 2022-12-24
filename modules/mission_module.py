@@ -1,17 +1,14 @@
 # import pygame
 import random
 import modules.pilot_module as pilot_module
+import modules.navigation_module as nav
 from settings import *
-
-
-class Waypoint:
-    def __init__(self, pos_x, pos_y):
-        self.pos_x = pos_x
-        self.pos_y = pos_y
+import json
 
 
 class MissionManager:
-    def __init__(self):
+    def __init__(self, game_manager):
+        self.game = game_manager
         self.pilots = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
         self.objectives = pygame.sprite.Group()
@@ -24,6 +21,9 @@ class MissionManager:
         self.map_momentum_y = 0
         self.map_offset_x = 0
         self.map_offset_y = 0
+
+        self.missions_available = []
+        self.missions_completed = []
 
     def load_pilot_for_test_mission(self, pilot):
         pilot.pos_x = random.randint(screen_width*0.25, screen_width*0.75)
@@ -59,18 +59,25 @@ class MissionManager:
         self.waypoints.empty()
         self.terrain.empty()
 
-    def issue_orders(self, pilot, target_type):
-        pilot.targeting_mode = "manual"
-        if target_type == "waypoint":
-            mouse_pos = pygame.mouse.get_pos()
-            pilot.target["move"] = Waypoint(mouse_pos[0], mouse_pos[1])
+    def run_combat(self):
+        game = self.game
+        # update ally and enemy pilots while game is running
+        if game.mode == "combat" and game.paused is False:
+            # update ally and enemy pilots
+            self.pilots.update()
+            self.enemies.update()
 
-            print(f"{pilot.name} is targeting waypoint {mouse_pos}")
+            # issues orders for a pilot if they are currently selected and the player clicks on the map
+            # current functionality only allows the player to set a target location rather than a target pilot
 
-    def update(self):
-        # self.pilots.update()
-        # self.enemies.update()
-        pass
+    def load_combat_test(self):
+        print("loading combat test")
+        for pilot in self.game.pilots:
+            self.load_pilot_for_test_mission(pilot)
+            # mission.load_pilot_for_test_mission(nasha)
+            # self.load_enemy_for_test_mission(roger)
+            mission_data_file = json.load(open("data/mission_data.json", "r"))
+            self.load_mission("test_mission", mission_data_file)
 
 
 class MissionObjective:

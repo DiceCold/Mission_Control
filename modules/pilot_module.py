@@ -26,6 +26,7 @@ class Pilot(pygame.sprite.Sprite):
     def __init__(self, name):
         super().__init__()
         self.name = name
+        self.color = (255, 0, 0)
 
         # import information from data file
         data_file = json.load(open("data/pilot_data.json", "r"))
@@ -112,9 +113,14 @@ class Pilot(pygame.sprite.Sprite):
             "enemies": [],
             "objectives": []
         }
-    def reset_color(self):
+
+    def deselect(self):
+        self.selected = False
+        self.highlighted = False
+        # reset color
         if self.faction == "vanguard" and self.image != self.image_blue:
             self.image = self.image_blue
+
     def tick_invulnerable_timer(self):
         if self.invulnerable_timer > 0:
             self.invulnerable_timer -= 1
@@ -226,7 +232,6 @@ class Pilot(pygame.sprite.Sprite):
         pass
 
     def update(self):
-        self.reset_color()
         # movement
         if self.targeting_mode == "automatic":
             self.target["move"] = self.find_target(self.target_list["enemies"])

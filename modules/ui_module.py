@@ -1,7 +1,107 @@
 import pygame
 from settings import *
 
-focus = None
+
+def highlight_pilot(mouse_pos, pilot):
+    if pilot.rect.left < mouse_pos[0] < pilot.rect.right and pilot.rect.top < mouse_pos[1] < pilot.rect.bottom:
+        pilot.highlighted = True
+    elif pilot.selected:
+        pilot.highlighted = True
+    else:
+        pilot.highlighted = False
+
+
+def issue_orders(self, pilot, target_type, mouse_pos):
+    pilot.targeting_mode = "manual"
+    if target_type == "waypoint":
+        pilot.target["move"] = nav.Waypoint(mouse_pos[0], mouse_pos[1])
+
+        print(f"{pilot.name} is targeting waypoint {mouse_pos}")
+
+
+class InterfaceManager:
+    def __init__(self, game_manager):
+        self.game = game_manager
+        self.click_cooldown_max = 25
+        self.click_cooldown = self.click_cooldown_max
+
+        self.buttons = pygame.sprite.Group()
+        self.button_labels = pygame.sprite.Group()
+
+        self.selected_pilot = None
+
+    def create_button(self, button_type, text, pos_x, pos_y, width=screen_width * 0.2, height=screen_height * 0.15):
+        button = Button(button_type, pos_x, pos_y, width, height)
+        self.buttons.add(button)
+        label = TextLabel("button", button, text)
+        self.button_labels.add(label)
+
+    def highlight_button(self, mouse_pos):
+        for button in self.buttons:
+            if button.status != "hidden":
+                rect = button.rect
+                # highlight if mouse collides with rect
+                if rect.left < mouse_pos[0] < rect.right and rect.top < mouse_pos[1] < rect.bottom:
+                    button.status = "highlight"
+                else:
+                    button.status = "default"
+
+    def select_pilot(self, pilot):
+        if pilot.highlighted:
+            pilot.selected = True
+            self.selected_pilot = pilot
+            print(f"{pilot.name} selected")
+
+    def update(self):
+        game = self.game
+        mouse_pos = pygame.mouse.get_pos()
+
+        # tick down the cooldown on clicking
+        if self.click_cooldown > 0:
+            self.click_cooldown -= 1
+
+        # highlight pilots on mouseover when combat is paused
+        if game.mode == "combat" and game.paused:
+            # check to see if mouse intersects with pilot's rect
+            for pilot in game.pilots:
+                highlight_pilot(mouse_pos, pilot)
+        try:
+            if game.mode == "combat" and game.paused is False:
+                # make sure no pilot is highlighted if combat is unpaused
+                game.pilots.deselect()
+        except(Exception, ):
+            pass
+
+        # highlight button on mouseover when game is paused
+        if game.paused:
+            self.highlight_button(mouse_pos)
+
+        # event loop for player inputs
+        for event in pygame.event.get():
+            # click to select
+            if event.type == pygame.MOUSEBUTTONDOWN and self.click_cooldown == 0:
+                # reset cooldown
+                self.click_cooldown = self.click_cooldown_max
+
+                # click button
+                for button in self.buttons:
+                    if button.rect.collidepoint(event.pos) and button.status != "hidden":
+                        button.click_button()
+
+                # select pilot by clicking
+                if game.mode == "combat" and game.paused:
+                    for pilot in game.pilots:
+                        if pilot.rect.collidepoint(event.pos):
+                            self.select_pilot(pilot)
+
+                # issue orders to waypoint if pilot is selected
+                if game.selected_pilot is not None:
+                    pilot = self.selected_pilot
+                    if pilot.rect.collidepoint(event.pos):
+                        pilot.targeting_mode = "automatic"
+                        self.selected_pilot = None
+                    else:
+                        issue_orders(self.selected_pilot, "waypoint", mouse_pos)
 
 
 class TextLabel(pygame.sprite.Sprite):
@@ -29,8 +129,6 @@ class TextLabel(pygame.sprite.Sprite):
             # update image
             self.image = self.font.render(self.text, False, self.color)
             self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
-
-
 
 
 class Button(pygame.sprite.Sprite):
@@ -122,13 +220,13 @@ class Button(pygame.sprite.Sprite):
     # def check_active(self):
     #     # determine if active
     #     if self.button_type == "dashboard_map":
-    #         if focus == "cockpit":
+    #         if mode == "cockpit":
     #             self.active = True
     #         else:
     #             self.active = False
     #
     #     elif self.button_type == "swap_button":
-    #         if focus != "inventory":
+    #         if mode != "inventory":
     #             self.active = False
     #         elif selected.inventory_slot > -1 and selected.pilot_slot > -1 and selected.loadout_slot > -1:
     #             self.active = True
@@ -141,28 +239,28 @@ class Button(pygame.sprite.Sprite):
     #             self.active = False
     #
     #     elif self.button_type == "dispatch_button":
-    #         if focus == "pilot_select" and selected.pilot_slot > 0 and selected.pilot.on_mission == False:
+    #         if mode == "pilot_select" and selected.pilot_slot > 0 and selected.pilot.on_mission == False:
     #             self.active = True
     #         else:
     #             self.active = False
     #
     #     elif self.button_type == "continue_button":
     #         # make the continue button active if at least one Pilot is dispatching
-    #         if focus == "pilot_select":
+    #         if mode == "pilot_select":
     #             self.active = False
     #             for pilot in group.pilot_roster:
     #                 if pilot.dispatching: self.active = True
     #
     #         # make the continue button active if there are scenes in queue and game is not awaiting a choice
-    #         elif focus == "dialogue":
+    #         elif mode == "dialogue":
     #             if len(scene.scene_queue) > 0 and dialogue.choices_available == False: self.active = True
     #
     #         # always hide continue button on world map
-    #         elif focus == "map":
+    #         elif mode == "map":
     #             self.active = False
     #
     #         # always hide continue button during combat
-    #         elif focus == "combat":
+    #         elif mode == "combat":
     #             self.active = False
     #
     #         # make the continue button visible if active and hidden otherwise
@@ -194,12 +292,12 @@ class Button(pygame.sprite.Sprite):
         #         self.cooldown = self.cooldown_max
         #
         #         # close ui window
-        #         if self.button_type == "x_button" and focus != "cockpit":
-        #             focus = "cockpit"
+        #         if self.button_type == "x_button" and mode != "cockpit":
+        #             mode = "cockpit"
         #
         #         # show world map
-        #         elif focus == "cockpit" and self.button_type == "dashboard_map":
-        #             focus = "map"
+        #         elif mode == "cockpit" and self.button_type == "dashboard_map":
+        #             mode = "map"
         #
         #         # swap loadout and inventory items
         #         elif self.button_type == "swap_button" and self.match == True:
@@ -218,9 +316,9 @@ class Button(pygame.sprite.Sprite):
         #             else: selected.pilot.dispatching = False
         #
         #         # load the departing messages and return to dialogue screen. This should probably be a method like overlay.continue().
-        #         elif self.button_type == "continue_button" and self.active == True and focus == "pilot_select":
+        #         elif self.button_type == "continue_button" and self.active == True and mode == "pilot_select":
         #             scene.scene_queue.clear()
-        #             focus = "dialogue"
+        #             mode = "dialogue"
         #             for pilot in group.pilot_roster:
         #                 if pilot.dispatching:
         #                     pilot.dispatching = False
@@ -239,7 +337,7 @@ class Button(pygame.sprite.Sprite):
         #                 # mission.mission_setup(selected.active_mission_number)
         #
         #         # advance to next scene if queue is not empty
-        #         elif self.button_type == "continue_button" and self.active == True and focus == "dialogue" and dialogue.choices_available == False:
+        #         elif self.button_type == "continue_button" and self.active == True and mode == "dialogue" and dialogue.choices_available == False:
         #             try:
         #                 if debug_mode == True:
         #                     print(" ")

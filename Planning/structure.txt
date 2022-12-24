@@ -1,0 +1,62 @@
+Management structure
+
+Game Manager - Handles overall running of the game, save load, quit, etc
+
+	Graphics Manager - Handles displaying things on the screen
+
+	Interface Manager - Handles buttons, highlighting on mouseover, selecting, and anything else that responds to direct input from the player
+	
+	Mission Manager - Handles loading dialogue, pilots, objectives, enemies, etc for missions. Also controls switching between combat, character select, and dialogue modes.
+	
+	Combat Manager
+	
+		Navigation Module - Contains functions for moving, finding targets, etc
+		
+		Character Manager
+		
+		Enemy Manager
+		
+		Objective Manager - Handles mission objectives
+		
+		Terrain Manager - Handles obstacles on the map
+
+	Dialogue Manager - Handles conversations and choices
+
+	Inventory Manager - Handles the player's inventory, changing pilot loadout
+	
+	Resource Manager - Handles tracking the player's resouces such as scrap and meds, as well as faction reputations
+
+	Shop Manager - Handles loading items to display in the shop, as well as adding to cart and purchasing.
+	
+	Downtime Manager - Handles downtime activities like repairing battlesuits and healing pilots
+
+
+
+Object classes
+
+Items
+	
+	Weapons
+	
+	Shields
+	
+	Utility
+	
+Mobile entities
+	
+	Pilots
+	
+	Enemies
+	
+	Missiles
+	
+Mission Objectives
+
+	Control/Activation Points
+	
+	Pickups/Loot
+	
+	Destructables
+		Attack
+		Defend
+	
