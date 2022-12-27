@@ -33,6 +33,8 @@ class InterfaceManager:
 
         self.selected_pilot = None
 
+        self.menu = MenuManager()
+
     def reset_cooldown(self):
         self.click_cooldown = self.click_cooldown_max
 
@@ -87,8 +89,6 @@ class InterfaceManager:
             self.highlight_button(mouse_pos)
 
 
-
-
 class TextLabel(pygame.sprite.Sprite):
     def __init__(self, label_type, reference, text=""):
         super().__init__()
@@ -114,6 +114,65 @@ class TextLabel(pygame.sprite.Sprite):
             # update image
             self.image = self.font.render(self.text, False, self.color)
             self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
+
+
+class MenuManager:
+    def __init__(self):
+        self.menu_type = "combat"
+        self.hidden = True
+        self.pos_x = screen_width*0.5
+        self.pos_y = screen_height*0.5
+        self.width = screen_width*0.5
+        self.height = screen_height*0.3
+
+        self.back_image = pygame.image.load("graphics/menu/menu_back.png").convert_alpha()
+        self.back_image = pygame.transform.scale(self.back_image, (self.width, self.height))
+        self.back_rect = self.back_image.get_rect(center=(self.pos_x, self.pos_y))
+
+        self.menu_options = []
+
+    def load_menu(self, menu_type, pos_x, pos_y, width, height):
+        self.menu_type = menu_type
+        self.hidden = False
+        self.pos_x = pos_x
+        self.pos_y = pos_y
+        self.width = width
+        self.height = height
+
+        # update back image since positions/dimensions may change
+        self.back_image = pygame.image.load("graphics/menu/menu_back.png").convert_alpha()
+        self.back_image = pygame.transform.scale(self.back_image, (self.width, self.height))
+        self.back_rect = self.back_image.get_rect(center=(self.pos_x, self.pos_y))
+
+        self.update_menu_options()
+
+    def draw_menu(self):
+        # draw back of menu
+        screen.blit(self.back_image, self.back_rect)
+
+        # draw options
+        for option in self.menu_options:
+            text = option
+            color = (0, 0, 0)
+            index = self.menu_options.index(option)
+            print(text, color, index)
+            image = text_font_small.render(text, False, color)
+            pos_x = self.pos_x - self.width*0.4
+            pos_y = self.pos_y - self.height * 0.4
+            rect = image.get_rect(topleft=(pos_x, pos_y + self.height*0.15*(index + 1)))
+            screen.blit(image, rect)
+
+    def update_menu_options(self, reference=None):
+        if self.menu_type == "combat":
+            if reference is not None:
+                self.menu_options = [
+                    f"Selected Pilot: {reference.name}",
+                    f"Targeting Mode: {reference.targeting_mode}",
+                    "Select Target",
+                    "Redirect Power",
+                    "Activate Ability"
+                ]
+
 
 
 class Button(pygame.sprite.Sprite):

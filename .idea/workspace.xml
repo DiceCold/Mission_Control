@@ -7,8 +7,6 @@
     <list default="true" id="711c8494-9fd2-4d26-a466-16b6722da02b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/graphics_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/graphics_module.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/pilot_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/pilot_module.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/ui_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/ui_module.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

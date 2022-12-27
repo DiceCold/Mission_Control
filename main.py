@@ -23,6 +23,7 @@ print("To toggle combat while debug is enabled, press 'x'")
 print("To set combat to the testing setup press 'z' while combat is enabled.")
 print("To return to cockpit while debug is enabled, press 'c'")
 print("To pause or unpause combat press space")
+print("To toggle the menu press 'o'")
 
 
 # def create_rect(x, y, width, height):
@@ -86,6 +87,10 @@ class GameManager:
 
         if game.mode != "cockpit":
             graphics.draw_green()
+
+        if not game.ui.menu.hidden:
+            self.ui.menu.draw_menu()
+
 
     def update(self):
         if game.mode == "combat":
@@ -153,12 +158,14 @@ while True:  # game Cycle
                     print("debug_mode disabled")
             if game.debug_mode:
                 if event.key == pygame.K_s:
+                    # toggle shop
                     if game.mode != "shop":
                         game.mode = "shop"
                         print("shop enabled with debug_mode")
                     else:
                         game.mode = "cockpit"
                         print("shop disabled with debug_mode")
+                # toggle combat
                 elif event.key == pygame.K_x:
                     if game.mode != "combat":
                         game.mode = "combat"
@@ -166,8 +173,17 @@ while True:  # game Cycle
                     else:
                         game.mode = "cockpit"
                         print("combat disabled with debug_mode")
+                # return to cockpit
                 elif event.key == pygame.K_c:
                     game.mode = "cockpit"
+                # toggle menu
+                elif event.key == pygame.K_o:
+                    if game.ui.menu.hidden:
+                        game.ui.menu.hidden = False
+                        game.ui.menu.update_menu_options(game.ui.selected_pilot)
+                        print(game.ui.menu.menu_options)
+                    else:
+                        game.ui.menu.hidden = True
 
             # load combat test
             if game.debug_mode and game.mode == "combat":
