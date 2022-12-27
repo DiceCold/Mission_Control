@@ -30,7 +30,6 @@ print("To pause or unpause combat press space")
 #     return rect
 
 
-
 def update_fps():
     fps = str(int(clock.get_fps()))
     fps_text = text_font.render(fps, 1, pygame.Color("coral"))
@@ -73,8 +72,6 @@ class GameManager:
         elif self.mode == "combat":
             mission.pilots.draw(screen)
             graphics.draw_terrain(mission.terrain)
-            for pilot in mission.enemies:
-                pygame.draw.circle(screen, pilot.color, (pilot.pos_x, pilot.pos_y), screen_width * 0.005)
 
             # draw crosshair
             if self.paused and self.ui.selected_pilot is not None:
@@ -93,8 +90,10 @@ class GameManager:
     def update(self):
         if game.mode == "combat":
             self.mission.run_combat()
-        # update buttons
+
+        # update ui
         self.ui.update()
+
         # render graphics on screen
         self.update_graphics()
 
@@ -136,6 +135,8 @@ game.pilots.add(nasha)
 game.mission.enemies.add(roger)
 
 while True:  # game Cycle
+    mouse_pos = pygame.mouse.get_pos()
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:  # Quit
             pygame.quit()
@@ -185,10 +186,42 @@ while True:  # game Cycle
                         pilot.selected = False
                     print("Combat has been unpaused")
 
+        # click to select
+        if event.type == pygame.MOUSEBUTTONDOWN and game.ui.click_cooldown == 0:
+            # reset cooldown
+            game.ui.reset_cooldown()
+
+            # select button by clicking
+            for button in game.ui.buttons:
+                if button.rect.collidepoint(event.pos) and button.status != "hidden":
+                    button.click_button()
+
+            # select pilot by clicking
+            if game.mode == "combat" and game.paused:
+                for pilot in game.pilots:
+                    # check if mouse is on pilot
+                    if pilot.rect.collidepoint(event.pos):
+                        # select the pilot if not currently selected
+                        if pilot != game.ui.selected_pilot:
+                            game.ui.select_pilot(pilot)
+                        # deselect the pilot if already selected
+                        else:
+                            game.ui.deselect_pilot(pilot)
+
+            # issue orders to waypoint if pilot is selected
+            if game.ui.selected_pilot is not None:
+                pilot = game.ui.selected_pilot
+                mouse_pos = pygame.mouse.get_pos()
+                print("issuing orders")
+                ui_module.issue_orders(game.ui.selected_pilot, "waypoint", mouse_pos)
+                # reset cooldown
+                game.ui.click_cooldown = game.ui.click_cooldown_max
+
         # if event.type == pygame.MOUSEBUTTONDOWN and game.ui.click_cooldown == 0:
         #     for item in shop.shop_items:
         #         item.add_to_cart(game, shop)
 
     game.update()
+
     pygame.display.update()
     clock.tick(60)

@@ -82,7 +82,7 @@ class Pilot(pygame.sprite.Sprite):
             self.color = (0, 0, 255)
             self.image_blue = pygame.image.load("graphics/icons/blue_dot_icon.png").convert_alpha()
             self.image_blue = pygame.transform.scale(self.image_blue, (self.width, self.height))
-            self.image_white = pygame.image.load("graphics/icons/blue_dot_icon.png").convert_alpha()
+            self.image_white = pygame.image.load("graphics/icons/white_dot_icon.png").convert_alpha()
             self.image_white = pygame.transform.scale(self.image_white, (self.width, self.height))
             self.image = self.image_blue
         elif self.faction == "hive":
@@ -231,13 +231,26 @@ class Pilot(pygame.sprite.Sprite):
         #     pygame.draw.circle(screen, self.color, (self.pos_x, self.pos_y), screen_width*0.01)
         pass
 
+    def handle_highlight(self):
+        if self.faction == "vanguard":
+            if self.selected or self.highlighted:
+                self.image = self.image_white
+            else:
+                self.image = self.image_blue
+
     def update(self):
+        # change color from blue to white if highlighted
+        if self.selected:
+            print(self.name, "currently selected")
+        self.handle_highlight()
+        if self.selected:
+            print(self.name, "currently selected")
+
         # movement
         if self.targeting_mode == "automatic":
             self.target["move"] = self.find_target(self.target_list["enemies"])
             self.target["attack"] = self.find_target(self.target_list["enemies"])
         self.maneuver()
-        print(self.name, self.selected, self.highlighted, self.color)
 
 
     # def load(self, name):

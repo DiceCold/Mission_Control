@@ -1,5 +1,6 @@
 import pygame
 from settings import *
+import modules.navigation_module as nav
 
 
 def highlight_pilot(mouse_pos, pilot):
@@ -9,9 +10,11 @@ def highlight_pilot(mouse_pos, pilot):
         pilot.highlighted = True
     else:
         pilot.highlighted = False
+    # set color based on if highlighted
+    pilot.handle_highlight()
 
 
-def issue_orders(self, pilot, target_type, mouse_pos):
+def issue_orders(pilot, target_type, mouse_pos):
     pilot.targeting_mode = "manual"
     if target_type == "waypoint":
         pilot.target["move"] = nav.Waypoint(mouse_pos[0], mouse_pos[1])
@@ -30,6 +33,9 @@ class InterfaceManager:
 
         self.selected_pilot = None
 
+    def reset_cooldown(self):
+        self.click_cooldown = self.click_cooldown_max
+
     def create_button(self, button_type, text, pos_x, pos_y, width=screen_width * 0.2, height=screen_height * 0.15):
         button = Button(button_type, pos_x, pos_y, width, height)
         self.buttons.add(button)
@@ -47,10 +53,14 @@ class InterfaceManager:
                     button.status = "default"
 
     def select_pilot(self, pilot):
-        if pilot.highlighted:
-            pilot.selected = True
-            self.selected_pilot = pilot
-            print(f"{pilot.name} selected")
+        pilot.selected = True
+        self.selected_pilot = pilot
+        print(f"{pilot.name} selected")
+
+    def deselect_pilot(self, pilot):
+        pilot.selected = False
+        self.selected_pilot = None
+        print(f"{pilot.name} deselected")
 
     def update(self):
         game = self.game
@@ -76,32 +86,7 @@ class InterfaceManager:
         if game.paused:
             self.highlight_button(mouse_pos)
 
-        # event loop for player inputs
-        for event in pygame.event.get():
-            # click to select
-            if event.type == pygame.MOUSEBUTTONDOWN and self.click_cooldown == 0:
-                # reset cooldown
-                self.click_cooldown = self.click_cooldown_max
 
-                # click button
-                for button in self.buttons:
-                    if button.rect.collidepoint(event.pos) and button.status != "hidden":
-                        button.click_button()
-
-                # select pilot by clicking
-                if game.mode == "combat" and game.paused:
-                    for pilot in game.pilots:
-                        if pilot.rect.collidepoint(event.pos):
-                            self.select_pilot(pilot)
-
-                # issue orders to waypoint if pilot is selected
-                if game.selected_pilot is not None:
-                    pilot = self.selected_pilot
-                    if pilot.rect.collidepoint(event.pos):
-                        pilot.targeting_mode = "automatic"
-                        self.selected_pilot = None
-                    else:
-                        issue_orders(self.selected_pilot, "waypoint", mouse_pos)
 
 
 class TextLabel(pygame.sprite.Sprite):
