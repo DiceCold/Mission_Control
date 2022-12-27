@@ -24,11 +24,20 @@ print("To set combat to the testing setup press 'z' while combat is enabled.")
 print("To return to cockpit while debug is enabled, press 'c'")
 print("To pause or unpause combat press space")
 print("To toggle the menu press 'o'")
+print("To toggle pilot frames press 'p'")
 
 
 # def create_rect(x, y, width, height):
 #     rect = pygame.Rect(screen_width * x, screen_height * y, screen_width * width, screen_height * height)
 #     return rect
+
+def toggle_hidden(manager, name):
+    if manager.hidden:
+        manager.hidden = False
+        print(f"{name} is now active")
+    else:
+        manager.hidden = True
+        print(f"{name} is now hidden")
 
 
 def update_fps():
@@ -88,9 +97,13 @@ class GameManager:
         if game.mode != "cockpit":
             graphics.draw_green()
 
+        # draw the menu if it's not hidden
         if not game.ui.menu.hidden:
             self.ui.menu.draw_menu()
 
+        # draw a character frame on the left side of the screen for each pilot if not hidden
+        if not game.ui.pilot_frame_manager.hidden:
+            self.ui.pilot_frame_manager.draw_pilot_frames()
 
     def update(self):
         if game.mode == "combat":
@@ -178,12 +191,12 @@ while True:  # game Cycle
                     game.mode = "cockpit"
                 # toggle menu
                 elif event.key == pygame.K_o:
-                    if game.ui.menu.hidden:
-                        game.ui.menu.hidden = False
-                        game.ui.menu.update_menu_options(game.ui.selected_pilot)
-                        print(game.ui.menu.menu_options)
-                    else:
-                        game.ui.menu.hidden = True
+                    toggle_hidden(game.ui.menu, "menu")
+                    game.ui.menu.update_menu_options(game.ui.selected_pilot)
+
+                # toggle party_frames
+                elif event.key == pygame.K_p:
+                    toggle_hidden(game.ui.pilot_frame_manager, "party_frames")
 
             # load combat test
             if game.debug_mode and game.mode == "combat":

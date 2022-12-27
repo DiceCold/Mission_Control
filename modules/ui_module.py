@@ -33,7 +33,8 @@ class InterfaceManager:
 
         self.selected_pilot = None
 
-        self.menu = MenuManager()
+        self.menu = MenuManager(self.game)
+        self.pilot_frame_manager = PilotFrameManager(self.game)
 
     def reset_cooldown(self):
         self.click_cooldown = self.click_cooldown_max
@@ -88,6 +89,8 @@ class InterfaceManager:
         if game.paused:
             self.highlight_button(mouse_pos)
 
+        self.pilot_frame_manager.update_pilot_frames()
+
 
 class TextLabel(pygame.sprite.Sprite):
     def __init__(self, label_type, reference, text=""):
@@ -117,9 +120,11 @@ class TextLabel(pygame.sprite.Sprite):
 
 
 class MenuManager:
-    def __init__(self):
+    def __init__(self, game_manager):
+        self.game = game_manager
         self.menu_type = "combat"
         self.hidden = True
+
         self.pos_x = screen_width*0.5
         self.pos_y = screen_height*0.5
         self.width = screen_width*0.5
@@ -140,7 +145,7 @@ class MenuManager:
         self.height = height
 
         # update back image since positions/dimensions may change
-        self.back_image = pygame.image.load("graphics/menu/menu_back.png").convert_alpha()
+        # self.back_image = pygame.image.load("graphics/menu/menu_back.png").convert_alpha()
         self.back_image = pygame.transform.scale(self.back_image, (self.width, self.height))
         self.back_rect = self.back_image.get_rect(center=(self.pos_x, self.pos_y))
 
@@ -173,6 +178,84 @@ class MenuManager:
                     "Activate Ability"
                 ]
 
+
+class PilotFrameManager:
+    def __init__(self, game_manager):
+        self.game = game_manager
+        self.hidden = False
+        self.pilot_frame_group = []
+
+    def update_frame_quantity(self):
+        pilot_quantity = len(self.game.pilots)
+        pilot_frame_quantity = len(self.pilot_frame_group)
+        # if there are fewer frames than pilots add another pilot_frame
+        if pilot_frame_quantity < pilot_quantity:
+            pilot_frame = PilotFrame(pilot_frame_quantity, self.game.pilots)
+            self.pilot_frame_group.append(pilot_frame)
+        # if there are more frames than pilots delete the last pilot_frame from the list
+        elif pilot_frame_quantity > pilot_quantity:
+            del(self.pilot_frame_group[-1])
+            
+    def update_pilot_frames(self):
+        self.update_frame_quantity()
+        for pilot_frame in self.pilot_frame_group:
+            pilot_frame.update_pilot_frame()
+    
+    def draw_pilot_frames(self):
+        for pilot_frame in self.pilot_frame_group:
+            pilot_frame.draw_pilot_frame()
+
+
+class PilotFrame:
+    def __init__(self, index, pilot_list):
+        self.index = index
+        self.pilot_list = pilot_list
+
+        # try to load the info for the pilot based on position in list
+        try:
+            self.pilot = self.pilot_list[self.index]
+            self.name = self.pilot.name
+        except(Exception, ):
+            self.pilot = None
+            self.name = "default"
+
+        self.width = screen_width*0.2
+        self.height = screen_height*0.2
+        self.pos_x = screen_width*0.1
+        self.pos_y = self.height*(self.index + 1)
+
+        # load backing image
+        self.back_image = pygame.image.load("graphics/menu/menu_back.png").convert_alpha()
+        self.back_image = pygame.transform.scale(self.back_image, (self.width, self.height))
+        self.back_rect = self.back_image.get_rect(center=(self.pos_x, self.pos_y))
+        # load text image
+        self.text_image = text_font.render(self.name , False, (0, 0, 0))
+        self.text_rect = self.text_image.get_rect(center=(self.pos_x, self.pos_y))
+
+    def update_pilot_frame(self):
+        # try to load the info for the pilot based on position in list
+        # I'm sure there's a better way to get the position of an object in the sprite group, but this works for now
+        list_position = -1
+        for pilot in self.pilot_list:
+            list_position += 1
+            if list_position == self.index:
+                self.pilot = pilot
+
+        # self.pilot = self.pilot_list[self.index]
+        self.name = self.pilot.name
+        # except(Exception,):
+        #     self.pilot = None
+        #     self.name = "default"
+        # update image and rect for text
+        self.text_image = text_font.render(self.name, False, (0, 0, 0))
+        self.text_rect = self.text_image.get_rect(center=(self.pos_x, self.pos_y))
+
+    def draw_pilot_frame(self):
+        if self.pilot is not None:
+            # draw the back
+            screen.blit(self.back_image, self.back_rect)
+            # draw text name
+            screen.blit(self.text_image, self.text_rect)
 
 
 class Button(pygame.sprite.Sprite):
