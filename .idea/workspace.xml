@@ -7,6 +7,8 @@
     <list default="true" id="711c8494-9fd2-4d26-a466-16b6722da02b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/mission_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/mission_module.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/pilot_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/pilot_module.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/ui_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/ui_module.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -97,5 +99,16 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/modules/mission_module.py</url>
+          <line>76</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

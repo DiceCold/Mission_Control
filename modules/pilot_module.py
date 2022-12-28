@@ -3,6 +3,7 @@ from settings import *
 from math import atan2, degrees, pi, inf
 import random
 import json
+import modules.navigation_module as nav
 
 
 def find_distance(origin, target):
@@ -67,12 +68,17 @@ class Pilot(pygame.sprite.Sprite):
         self.orders = "aggressive_focus"
         self.highlighted = False
         self.selected = False
+        self.overcharge_system = {
+            "red": True,
+            "blue": False,
+            "green": False
+        }
 
         self.pos_x = -1
         self.pos_y = -1
         self.velocity_x = 0
         self.velocity_y = 0
-        self.max_speed = 12
+        self.max_speed = 4
 
         self.width = screen_width * 0.01
         self.height = screen_width * 0.01
@@ -138,6 +144,11 @@ class Pilot(pygame.sprite.Sprite):
         # except(Exception, ):
         #     new_target = None
 
+        # default to center of map if pilot has no target
+        if new_target is None:
+            new_target = nav.Waypoint(screen_width * 0.5, screen_height * 0.5)
+            # print(f"{self.name} is targeting middle of the map")
+            # print(self.name, "is at", self.pos_x, self.pos_y)
         return new_target
 
     def maneuver(self, multiplier = 1):

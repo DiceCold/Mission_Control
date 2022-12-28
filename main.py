@@ -80,7 +80,7 @@ class GameManager:
         elif self.mode == "cockpit":
             graphics.draw_cockpit()
         elif self.mode == "combat":
-            mission.pilots.draw(screen)
+            game.pilots.draw(screen)
             graphics.draw_terrain(mission.terrain)
 
             # draw crosshair
@@ -102,8 +102,8 @@ class GameManager:
             self.ui.menu.draw_menu()
 
         # draw a character frame on the left side of the screen for each pilot if not hidden
-        if not game.ui.pilot_frame_manager.hidden:
-            self.ui.pilot_frame_manager.draw_pilot_frames()
+        if not game.ui.status_frame_manager.hidden:
+            self.ui.status_frame_manager.draw_status_frames()
 
     def update(self):
         if game.mode == "combat":
@@ -143,14 +143,14 @@ graphics = graphics_module.GraphicsManager()
 # pilots
 pilot_data = json.load(open("data/pilot_data.json", "r"))
 
-rose = pilot_module.Pilot("rose")
+rose = pilot_module.Pilot("Rose")
 rose.target["move"] = nav.Waypoint(screen_width*0.5, screen_height*0.5)
 rose.targeting_mode = "manual"
 nasha = pilot_module.Pilot("Nasha")
 roger = pilot_module.Pilot("Roger")
 game.pilots.add(rose)
 game.pilots.add(nasha)
-game.mission.enemies.add(roger)
+# game.mission.enemies.add(roger)
 
 while True:  # game Cycle
     mouse_pos = pygame.mouse.get_pos()
@@ -194,9 +194,9 @@ while True:  # game Cycle
                     toggle_hidden(game.ui.menu, "menu")
                     game.ui.menu.update_menu_options(game.ui.selected_pilot)
 
-                # toggle party_frames
+                # toggle pilot_status_frames
                 elif event.key == pygame.K_p:
-                    toggle_hidden(game.ui.pilot_frame_manager, "party_frames")
+                    toggle_hidden(game.ui.status_frame_manager, "pilot_status_frames")
 
             # load combat test
             if game.debug_mode and game.mode == "combat":
@@ -207,12 +207,13 @@ while True:  # game Cycle
             if event.key == pygame.K_SPACE and game.mode == "combat":
                 if not game.paused:
                     game.paused = True
+                    game.ui.selected_pilot = None
                     print("Combat has been paused")
                 else:
                     game.paused = False
-                    game.selected_pilot = None
-                    for pilot in mission.pilots:
-                        pilot.selected = False
+                    game.ui.selected_pilot = None
+                    for pilot in game.pilots:
+                        pilot.deselect()
                     print("Combat has been unpaused")
 
         # click to select
@@ -225,6 +226,19 @@ while True:  # game Cycle
                 if button.rect.collidepoint(event.pos) and button.status != "hidden":
                     button.click_button()
 
+            # toggle overcharge lights
+            for pilot_frame in game.ui.status_frame_manager.status_frame_group:
+                if not game.ui.status_frame_manager.hidden:
+                    for button in pilot_frame.light_group:
+                        if button.rect.collidepoint(event.pos):
+                            button.click_button()
+                            print(pilot_frame.pilot.overcharge_system)
+                    for button in pilot_frame.toggle_group:
+                        if button.rect.collidepoint(event.pos):
+                            button.click_button()
+
+            # toggle automatic control mode
+
             # select pilot by clicking
             if game.mode == "combat" and game.paused:
                 for pilot in game.pilots:
@@ -236,15 +250,20 @@ while True:  # game Cycle
                         # deselect the pilot if already selected
                         else:
                             game.ui.deselect_pilot(pilot)
+                # deselect all but the most recently selected pilot
+                for pilot in game.pilots:
+                    if game.ui.selected_pilot != pilot:
+                        pilot.selected = False
 
             # issue orders to waypoint if pilot is selected
             if game.ui.selected_pilot is not None:
                 pilot = game.ui.selected_pilot
                 mouse_pos = pygame.mouse.get_pos()
-                print("issuing orders")
+                if pilot.targeting_mode == "manual":
+                    print("issuing orders to", pilot.name)
                 ui_module.issue_orders(game.ui.selected_pilot, "waypoint", mouse_pos)
                 # reset cooldown
-                game.ui.click_cooldown = game.ui.click_cooldown_max
+                # game.ui.click_cooldown = game.ui.click_cooldown_max
 
         # if event.type == pygame.MOUSEBUTTONDOWN and game.ui.click_cooldown == 0:
         #     for item in shop.shop_items:

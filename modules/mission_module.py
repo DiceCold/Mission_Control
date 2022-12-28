@@ -73,6 +73,7 @@ class MissionManager:
     def load_combat_test(self):
         print("loading combat test")
         for pilot in self.game.pilots:
+            print(pilot.name)
             self.load_pilot_for_test_mission(pilot)
             # mission.load_pilot_for_test_mission(nasha)
             # self.load_enemy_for_test_mission(roger)

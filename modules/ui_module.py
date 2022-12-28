@@ -15,11 +15,11 @@ def highlight_pilot(mouse_pos, pilot):
 
 
 def issue_orders(pilot, target_type, mouse_pos):
-    pilot.targeting_mode = "manual"
-    if target_type == "waypoint":
-        pilot.target["move"] = nav.Waypoint(mouse_pos[0], mouse_pos[1])
+    if pilot.targeting_mode == "manual":
+        if target_type == "waypoint":
+            pilot.target["move"] = nav.Waypoint(mouse_pos[0], mouse_pos[1])
 
-        print(f"{pilot.name} is targeting waypoint {mouse_pos}")
+            print(f"{pilot.name} is targeting waypoint {mouse_pos}")
 
 
 class InterfaceManager:
@@ -34,7 +34,7 @@ class InterfaceManager:
         self.selected_pilot = None
 
         self.menu = MenuManager(self.game)
-        self.pilot_frame_manager = PilotFrameManager(self.game)
+        self.status_frame_manager = StatusFrameManager(self.game)
 
     def reset_cooldown(self):
         self.click_cooldown = self.click_cooldown_max
@@ -57,6 +57,8 @@ class InterfaceManager:
 
     def select_pilot(self, pilot):
         pilot.selected = True
+        # change to manual depends if I want to see their current target or just override it
+        pilot.targeting_mode = "manual"
         self.selected_pilot = pilot
         print(f"{pilot.name} selected")
 
@@ -78,18 +80,18 @@ class InterfaceManager:
             # check to see if mouse intersects with pilot's rect
             for pilot in game.pilots:
                 highlight_pilot(mouse_pos, pilot)
-        try:
-            if game.mode == "combat" and game.paused is False:
-                # make sure no pilot is highlighted if combat is unpaused
-                game.pilots.deselect()
-        except(Exception, ):
-            pass
+        # try:
+        #     if game.mode == "combat" and game.paused is False:
+        #         # make sure no pilot is highlighted if combat is unpaused
+        #         game.pilots.deselect()
+        # except(Exception, ):
+        #     pass
 
         # highlight button on mouseover when game is paused
         if game.paused:
             self.highlight_button(mouse_pos)
 
-        self.pilot_frame_manager.update_pilot_frames()
+        self.status_frame_manager.update_status_frames()
 
 
 class TextLabel(pygame.sprite.Sprite):
@@ -179,60 +181,99 @@ class MenuManager:
                 ]
 
 
-class PilotFrameManager:
+class StatusFrameManager:
     def __init__(self, game_manager):
         self.game = game_manager
         self.hidden = False
-        self.pilot_frame_group = []
+        self.status_frame_group = []
 
     def update_frame_quantity(self):
         pilot_quantity = len(self.game.pilots)
-        pilot_frame_quantity = len(self.pilot_frame_group)
-        # if there are fewer frames than pilots add another pilot_frame
-        if pilot_frame_quantity < pilot_quantity:
-            pilot_frame = PilotFrame(pilot_frame_quantity, self.game.pilots)
-            self.pilot_frame_group.append(pilot_frame)
-        # if there are more frames than pilots delete the last pilot_frame from the list
-        elif pilot_frame_quantity > pilot_quantity:
-            del(self.pilot_frame_group[-1])
+        status_frame_quantity = len(self.status_frame_group)
+        # if there are fewer frames than pilots add another status_frame
+        if status_frame_quantity < pilot_quantity:
+            status_frame = PilotFrame(status_frame_quantity, self.game.pilots)
+            self.status_frame_group.append(status_frame)
+        # if there are more frames than pilots delete the last status_frame from the list
+        elif status_frame_quantity > pilot_quantity:
+            del(self.status_frame_group[-1])
             
-    def update_pilot_frames(self):
+    def update_status_frames(self):
         self.update_frame_quantity()
-        for pilot_frame in self.pilot_frame_group:
-            pilot_frame.update_pilot_frame()
+        for status_frame in self.status_frame_group:
+            status_frame.update_status_frame()
     
-    def draw_pilot_frames(self):
-        for pilot_frame in self.pilot_frame_group:
-            pilot_frame.draw_pilot_frame()
+    def draw_status_frames(self):
+        for status_frame in self.status_frame_group:
+            status_frame.draw_status_frame()
 
 
 class PilotFrame:
     def __init__(self, index, pilot_list):
         self.index = index
         self.pilot_list = pilot_list
+        self.text_color = (255, 255, 255)
 
         # try to load the info for the pilot based on position in list
         try:
             self.pilot = self.pilot_list[self.index]
             self.name = self.pilot.name
+            self.overcharge_system = self.pilot.overcharge_system
         except(Exception, ):
             self.pilot = None
             self.name = "default"
+            self.overcharge_system = {
+                "red": False,
+                "blue": True,
+                "green": False
+            }
+            print(f"Error: no pilot at specified index {self.index}")
 
         self.width = screen_width*0.2
-        self.height = screen_height*0.2
+        self.height = screen_height*0.05
         self.pos_x = screen_width*0.1
         self.pos_y = self.height*(self.index + 1)
+        self.name_pos_x = self.pos_x+self.width*0.05
+        self.name_pos_y = self.pos_y + self.height * 0.2
+
+        # add overcharge button lights
+        circle_size = screen_width*0.01
+        red_pos = (self.pos_x + self.width*0.8, self.pos_y + self.height*0.3)
+        blue_pos = (self.pos_x + self.width*0.85, self.pos_y + self.height*0.3)
+        green_pos = (self.pos_x + self.width * 0.9, self.pos_y + self.height * 0.3)
+        size = (circle_size, circle_size)
+        self.red_light = Button("overcharge_light", red_pos[0], red_pos[1], circle_size, circle_size, "red", self.pilot)
+        self.blue_light = Button("overcharge_light", blue_pos[0], blue_pos[1], circle_size, circle_size, "blue", self.pilot)
+        self.green_light = Button("overcharge_light", green_pos[0], green_pos[1], circle_size, circle_size, "green", self.pilot)
+        self.light_group = pygame.sprite.Group()
+        self.light_group.add(self.red_light, self.blue_light, self.green_light)
+        
+        # add toggle for automatic control
+        auto_size = (self.width*0.2, self.height*0.3)
+        auto_pos = (self.pos_x + self.width * 0.9, self.pos_y + self.height * 0.6)
+        self.toggle_auto = Button("toggle_auto", auto_pos[0], auto_pos[1], auto_size[0], auto_size[1], None, self.pilot)
+        self.toggle_group = pygame.sprite.Group(self.toggle_auto)
 
         # load backing image
-        self.back_image = pygame.image.load("graphics/menu/menu_back.png").convert_alpha()
+        self.back_image = pygame.image.load("graphics/pilot_frames/frame_back_3.png").convert_alpha()
         self.back_image = pygame.transform.scale(self.back_image, (self.width, self.height))
-        self.back_rect = self.back_image.get_rect(center=(self.pos_x, self.pos_y))
+        self.back_rect = self.back_image.get_rect(topleft=(self.pos_x, self.pos_y))
         # load text image
-        self.text_image = text_font.render(self.name , False, (0, 0, 0))
-        self.text_rect = self.text_image.get_rect(center=(self.pos_x, self.pos_y))
+        self.name_text_image = text_font.render(self.name, False, self.text_color)
+        self.name_text_rect = self.name_text_image.get_rect(topleft=(self.name_pos_x, self.name_pos_y))
 
-    def update_pilot_frame(self):
+    def update_overcharge_lights(self):
+        if self.pilot is not None:
+            self.overcharge_system = self.pilot.overcharge_system
+        for light in self.light_group:
+            if self.overcharge_system[f"{light.color}"]:
+                light.status = "overcharged"
+            else:
+                light.status = "default"
+        self.light_group.update()
+
+    def update_status_frame(self):
+        self.update_overcharge_lights()
         # try to load the info for the pilot based on position in list
         # I'm sure there's a better way to get the position of an object in the sprite group, but this works for now
         list_position = -1
@@ -241,25 +282,39 @@ class PilotFrame:
             if list_position == self.index:
                 self.pilot = pilot
 
-        # self.pilot = self.pilot_list[self.index]
-        self.name = self.pilot.name
+        if self.pilot is not None:
+            self.name = self.pilot.name
+            # update overcharge lights
+            self.overcharge_system = self.pilot.overcharge_system
+            for i in self.light_group:
+                i.reference = self.pilot
+            # update toggle for automatic control
+            self.toggle_auto.reference = self.pilot
+            self.toggle_auto.status = self.pilot.targeting_mode
+            self.toggle_auto.update()
         # except(Exception,):
         #     self.pilot = None
         #     self.name = "default"
         # update image and rect for text
-        self.text_image = text_font.render(self.name, False, (0, 0, 0))
-        self.text_rect = self.text_image.get_rect(center=(self.pos_x, self.pos_y))
+        self.name_text_image = text_font.render(self.name, False, self.text_color)
+        self.name_text_rect = self.name_text_image.get_rect(topleft=(self.name_pos_x, self.name_pos_y))
 
-    def draw_pilot_frame(self):
+    def draw_status_frame(self):
         if self.pilot is not None:
             # draw the back
             screen.blit(self.back_image, self.back_rect)
             # draw text name
-            screen.blit(self.text_image, self.text_rect)
+            screen.blit(self.name_text_image, self.name_text_rect)
+            # draw overcharge lights
+            # screen.blit(self.red_image, self.red_rect)
+            # screen.blit(self.blue_image, self.blue_rect)
+            # screen.blit(self.green_image, self.green_rect)
+            self.light_group.draw(screen)
+            self.toggle_group.draw(screen)
 
 
 class Button(pygame.sprite.Sprite):
-    def __init__(self, button_type, pos_x=0, pos_y=0, width=screen_width*0.1, height=screen_width*0.1):
+    def __init__(self, button_type, pos_x=0, pos_y=0, width=100, height=100, color=None, reference=None):
         super().__init__()
         self.button_type = button_type
         self.pos_x = pos_x
@@ -272,8 +327,8 @@ class Button(pygame.sprite.Sprite):
         # set cooldown/max
         self.cooldown_max = 25
         self.cooldown = self.cooldown_max
-
-
+        self.color = color
+        self.reference = reference
 
         if self.button_type == "x_button":
             self.frame_1 = pygame.image.load("graphics/icons/x_button.png").convert_alpha()
@@ -313,7 +368,34 @@ class Button(pygame.sprite.Sprite):
             self.pos_x = screen_width*0.5
             self.pos_y = screen_height*0.85 
             self.frame_1 = pygame.image.load("graphics/interface/labels/label_white_selected_lowres.png").convert_alpha()
-            self.frame_1 = pygame.transform.scale(self.frame_1,(self.width,self.height))
+            self.frame_1 = pygame.transform.scale(self.frame_1, (self.width, self.height))
+
+        elif button_type == "overcharge_light":
+            # load overcharge-light images
+            self.on_image = pygame.image.load(f"graphics/icons/{self.color}_light_on.png").convert_alpha()
+            self.on_image = pygame.transform.scale(self.on_image, (self.width, self.width))
+            self.off_image = pygame.image.load(f"graphics/icons/{self.color}_light_off.png").convert_alpha()
+            self.off_image = pygame.transform.scale(self.off_image, (self.width, self.width))
+            self.status = "overcharged"
+            self.images = {
+                "default": self.off_image,
+                "overcharged": self.on_image
+            }
+            self.image = self.images[self.status]
+            self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
+
+        elif button_type == "toggle_auto":
+            self.auto_image = pygame.image.load("graphics/pilot_frames/toggle_auto.png").convert_alpha()
+            self.auto_image = pygame.transform.scale(self.auto_image, (self.width, self.height))
+            self.manual_image = pygame.image.load("graphics/pilot_frames/toggle_manual.png").convert_alpha()
+            self.manual_image = pygame.transform.scale(self.manual_image, (self.width, self.height))
+            self.status = "automatic"
+            self.images = {
+                "automatic": self.auto_image,
+                "manual": self.manual_image
+            }
+            self.image = self.images[self.status]
+            self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
 
         elif button_type == "default_button":
             # set dimensions
@@ -340,70 +422,50 @@ class Button(pygame.sprite.Sprite):
         self.image = self.images[self.status]
         self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
 
+    def toggle_auto(self):
+        targeting_mode = self.reference.targeting_mode
+        # update pilot's targeting mode
+        if targeting_mode == "automatic":
+            targeting_mode = "manual"
+            print(self.reference.name, "switching to manual control")
+        else:
+            targeting_mode = "automatic"
+            print(self.reference.name, "switching to automatic control")
+        # update button status
+        self.status = targeting_mode
+        # update pilot targeting mode
+        self.reference.targeting_mode = targeting_mode
+        if targeting_mode == "automatic":
+            self.reference.find_target(self.reference.target_list["enemies"])
+
+    def toggle_light(self):
+        # set all lights off so that only one can be lit at a time
+        self.reference.overcharge_system["red"] = False
+        self.reference.overcharge_system["blue"] = False
+        self.reference.overcharge_system["green"] = False
+
+        # switches status of overcharge light between default and overcharged
+        if self.status == "default":
+            self.status = "overcharged"
+            self.reference.overcharge_system[f"{self.color}"] = True
+        else:
+            self.status = "default"
+            self.reference.overcharge_system[f"{self.color}"] = False
+
     def click_button(self):
         # reset cooldown
         self.cooldown = self.cooldown_max
         print("You clicked a button")
-    # def check_active(self):
-    #     # determine if active
-    #     if self.button_type == "dashboard_map":
-    #         if mode == "cockpit":
-    #             self.active = True
-    #         else:
-    #             self.active = False
-    #
-    #     elif self.button_type == "swap_button":
-    #         if mode != "inventory":
-    #             self.active = False
-    #         elif selected.inventory_slot > -1 and selected.pilot_slot > -1 and selected.loadout_slot > -1:
-    #             self.active = True
-    #             if group.inventory[selected.inventory_slot].function != selected.pilot.battlesuit.loadout[
-    #                 selected.loadout_slot].function:
-    #                 self.match = False
-    #             else:
-    #                 self.match = True
-    #         else:
-    #             self.active = False
-    #
-    #     elif self.button_type == "dispatch_button":
-    #         if mode == "pilot_select" and selected.pilot_slot > 0 and selected.pilot.on_mission == False:
-    #             self.active = True
-    #         else:
-    #             self.active = False
-    #
-    #     elif self.button_type == "continue_button":
-    #         # make the continue button active if at least one Pilot is dispatching
-    #         if mode == "pilot_select":
-    #             self.active = False
-    #             for pilot in group.pilot_roster:
-    #                 if pilot.dispatching: self.active = True
-    #
-    #         # make the continue button active if there are scenes in queue and game is not awaiting a choice
-    #         elif mode == "dialogue":
-    #             if len(scene.scene_queue) > 0 and dialogue.choices_available == False: self.active = True
-    #
-    #         # always hide continue button on world map
-    #         elif mode == "map":
-    #             self.active = False
-    #
-    #         # always hide continue button during combat
-    #         elif mode == "combat":
-    #             self.active = False
-    #
-    #         # make the continue button visible if active and hidden otherwise
-    #         if self.active == True:
-    #             self.animation_index = 1
-    #         else:
-    #             self.animation_index = 0
-    #
-    #     elif self.button_type == "x_button":
-    #         pass
-    #
-    #     else:
-    #         if debug_mode:
-    #             print("Error: unrecognized button type when checking if active", self.button_type)
-    #         else:
-    #             pass
+
+        # toggle overcharge lights
+        if self.button_type == "overcharge_light":
+            print("status was: ", self.status)
+            self.toggle_light()
+            print("status is now", self.status)
+            
+        # toggle automatic/manual control mode
+        if self.button_type == "toggle_auto":
+            self.toggle_auto()
 
     def update(self):
         # reduce cooldown
@@ -411,84 +473,5 @@ class Button(pygame.sprite.Sprite):
             self.cooldown -= 1
         # update image based on status
         self.update_image()
-        # mouse inputs
-        # if event.type == pygame.MOUSEBUTTONDOWN:
-        #     if self.rect.collidepoint(event.pos) and self.active == True and self.cooldown == 0:
-        #
-        #         # reset cooldown
-        #         self.cooldown = self.cooldown_max
-        #
-        #         # close ui window
-        #         if self.button_type == "x_button" and mode != "cockpit":
-        #             mode = "cockpit"
-        #
-        #         # show world map
-        #         elif mode == "cockpit" and self.button_type == "dashboard_map":
-        #             mode = "map"
-        #
-        #         # swap loadout and inventory items
-        #         elif self.button_type == "swap_button" and self.match == True:
-        #             # swap items
-        #             new_loadout_item = group.inventory[selected.inventory_slot]
-        #             new_inventory_item = selected.pilot.battlesuit.loadout[selected.loadout_slot]
-        #             selected.pilot.battlesuit.loadout[selected.loadout_slot] = new_loadout_item
-        #             group.inventory[selected.inventory_slot] = new_inventory_item
-        #             # reset which items are currently selected
-        #             selected.loadout_slot = -1
-        #             selected.inventory_slot = -1
-        #
-        #         # assign Pilot to mission
-        #         elif self.button_type == "dispatch_button":
-        #             if selected.pilot.dispatching == False: selected.pilot.dispatching = True
-        #             else: selected.pilot.dispatching = False
-        #
-        #         # load the departing messages and return to dialogue screen. This should probably be a method like overlay.continue().
-        #         elif self.button_type == "continue_button" and self.active == True and mode == "pilot_select":
-        #             scene.scene_queue.clear()
-        #             mode = "dialogue"
-        #             for pilot in group.pilot_roster:
-        #                 if pilot.dispatching:
-        #                     pilot.dispatching = False
-        #                     pilot.on_mission = True
-        #                 if pilot.on_mission:
-        #                     scene.scene_queue.append(f"{pilot.name} departing")
-        #
-        #             # conclude npcs with nighthawk and making sure she speaks last
-        #             if len(scene.scene_queue) > 1 and scene.scene_queue[0] == "Nighthawk departing":
-        #                 scene.scene_queue.append("Nighthawk departing")
-        #                 scene.scene_queue.remove("Nighthawk departing")
-        #
-        #             scene.scene_queue.append("combat")
-        #
-        #             if debug_mode == True: print(scene.scene_queue)
-        #                 # mission.mission_setup(selected.active_mission_number)
-        #
-        #         # advance to next scene if queue is not empty
-        #         elif self.button_type == "continue_button" and self.active == True and mode == "dialogue" and dialogue.choices_available == False:
-        #             try:
-        #                 if debug_mode == True:
-        #                     print(" ")
-        #                     print(scene.scene_queue)
-        #                     print("removing scene: ", scene.scene_queue[0])
-        #                     print("advancing to scene:", scene.scene_queue[1])
-        #                 dialogue.advance_scene(-1)
-        #                 if debug_mode == True:
-        #                     print("current scene is now:", scene.scene_queue[0])
-        #                     print("next scene in queue:", scene.scene_queue[1])
-        #                     print(scene.scene_queue)
-        #                     print(" ")
-        #             except:
-        #                 if debug_mode == True: print("Error: no scenes in queue to remove")
-        #                 else: pass
-        #
-        #         # if none of the above button is not activated
-        #         else: self.active = False
-        #
-        # # update image
-        # if self.active == False: self.animation_index = 0
-        # else: self.animation_index = 1
-        # if self.type == "swap_button" and self.active == True:
-        #     if self.match == False: self.animation_index = 2
-        # self.image = self.frames[self.animation_index]
-        # self.rect = self.image.get_rect(center = (self.pos_x,self.pos_y))
+
         
