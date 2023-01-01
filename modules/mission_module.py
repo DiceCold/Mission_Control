@@ -36,9 +36,13 @@ class MissionManager:
         enemy.pos_x = random.randint(screen_width * 0.25, screen_width * 0.75)
         enemy.pos_y = random.randint(screen_height * 0.25, screen_height * 0.75)
         enemy.faction = "iron_hive"
-        enemy.color = (255, 0, 0)
         enemy.target_list["enemies"] = self.pilots
         print(f"Adding enemy pilot {enemy.name} to scene at ({enemy.pos_x}, {enemy.pos_y})")
+        self.enemies.add(enemy)
+
+    def spawn_enemy(self, enemy_type, pos_x=-1, pos_y=-1, faction="iron_hive"):
+        enemy = pilot_module.Enemy(enemy_type, pos_x, pos_y, faction)
+        print(f"Adding enemy {enemy.name} to scene at ({enemy.pos_x}, {enemy.pos_y})")
         self.enemies.add(enemy)
 
     def load_mission(self, mission_name, data_file):
@@ -77,8 +81,8 @@ class MissionManager:
             self.load_pilot_for_test_mission(pilot)
             # mission.load_pilot_for_test_mission(nasha)
             # self.load_enemy_for_test_mission(roger)
-            mission_data_file = json.load(open("data/mission_data.json", "r"))
-            self.load_mission("test_mission", mission_data_file)
+        mission_data_file = json.load(open("data/mission_data.json", "r"))
+        self.load_mission("test_mission", mission_data_file)
 
 
 class MissionObjective:

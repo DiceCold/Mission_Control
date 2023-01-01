@@ -4,6 +4,8 @@
 			"name": "default",
 			"pilot_id": 0,
 			"faction": "vanguard",
+			"evasion_score": 10,
+			"accuracy_score": 0,
 			"attributes": {
 				"reflex": 0,
 				"focus": 0,
@@ -14,16 +16,30 @@
 			"feats": "none",
 			"chassis": "majestic",
 			"loadout": [
-				"jet booster",
-				"burst laser",
-				"burst laser",
-				"light shield"
+				{
+					"item_type": "mobility",
+					"item_name": "jet_booster"
+				},
+				{
+					"item_type": "weapon",
+					"item_name": "burst_laser"
+				},
+				{
+					"item_type": "weapon",
+					"item_name": "burst_laser"
+				},
+				{
+					"item_type": "shield",
+					"item_name": "default_shield"
+				}
 			]
 		},
 		"nighthawk": {
 			"name": "Nighthawk",
 			"pilot_id": 1,
 			"faction": "vanguard",
+			"evasion_score": 10,
+			"accuracy_score": 0,
 			"attributes": {
 				"reflex": 0,
 				"focus": 0,
@@ -33,16 +49,30 @@
 			},
 			"chassis": "majestic",
 			"loadout": [
-				"jet booster",
-				"burst laser",
-				"burst laser",
-				"light shield"
+				{
+					"item_type": "mobility",
+					"item_name": "jet_booster"
+				},
+				{
+					"item_type": "weapon",
+					"item_name": "burst_laser"
+				},
+				{
+					"item_type": "weapon",
+					"item_name": "burst_laser"
+				},
+				{
+					"item_type": "shield",
+					"item_name": "default_shield"
+				}
 			]
 		},
 	"rose": {
 		"name": "Rose",
 		"pilot_id": 1,
 		"faction": "vanguard",
+		"evasion_score": 10,
+		"accuracy_score": 0,
 		"attributes": {
 			"reflex": 0,
 			"focus": 0,
@@ -51,7 +81,24 @@
 			"precision": 0
 			},
 		"chassis": "majestic",
-		"loadout": ["jet booster", "burst laser", "burst laser", "light shield"]
+		"loadout": [
+			{
+					"item_type": "mobility",
+					"item_name": "jet_booster"
+				},
+				{
+					"item_type": "weapon",
+					"item_name": "burst_laser"
+				},
+				{
+					"item_type": "weapon",
+					"item_name": "burst_laser"
+				},
+				{
+					"item_type": "shield",
+					"item_name": "default_shield"
+				}
+		]
 		}
 	}
 }

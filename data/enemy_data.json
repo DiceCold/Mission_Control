@@ -1,0 +1,20 @@
+{
+	"drone": {
+		"name": "drone",
+		"evasion_score": 10,
+		"accuracy_score": 0,
+		"hp_max": 100,
+		"max_speed": 4,
+		"size": 1,
+		"loadout": [
+			{
+			"item_type": "mobility",
+			"item_name": "jet_booster"
+			},
+			{
+			"item_type": "weapon",
+			"item_name": "burst_laser"
+			}
+		]
+	}
+}

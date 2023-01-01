@@ -9,6 +9,7 @@ pygame.init()
 text_font = pygame.font.Font("font/Pixeltype.ttf", 50)
 text_font_small = pygame.font.Font("font/Pixeltype.ttf", 30)
 text_font_micro = pygame.font.Font("font/Pixeltype.ttf", 20)
+pixel_font_15 = pygame.font.Font("font/Pixeltype.ttf", 15)
 
 screen = pygame.display.set_mode((screen_width, screen_height))
 

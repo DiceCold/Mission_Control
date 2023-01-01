@@ -5,11 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="711c8494-9fd2-4d26-a466-16b6722da02b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/modules/vfx_module.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/item_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/item_data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/pilot_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/pilot_data.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mockups/pilot_info_frame_mockup2.psd" beforeDir="false" afterPath="$PROJECT_DIR$/mockups/pilot_info_frame_mockup2.psd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/graphics_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/graphics_module.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/items.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/items.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/mission_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/mission_module.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/navigation_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/navigation_module.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/pilot_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/pilot_module.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/shop.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/shop.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/ui_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/ui_module.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,8 +54,8 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/dicec/OneDrive/Documents/GitHub/Mission_Control",
-    "run.code.analysis.last.selected.profile": "pProject Default"
+    "last_opened_file_path": "C:/Users/dicec/OneDrive/Documents/GitHub/Mission_Control/main.py",
+    "run.code.analysis.last.selected.profile": "aDefault"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -56,19 +66,19 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="dialogue_sandbox" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python">
       <module name="Mission_Control" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\Program Files\Python310\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/dialogue_sandbox.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -99,16 +109,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/modules/mission_module.py</url>
-          <line>76</line>
-          <option name="timeStamp" value="15" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

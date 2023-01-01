@@ -1,6 +1,7 @@
 import pygame
 from settings import *
 import modules.navigation_module as nav
+from settings import pixel_font_15
 
 
 def highlight_pilot(mouse_pos, pilot):
@@ -227,11 +228,10 @@ class PilotFrame:
                 "blue": True,
                 "green": False
             }
-            print(f"Error: no pilot at specified index {self.index}")
 
         self.width = screen_width*0.2
         self.height = screen_height*0.05
-        self.pos_x = screen_width*0.1
+        self.pos_x = screen_width*0.01
         self.pos_y = self.height*(self.index + 1)
         self.name_pos_x = self.pos_x+self.width*0.05
         self.name_pos_y = self.pos_y + self.height * 0.2
@@ -249,18 +249,37 @@ class PilotFrame:
         self.light_group.add(self.red_light, self.blue_light, self.green_light)
         
         # add toggle for automatic control
-        auto_size = (self.width*0.2, self.height*0.3)
-        auto_pos = (self.pos_x + self.width * 0.9, self.pos_y + self.height * 0.6)
+        # toggle
+        auto_size = (self.width*0.25, self.height*0.35)
+        auto_pos = (self.pos_x + self.width * 0.85, self.pos_y + self.height * 0.65)
         self.toggle_auto = Button("toggle_auto", auto_pos[0], auto_pos[1], auto_size[0], auto_size[1], None, self.pilot)
         self.toggle_group = pygame.sprite.Group(self.toggle_auto)
+        # text labels
+        # self.manual_text_image = text_font_micro.render("Manual", False, (0, 0, 0))
+        self.auto_text_image = pixel_font_15.render("AUTO", False, (255, 255, 255))
+        self.auto_text_rect = self.auto_text_image.get_rect(center=(self.pos_x+self.width*0.9, self.pos_y+self.height*0.7))
 
         # load backing image
-        self.back_image = pygame.image.load("graphics/pilot_frames/frame_back_3.png").convert_alpha()
+        self.back_image = pygame.image.load("graphics/pilot_frames/frame_back_4.png").convert_alpha()
         self.back_image = pygame.transform.scale(self.back_image, (self.width, self.height))
         self.back_rect = self.back_image.get_rect(topleft=(self.pos_x, self.pos_y))
         # load text image
         self.name_text_image = text_font.render(self.name, False, self.text_color)
         self.name_text_rect = self.name_text_image.get_rect(topleft=(self.name_pos_x, self.name_pos_y))
+
+        # load status icons for shield and damage
+        shield_icon = StatusIcon("shield", self.pos_x+self.width*0.5, self.pos_y+self.height*0.2, self.width*0.1, self.width*0.1, self.pilot)
+        damage_icon = StatusIcon("damage", self.pos_x+self.width*0.6, self.pos_y+self.height*0.2, self.width*0.1, self.width*0.1, self.pilot)
+        self.status_icon_group = pygame.sprite.Group(shield_icon, damage_icon)
+
+    def update_auto_toggle_labels(self):
+        if self.pilot.targeting_mode == "automatic":
+            self.auto_text_image = pixel_font_15.render("AUTO", False, (255, 255, 255))
+        else:
+            self.auto_text_image = pixel_font_15.render("AUTO", False, (0, 0, 0))
+
+    def draw_auto_toggle_labels(self):
+        screen.blit(self.auto_text_image, self.auto_text_rect)
 
     def update_overcharge_lights(self):
         if self.pilot is not None:
@@ -271,6 +290,9 @@ class PilotFrame:
             else:
                 light.status = "default"
         self.light_group.update()
+
+    def draw_status_icons(self):
+        self.status_icon_group.draw(screen)
 
     def update_status_frame(self):
         self.update_overcharge_lights()
@@ -288,10 +310,16 @@ class PilotFrame:
             self.overcharge_system = self.pilot.overcharge_system
             for i in self.light_group:
                 i.reference = self.pilot
+            # update status icons
+            for i in self.status_icon_group:
+                i.reference = self.pilot
+            self.status_icon_group.update()
+
             # update toggle for automatic control
             self.toggle_auto.reference = self.pilot
             self.toggle_auto.status = self.pilot.targeting_mode
             self.toggle_auto.update()
+            self.update_auto_toggle_labels()
         # except(Exception,):
         #     self.pilot = None
         #     self.name = "default"
@@ -311,6 +339,73 @@ class PilotFrame:
             # screen.blit(self.green_image, self.green_rect)
             self.light_group.draw(screen)
             self.toggle_group.draw(screen)
+            self.draw_auto_toggle_labels()
+            self.draw_status_icons()
+
+
+class StatusIcon(pygame.sprite.Sprite):
+    def __init__(self, icon_type, pos_x=0, pos_y=0, width=screen_width*0.1, height=screen_height*0.1, reference=None):
+        super().__init__()
+        self.icon_type = icon_type
+        self.pos_x = pos_x
+        self.pos_y = pos_y
+        self.width = width
+        self.height = height
+        self.reference = reference
+
+        # load images
+        if self.icon_type == "shield":
+            self.shield_icon_blue = pygame.image.load("graphics/icons/shield.png").convert_alpha()
+            self.shield_icon_black = pygame.image.load("graphics/icons/shield_icon_black.png").convert_alpha()
+            self.shield_icon_blue = pygame.transform.scale(self.shield_icon_blue, (self.width, self.height))
+            self.shield_icon_black = pygame.transform.scale(self.shield_icon_black, (self.width, self.height))
+            self.image = self.shield_icon_blue
+            self.rect = self.image.get_rect(topleft=(self.pos_x, self.pos_y))
+            print("loaded shield icon", self.pos_x, self.pos_y)
+
+        if self.icon_type == "damage":
+            self.damage_icon_white = pygame.image.load("graphics/icons/warning_white.png").convert_alpha()
+            self.damage_icon_red = pygame.image.load("graphics/icons/warning_red.png").convert_alpha()
+            self.damage_icon_yellow = pygame.image.load("graphics/icons/warning_yellow.png").convert_alpha()
+            self.damage_icon_white = pygame.transform.scale(self.damage_icon_white, (self.width, self.height))
+            self.damage_icon_red = pygame.transform.scale(self.damage_icon_red, (self.width, self.height))
+            self.damage_icon_yellow = pygame.transform.scale(self.damage_icon_yellow, (self.width, self.height))
+            self.image = self.damage_icon_white
+            self.rect = self.image.get_rect(topleft=(self.pos_x, self.pos_y))
+            print("loaded damage icon", self.pos_x, self.pos_y)
+
+    def update_shield_icon(self):
+        if self.reference is not None:
+            if self.reference.shielded:
+                self.image = self.shield_icon_blue
+            else:
+                self.image = self.shield_icon_black
+
+    def update_damage_icon(self):
+        if self.reference is not None:
+            # show icon as white if > 60% health
+            if self.reference.hp_current > self.reference.hp_max*0.6:
+                self.image = self.damage_icon_white
+            # show as yellow if > 30% health
+            elif self.reference.hp_current > self.reference.hp_max*0.3:
+                self.image = self.damage_icon_yellow
+            # show as red if < 30% health
+            else:
+                self.image = self.damage_icon_red
+
+    def update_reference(self, reference):
+        self.reference = reference
+
+    def update(self):
+        if self.icon_type == "shield":
+            self.update_shield_icon()
+        elif self.icon_type == "damage":
+            self.update_damage_icon()
+        else:
+            print(self.icon_type)
+
+    def draw_icon(self):
+        screen.blit(self.image, self.rect)
 
 
 class Button(pygame.sprite.Sprite):
@@ -385,9 +480,9 @@ class Button(pygame.sprite.Sprite):
             self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
 
         elif button_type == "toggle_auto":
-            self.auto_image = pygame.image.load("graphics/pilot_frames/toggle_auto.png").convert_alpha()
+            self.auto_image = pygame.image.load("graphics/pilot_frames/toggle_auto_2.png").convert_alpha()
             self.auto_image = pygame.transform.scale(self.auto_image, (self.width, self.height))
-            self.manual_image = pygame.image.load("graphics/pilot_frames/toggle_manual.png").convert_alpha()
+            self.manual_image = pygame.image.load("graphics/pilot_frames/toggle_manual_2.png").convert_alpha()
             self.manual_image = pygame.transform.scale(self.manual_image, (self.width, self.height))
             self.status = "automatic"
             self.images = {

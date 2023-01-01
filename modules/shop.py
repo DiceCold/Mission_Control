@@ -24,9 +24,9 @@ class ShopManager:
             self.basics_data[2]
         ]
         self.equipment_list = [
-            random.choice(self.weapon_data),
-            random.choice(self.weapon_data),
-            random.choice(self.weapon_data)
+            random.choice(list(self.weapon_data.values())),
+            random.choice(list(self.weapon_data.values())),
+            random.choice(list(self.weapon_data.values()))
         ]
         self.media_list = [
             random.choice(self.media_data),

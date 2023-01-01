@@ -1,4 +1,3 @@
-# sandbox
 
 # import pygame
 # import random
@@ -80,8 +79,13 @@ class GameManager:
         elif self.mode == "cockpit":
             graphics.draw_cockpit()
         elif self.mode == "combat":
-            game.pilots.draw(screen)
             graphics.draw_terrain(mission.terrain)
+            game.pilots.draw(screen)
+            game.mission.enemies.draw(screen)
+
+            #draw vfx
+            for pilot in game.pilots:
+                pilot.draw_vfx()
 
             # draw crosshair
             if self.paused and self.ui.selected_pilot is not None:
@@ -147,10 +151,11 @@ rose = pilot_module.Pilot("Rose")
 rose.target["move"] = nav.Waypoint(screen_width*0.5, screen_height*0.5)
 rose.targeting_mode = "manual"
 nasha = pilot_module.Pilot("Nasha")
-roger = pilot_module.Pilot("Roger")
+# roger = pilot_module.Pilot("Roger")
 game.pilots.add(rose)
 game.pilots.add(nasha)
-# game.mission.enemies.add(roger)
+# game.mission.load_enemy_for_test_mission(roger)
+game.mission.spawn_enemy("drone", 500, 500)
 
 while True:  # game Cycle
     mouse_pos = pygame.mouse.get_pos()

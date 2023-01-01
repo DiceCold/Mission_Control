@@ -17,11 +17,11 @@
 		"sonic",
 		"gravity"
 	],
-	"weapons": [
-		{
+	"weapons": {
+		"burst_laser": {
 			"accuracy": 0,
 			"key_attribute": "focus",
-			"cooldown": 200,
+			"cooldown": 100,
 			"damage_type": "thermal",
 			"name": "Burst Laser",
 			"range": [
@@ -29,57 +29,66 @@
 				"medium"
 			],
 			"tier": 0,
-			"type": "beam"
+			"weapon_type": "beam"
+			},
+	"cryo-ray": {
+		"accuracy": 0,
+		"key_attribute": "precision",
+		"cooldown": 200,
+		"damage_type": "cold",
+		"name": "Cryo-ray",
+		"range": [
+		"short",
+		"medium"
+		],
+		"tier": 0,
+		"type": "beam"
 		},
-		{
-			"accuracy": 0,
-			"key_attribute": "precision",
-			"cooldown": 200,
-			"damage_type": "cold",
-			"name": "Cryo-ray",
-			"range": [
-				"short",
-				"medium"
-			],
-			"tier": 0,
-			"type": "beam"
+	"default_weapon": {
+		"accuracy": 0,
+		"key_attribute": "focus",
+		"cooldown": 200,
+		"damage_type": "thermal",
+		"name": "Default Weapon",
+		"range": [
+		"short",
+		"medium"
+		],
+		"tier": 0,
+		"weapon_type": "beam"
 		},
-		{
-			"accuracy": 0,
-			"key_attribute": "focus",
-			"cooldown": 200,
-			"damage_type": "thermal",
-			"name": "Default Weapon",
-			"range": [
-				"short",
-				"medium"
-			],
-			"tier": 0,
-			"type": "beam"
+	"lightning_chain": {
+		"accuracy": 0,
+		"cooldown": 200,
+		"damage_type": "shock",
+		"name": "Lightning Chain",
+		"range": [
+		"short"
+		],
+		"tier": 1,
+		"weapon_type": "beam"
 		},
-		{
-			"accuracy": 0,
-			"cooldown": 200,
-			"damage_type": "shock",
-			"name": "Lightning Chain",
-			"range": [
-				"short"
-			],
-			"tier": 1,
-			"type": "beam"
-		},
-		{
-			"accuracy": 1,
-			"cooldown": 300,
-			"damage_type": "thermal",
-			"name": "Volcanic Lance",
-			"range": [
-				"medium"
-			],
-			"tier": 1,
-			"type": "beam"
+	"volcanic_lance": {
+		"accuracy": 1,
+		"cooldown": 300,
+		"damage_type": "thermal",
+		"name": "Volcanic Lance",
+		"range": [
+		"medium"
+		],
+		"tier": 1,
+		"weapon_type": "beam"
 		}
-	],
+},
+	"shields": {
+		"default_shield": {
+			"cooldown": 100
+		},
+		"light_shield": {
+			"cooldown": 100
+		}
+	},
+
 	"media": [
 		{
 			"name": "The Behemoth Returns",
