@@ -54,12 +54,12 @@
 		{
 			"object_type": "mountain",
 			"pos_x": 0.1,
-			"pos_y": 0.8
+			"pos_y": 0.2
 		},
 		{
 			"object_type": "mountain",
 			"pos_x": 0.2,
-			"pos_y": 0.8
+			"pos_y": 0.3
 		},
 		{
 			"object_type": "mountain",
@@ -74,7 +74,7 @@
 		{
 			"object_type": "mountain",
 			"pos_x": 0.5,
-			"pos_y": 0.8
+			"pos_y": 0.4
 		},
 		{
 			"object_type": "mountain",
@@ -84,7 +84,7 @@
 		{
 			"object_type": "mountain",
 			"pos_x": 0.7,
-			"pos_y": 0.8
+			"pos_y": 0.9
 		},
 		{
 			"object_type": "mountain",
@@ -94,7 +94,19 @@
 		{
 			"object_type": "mountain",
 			"pos_x": 0.9,
-			"pos_y": 0.8
+			"pos_y": 0.85
+		}
+	],
+	"enemies": [
+		{
+			"enemy_type": "drone",
+			"pos_x": 1.3,
+			"pos_y": 1.4
+		},
+		{
+			"enemy_type": "drone",
+			"pos_x": 1.2,
+			"pos_y": 0.6
 		}
 	]
 }

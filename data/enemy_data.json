@@ -3,7 +3,7 @@
 		"name": "drone",
 		"evasion_score": 10,
 		"accuracy_score": 0,
-		"hp_max": 100,
+		"hp_max": 20,
 		"max_speed": 4,
 		"size": 1,
 		"loadout": [

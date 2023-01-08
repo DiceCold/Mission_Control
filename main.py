@@ -1,17 +1,22 @@
 
 # import pygame
-# import random
+import random
 from sys import exit
 # import os
 # import copy
 import json
+
+import pygame.sprite
+
 import modules.graphics_module as graphics_module
 import modules.pilot_module as pilot_module
 import modules.mission_module as mission_module
-from modules.settings import *
+from settings import *
 import modules.shop as module_shop
 import modules.ui_module as ui_module
 import modules.navigation_module as nav
+from modules.vfx_module import VisualEffect
+import modules.sound_module as sound_module
 
 # press q to toggle debug mode
 # press s to toggle shop if debug mode is enabled
@@ -55,6 +60,7 @@ class GameManager:
         # load managers
         self.ui = ui_module.InterfaceManager(self)
         self.mission = mission_module.MissionManager(self)
+        self.sound = sound_module.SoundController()
 
         # self.ui.create_button("default_button", "test_button", screen_width*0.5, screen_height*0.5)
 
@@ -68,6 +74,20 @@ class GameManager:
             "Meds": 10
         }
 
+        self.vfx_group = pygame.sprite.Group()
+
+    def spawn_explosion(self, origin):
+        explosion = VisualEffect("explosion", None, origin, origin)
+        self.vfx_group.add(explosion)
+        self.sound.play_sound("explosion")
+
+    def spawn_lightning(self, origin):
+        lightning = VisualEffect("lightning", None, origin, origin)
+        self.vfx_group.add(lightning)
+
+    def draw_vfx_group(self):
+        self.vfx_group.draw(screen)
+
     def update_graphics(self):
         graphics.draw_black()
         if self.mode == "shop":
@@ -79,13 +99,18 @@ class GameManager:
         elif self.mode == "cockpit":
             graphics.draw_cockpit()
         elif self.mode == "combat":
+            # draw terrain
             graphics.draw_terrain(mission.terrain)
+
+            # draw mobile entities
             game.pilots.draw(screen)
             game.mission.enemies.draw(screen)
 
-            #draw vfx
+            # draw vfx
             for pilot in game.pilots:
                 pilot.draw_vfx()
+            for enemy in game.mission.enemies:
+                enemy.draw_vfx()
 
             # draw crosshair
             if self.paused and self.ui.selected_pilot is not None:
@@ -94,6 +119,16 @@ class GameManager:
                     graphics.draw_crosshair(target.pos_x, target.pos_y)
                 except(Exception,):
                     pass
+
+            # draw explosions
+            # temp
+            try:
+                if self.mode == "combat":
+                    if self.paused is False:
+                        self.vfx_group.update()
+                    self.vfx_group.draw(screen)
+            except(Exception,):
+                pass
 
         # self.ui.buttons.draw(screen)
         # self.ui.button_labels.draw(screen)
@@ -109,9 +144,20 @@ class GameManager:
         if not game.ui.status_frame_manager.hidden:
             self.ui.status_frame_manager.draw_status_frames()
 
+    def explode_mobs(self):
+        for mob in game.pilots:
+            if not mob.alive:
+                self.spawn_explosion(mob)
+                mob.kill()
+        for mob in game.mission.enemies:
+            if not mob.alive:
+                self.spawn_explosion(mob)
+                mob.kill()
+
     def update(self):
         if game.mode == "combat":
             self.mission.run_combat()
+            self.explode_mobs()
 
         # update ui
         self.ui.update()
@@ -120,42 +166,26 @@ class GameManager:
         self.update_graphics()
 
 
-# class Pilot(pygame.sprite.Sprite):
-#     def __init__(self, name, data_file):
-#         super().__init__()
-#         self.name = name
-#         data = data_file[f"{self.name}"]
-#         self.pilot_id = data["pilot_id"]
-#         self.faction = data["faction"]
-#         self.attributes = data["attributes"]
-#         self.feats = data["feats"]
-#         self.chassis = data["chassis"]
-#         self.loadout = data["loadout"]
-#         self.mood = "default"
-#
-#         self.pos_x = -1
-#         self.pos_y = -1
-#         self.momentum_x = 0
-#         self.momentum_y = 0
-
-
 game = GameManager()
 mission = game.mission
 shop = module_shop.ShopManager()
 graphics = graphics_module.GraphicsManager()
+game.sound.play_music("me_map")
 
 # pilots
 pilot_data = json.load(open("data/pilot_data.json", "r"))
 
-rose = pilot_module.Pilot("Rose")
+rose = pilot_module.PilotCharacter("Rose")
 rose.target["move"] = nav.Waypoint(screen_width*0.5, screen_height*0.5)
 rose.targeting_mode = "manual"
-nasha = pilot_module.Pilot("Nasha")
-# roger = pilot_module.Pilot("Roger")
+nasha = pilot_module.PilotCharacter("Nasha")
+# roger = pilot_module.PilotCharacter("Roger")
 game.pilots.add(rose)
 game.pilots.add(nasha)
 # game.mission.load_enemy_for_test_mission(roger)
 game.mission.spawn_enemy("drone", 500, 500)
+rose.pos_y = 500
+rose.pos_x = 500
 
 while True:  # game Cycle
     mouse_pos = pygame.mouse.get_pos()
@@ -187,13 +217,19 @@ while True:  # game Cycle
                 elif event.key == pygame.K_x:
                     if game.mode != "combat":
                         game.mode = "combat"
+                        # switch to combat music
+                        game.sound.play_music("me_rude_awakening")
                         print("combat enabled with debug_mode")
                     else:
                         game.mode = "cockpit"
+                        # switch to map music
+                        game.sound.play_music("me_map")
                         print("combat disabled with debug_mode")
                 # return to cockpit
                 elif event.key == pygame.K_c:
                     game.mode = "cockpit"
+                    # switch to map music
+                    game.sound.play_music("me_map")
                 # toggle menu
                 elif event.key == pygame.K_o:
                     toggle_hidden(game.ui.menu, "menu")
@@ -207,6 +243,10 @@ while True:  # game Cycle
             if game.debug_mode and game.mode == "combat":
                 if event.key == pygame.K_z:
                     mission.load_combat_test()
+
+            # temp function to test teleport
+            if event.key == pygame.K_t:
+                game.mission.teleport_pilot(rose)
 
             # pause and unpause combat
             if event.key == pygame.K_SPACE and game.mode == "combat":
@@ -278,3 +318,5 @@ while True:  # game Cycle
 
     pygame.display.update()
     clock.tick(60)
+
+

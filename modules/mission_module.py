@@ -40,13 +40,21 @@ class MissionManager:
         print(f"Adding enemy pilot {enemy.name} to scene at ({enemy.pos_x}, {enemy.pos_y})")
         self.enemies.add(enemy)
 
-    def spawn_enemy(self, enemy_type, pos_x=-1, pos_y=-1, faction="iron_hive"):
+    def spawn_enemy(self, enemy_type="drone", pos_x="random", pos_y="random", faction="iron_hive"):
+        # generate random positions if random
+        if pos_x == "random":
+            pos_x = random.randint(screen_width * 0.1, screen_width * 0.9)
+        if pos_y == "random":
+            pos_y = random.randint(screen_height * 0.1, screen_height * 0.9)
+        # create new entity
         enemy = pilot_module.Enemy(enemy_type, pos_x, pos_y, faction)
+        enemy.target_list["enemies"] = self.pilots
         print(f"Adding enemy {enemy.name} to scene at ({enemy.pos_x}, {enemy.pos_y})")
         self.enemies.add(enemy)
 
     def load_mission(self, mission_name, data_file):
         mission_data = data_file[mission_name]
+        # load terrain
         self.terrain.empty()
         terrain_objects_data = mission_data["terrain_objects"]
         for terrain_object in terrain_objects_data:
@@ -54,6 +62,15 @@ class MissionManager:
             pos_x = terrain_object["pos_x"]*screen_width
             pos_y = terrain_object["pos_y"]*screen_height
             self.terrain.add(TerrainObject(self, object_type, pos_x, pos_y))
+        # load enemies
+        self.enemies.empty()
+        enemies_data = mission_data["enemies"]
+        for enemy in enemies_data:
+            enemy_type = enemy["enemy_type"]
+            pos_x = enemy["pos_x"]*screen_width
+            pos_y = enemy["pos_y"]*screen_height
+            print("loading enemy", enemy_type, pos_x, pos_y)
+            self.spawn_enemy(enemy_type, pos_x, pos_y)
 
     def reset(self):
         for pilot in self.pilots:
@@ -67,6 +84,14 @@ class MissionManager:
         game = self.game
         # update ally and enemy pilots while game is running
         if game.mode == "combat" and game.paused is False:
+            # get pushed away if too close to another pilot
+            # for pilot in self.pilots:
+            #     pilot.repel_pilot(self.pilots)
+            #     pilot.repel_pilot(self.enemies)
+            # for enemy in self.enemies:
+            #     enemy.repel_pilot(self.pilots)
+            #     enemy.repel_pilot(self.enemies)
+
             # update ally and enemy pilots
             self.pilots.update()
             self.enemies.update()
@@ -74,16 +99,30 @@ class MissionManager:
             # issues orders for a pilot if they are currently selected and the player clicks on the map
             # current functionality only allows the player to set a target location rather than a target pilot
 
-    def load_combat_test(self):
-        print("loading combat test")
+    def load_combat_test(self, test_number=1):
+        print(f"loading combat test {test_number}")
+        if test_number == 1:
+            mission_id = "test_mission"
         for pilot in self.game.pilots:
             print(pilot.name)
             self.load_pilot_for_test_mission(pilot)
             # mission.load_pilot_for_test_mission(nasha)
             # self.load_enemy_for_test_mission(roger)
         mission_data_file = json.load(open("data/mission_data.json", "r"))
-        self.load_mission("test_mission", mission_data_file)
+        self.load_mission(f"{mission_id}", mission_data_file)
 
+    def teleport_pilot(self, pilot, pos_x="random", pos_y="random"):
+        # generate random positions if random
+        if pos_x == "random":
+            pos_x = random.randint(screen_width*0.1, screen_width*0.9)
+        if pos_y == "random":
+            pos_y = random.randint(screen_height*0.1, screen_height*0.9)
+        # set position of pilot
+        pilot.pos_x = pos_x
+        pilot.pos_y = pos_y
+        # create lightning effect for teleport
+        self.game.spawn_lightning(pilot)
+        self.game.sound.play_sound("thunder")
 
 class MissionObjective:
     def __init__(self, objective_type, name, pos_x, pos_y):

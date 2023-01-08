@@ -39,6 +39,7 @@ class MobileEntity(pygame.sprite.Sprite):
         self.velocity_x = 0
         self.velocity_y = 0
         self.max_speed = 4
+        self.speed_multiplier = 1
 
         # set health status
         self.injured = False
@@ -66,6 +67,12 @@ class MobileEntity(pygame.sprite.Sprite):
         # create vfx group
         self.vfx_group = pygame.sprite.Group()
 
+        # create persistent vfx for nametag and shield
+        nametag = VisualEffect("nametag", None, self, self, inf)
+        self.vfx_group.add(nametag)
+        shield = VisualEffect("shield", None, self, self, inf)
+        self.vfx_group.add(shield)
+
     def update_items(self):
         for item in self.loadout:
             item.update()
@@ -78,7 +85,6 @@ class MobileEntity(pygame.sprite.Sprite):
         # checks to find the closest target
         new_target = None
         new_target_distance = float(inf)
-        # try:
         for target in target_list:
             distance = find_distance(self, target)
             if distance <= new_target_distance:
@@ -96,14 +102,14 @@ class MobileEntity(pygame.sprite.Sprite):
         # update velocity
         if self.target["move"] is not None:
             if self.pos_x < self.target["move"].pos_x:
-                self.velocity_x += 0.1
+                self.velocity_x += 0.05
             else:
-                self.velocity_x -= 0.1
+                self.velocity_x -= 0.05
 
             if self.pos_y < self.target["move"].pos_y:
-                self.velocity_y += 0.1
+                self.velocity_y += 0.05
             else:
-                self.velocity_y -= 0.1
+                self.velocity_y -= 0.05
 
         # speed limit
         if abs(self.velocity_x) > self.max_speed:
@@ -112,9 +118,21 @@ class MobileEntity(pygame.sprite.Sprite):
             self.velocity_y *= 0.9
 
         # update position
-        self.pos_x = self.pos_x + self.velocity_x * multiplier
-        self.pos_y = self.pos_y + self.velocity_y * multiplier
+        self.pos_x = self.pos_x + self.velocity_x * self.speed_multiplier/2
+        self.pos_y = self.pos_y + self.velocity_y * self.speed_multiplier/2
         self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
+
+    def repel_pilot(self, list):
+        # for target in list:
+        #     if target is not self:
+        #         if abs(target.pos_x - self.pos_x) < screen_width*0.01 and abs(target.pos_y - self.pos_y) < screen_width*0.01:
+        #             self.velocity_x *= 1.1
+        #
+        #             try:
+        #                 print(self.name, "repelled from", target.name)
+        #             except(Exception, ):
+        #                 pass
+        pass
 
     def spawn_vfx(self, origin, target, vfx_type, damage_type, ttl=60):
         visual_effect = VisualEffect(vfx_type, damage_type, origin, target, ttl)
@@ -129,13 +147,17 @@ class MobileEntity(pygame.sprite.Sprite):
     def attack(self, item, target):
         # reset item cooldown
         item.cooldown = item.cooldown_max
+        if self.name == "drone":
+            print("drone attacking", target.name)
+
+        # create visual effect
+        self.spawn_vfx(self, target, item.weapon_type, item.damage_type)
 
         # roll to hit vs evasion
         target_number = target.evasion_score
         hit_roll = random.randint(1, 20)
         if hit_roll >= target_number:
             target.take_damage(item.damage_type)
-            self.spawn_vfx(self, target, item.weapon_type, item.damage_type)
 
     def use_items(self):
         for item in self.loadout:
@@ -174,14 +196,29 @@ class MobileEntity(pygame.sprite.Sprite):
         # check shields
         if self.shielded:
             self.shielded = False
+            print(self.name, "shields down")
         # reduce hp if not shielded
         elif self.hp_current > 0:
             self.hp_current -= damage_amount
+            print(self.name, "hp reduced to ", self.hp_current)
         else:
             self.alive = False
         # kill pilot if not alive
-        if not self.alive:
-            self.kill()
+        # if not self.alive:
+        #     self.kill()
+
+    def stay_in_bounds(self):
+        # set boundaries for x
+        if self.pos_x > screen_width:
+            self.velocity_x -= 0.2
+        elif self.pos_x < 0:
+            self.velocity_x += 0.2
+
+        # set boundaries for y
+        if self.pos_y > screen_height:
+            self.velocity_y -= 0.2
+        elif self.pos_y < 0:
+            self.velocity_y += 0.2
 
 
 class Enemy(MobileEntity):
@@ -204,6 +241,7 @@ class Enemy(MobileEntity):
             self.evasion_score = data["evasion_score"]
             self.accuracy_score = data["accuracy_score"]
             self.hp_max = data["hp_max"]
+            self.hp_current = self.hp_max
             self.max_speed = data["max_speed"]
             self.size = data["size"]
         except(Exception, ):
@@ -218,25 +256,41 @@ class Enemy(MobileEntity):
         self.width = screen_width*0.01 * self.size
         self.height = self.width
 
+        # set position
+        self.pos_x = pos_x
+        self.pos_y = pos_y
+
         # load image
         self.image = pygame.image.load("graphics/icons/red_dot_icon.png").convert_alpha()
         self.image = pygame.transform.scale(self.image, (self.width, self.height))
         # load rect
         self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
 
+        # import loadout
+        self.loadout = []
+        for i in data["loadout"]:
+            loadout_item = Item(i["item_name"], i["item_type"])
+            self.loadout.append(loadout_item)
+
     def update(self):
         # movement
         self.target["move"] = self.find_target(self.target_list["enemies"])
         self.target["attack"] = self.find_target(self.target_list["enemies"])
+        self.stay_in_bounds()
         self.maneuver()
 
         # update vfx
         self.update_vfx()
-        
+
+        # update items
+        self.update_items()
+        self.use_items()
+
+        # update invuln timer
         self.tick_invulnerable_timer()
 
 
-class Pilot(MobileEntity):
+class PilotCharacter(MobileEntity):
     def __init__(self, name):
         super().__init__(name, "pilot", "vanguard")
         self.name = name
@@ -255,7 +309,6 @@ class Pilot(MobileEntity):
         self.loadout = []
         for i in data["loadout"]:
             loadout_item = Item(i["item_name"], i["item_type"])
-            print("loading item", i["item_name"], i["item_type"])
             self.loadout.append(loadout_item)
 
         # set mood
@@ -311,6 +364,12 @@ class Pilot(MobileEntity):
         if self.faction == "iron_hive":
             self.image = self.image_red
 
+    def update_overcharge(self):
+        if self.overcharge_system["green"]:
+            self.speed_multiplier = 2
+        else:
+            self.speed_multiplier = 1
+
     def update(self):
         # change color from blue to white if highlighted
         if self.selected:
@@ -319,10 +378,14 @@ class Pilot(MobileEntity):
         if self.selected:
             print(self.name, "currently selected")
 
+        # handle overcharging
+        self.update_overcharge()
+
         # movement
         if self.targeting_mode == "automatic":
             self.target["move"] = self.find_target(self.target_list["enemies"])
             self.target["attack"] = self.find_target(self.target_list["enemies"])
+        self.stay_in_bounds()
         self.maneuver()
 
         # tick invuln
@@ -349,4 +412,4 @@ class Pilot(MobileEntity):
     #         self.spawn_train(screen_width*0.15, screen_height*0.15)
 
 
-target_dummy = Pilot("target_dummy")
+target_dummy = PilotCharacter("target_dummy")

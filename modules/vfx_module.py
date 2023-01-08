@@ -6,12 +6,15 @@ import random
 
 
 class VisualEffect(pygame.sprite.Sprite):
-    def __init__(self, vfx_type, damage_type, origin, target, ttl=60):
+    def __init__(self, vfx_type, damage_type, origin, target=None, ttl=60):
         super().__init__()
         self.vfx_type = vfx_type
         self.damage_type = damage_type
         self.origin = origin
+        if target is None:
+            target = origin
         self.target = target
+
         self.ttl = ttl
 
         if self.vfx_type == "beam":
@@ -21,6 +24,7 @@ class VisualEffect(pygame.sprite.Sprite):
             # alternatively could create method to find pivot point as average between the origin and target positions
             self.width = screen_width * 0.03
             self.angle = nav.find_angle(self.origin, self.target)
+            self.ttl = 10
 
             # set image based on damage type
             if self.damage_type == "thermal":
@@ -34,6 +38,112 @@ class VisualEffect(pygame.sprite.Sprite):
 
         elif self.vfx_type == "projectile":
             pass
+
+        elif self.vfx_type == "explosion":
+            effect_variant = random.randint(1, 4)
+            directory = "graphics/effects/explosions/"
+            self.spritesheet = pygame.image.load(f"{directory}spritesheet_{effect_variant}.png").convert_alpha()
+            # self.frames = explosion_frames
+            # self.image = self.blank_image
+            self.ttl = ttl
+            self.sheet_column = 0
+            self.sheet_row = 0
+            # temp
+            self.image = self.get_sprite()
+            self.rect = self.image.get_rect(center=(origin.pos_x, origin.pos_y))
+
+        elif self.vfx_type == "lightning":
+            directory = "graphics/effects/"
+            self.spritesheet = pygame.image.load(f"{directory}lightning_bolt6.png").convert_alpha()
+            self.ttl = 600
+            self.angle = random.randint(-30, 30)
+            self.sheet_column = 0
+            self.sheet_row = 0
+            self.frame_delay_max = 2
+            self.frame_delay_current = self.frame_delay_max
+            self.image = self.get_sprite()
+            self.rect = self.image.get_rect(center=(origin.pos_x, origin.pos_y))
+
+        elif self.vfx_type == "nametag":
+            # create name text image
+            self.font = text_font_micro
+            self.text = origin.name
+            self.color = (200, 200, 255)
+            self.image = self.font.render(self.text, False, self.color)
+
+            # set y offset from the named entity
+            self.pos_x = origin.pos_x
+            self.pos_y = origin.pos_y+screen_height*0.03
+            self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
+
+        elif self.vfx_type == "shield":
+            # load shield and blank images
+            directory = "graphics/effects/"
+            self.width = screen_width*0.03
+            self.shield_on_image = pygame.image.load(f"{directory}shield_bubble.png").convert_alpha()
+            self.shield_on_image = pygame.transform.scale(self.shield_on_image, (self.width, self.width))
+            self.shield_off_image = pygame.image.load("graphics/blank.png").convert_alpha()
+            self.shield_off_image = pygame.transform.scale(self.shield_off_image, (self.width, self.width))
+
+            # set shield image based on shielded status
+            if self.origin.shielded:
+                self.image = self.shield_on_image
+            else:
+                self.image = self.shield_off_image
+
+            # create rect
+            self.rect = self.image.get_rect(center=(self.origin.pos_x, self.origin.pos_y))
+
+    def update_shield(self):
+        # set shield image based on shielded status
+        if self.origin.shielded:
+            self.image = self.shield_on_image
+        else:
+            self.image = self.shield_off_image
+
+        # update rect
+        self.rect = self.rect = self.image.get_rect(center=(self.origin.pos_x, self.origin.pos_y))
+
+    def update_nametag(self):
+        if self.vfx_type == "nametag":
+            # set y offset from the named entity
+            self.pos_x = self.origin.pos_x
+            self.pos_y = self.origin.pos_y + screen_height * 0.03
+            self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
+
+    def update_explosion(self):
+        if self.vfx_type == "explosion":
+            self.ttl = 300
+            self.sheet_column += 1
+            if self.sheet_column == 8:
+                self.sheet_column = 0
+                self.sheet_row += 1
+            self.image = self.get_sprite()
+
+    def update_lightning(self):
+        if self.vfx_type == "lightning":
+            self.ttl = 300
+            self.frame_delay_current -= 1
+            if self.frame_delay_current == 0:
+                self.frame_delay_current = self.frame_delay_max
+                self.sheet_column += 1
+                if self.sheet_column == 50:
+                    self.sheet_column = 0
+                    self.angle = random.randint(-30, 30)
+                    self.kill()
+                self.image = self.get_sprite()
+                self.image = pygame.transform.scale(self.image, (256, screen_height*1.5))
+                self.image = pygame.transform.rotate(self.image, self.angle)
+
+    def get_sprite(self, size=256):
+        x = size * self.sheet_column
+        y = size * self.sheet_row
+        w = size
+        h = size
+        sprite = pygame.Surface((w, h), pygame.SRCALPHA)
+        # sprite.set_colorkey((0, 0, 0))
+        sprite.blit(self.spritesheet, (0, 0), (x, y, w, h))
+        return sprite
 
     def update_beam(self):
         self.length = nav.find_distance(self.origin, self.target)*2.05
@@ -49,11 +159,20 @@ class VisualEffect(pygame.sprite.Sprite):
         # update image
         if self.vfx_type == "beam":
             self.update_beam()
+        elif self.vfx_type == "explosion":
+            self.update_explosion()
+        elif self.vfx_type == "lightning":
+            self.update_lightning()
+        elif self.vfx_type == "nametag":
+            self.update_nametag()
+        elif self.vfx_type == "shield":
+            self.update_shield()
         # reduce time to live (ttl) and delete if time is 0
         if self.ttl > 0:
             self.ttl -= 1
         elif self.ttl == 0:
             self.kill()
+
 #
 # class VisualEffect(pygame.sprite.Sprite):
 #     def __init__(self, effect_type, damage_type, origin, target, countdown_max):

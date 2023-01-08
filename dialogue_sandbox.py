@@ -205,7 +205,7 @@ dialogue = DialogueManager()
 graphics = GraphicsManager()
 
 # pilots
-kite = Pilot("Kite")
+Rose = Pilot("Rose")
 nasha = Pilot("Nasha")
 roger = Pilot("Roger")
 
@@ -231,8 +231,8 @@ while True:  # game Cycle
                 if dialogue.scene == dialogue.data["Nasha demands a duel"]:
                     dialogue.scene = dialogue.data["Baal's satellite crash"]
                 elif dialogue.scene == dialogue.data["Baal's satellite crash"]:
-                    dialogue.scene = dialogue.data["Kite social intro"]
-                elif dialogue.scene == dialogue.data["Kite social intro"]:
+                    dialogue.scene = dialogue.data["Rose social intro"]
+                elif dialogue.scene == dialogue.data["Rose social intro"]:
                     dialogue.scene = dialogue.data["Nasha demands a duel"]
                 print("new current scene:", dialogue.scene["scene_id"])
                 dialogue.line_number = 1

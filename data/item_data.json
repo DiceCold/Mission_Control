@@ -82,10 +82,10 @@
 },
 	"shields": {
 		"default_shield": {
-			"cooldown": 100
+			"cooldown": 200
 		},
 		"light_shield": {
-			"cooldown": 100
+			"cooldown": 200
 		}
 	},
 

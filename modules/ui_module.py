@@ -361,7 +361,6 @@ class StatusIcon(pygame.sprite.Sprite):
             self.shield_icon_black = pygame.transform.scale(self.shield_icon_black, (self.width, self.height))
             self.image = self.shield_icon_blue
             self.rect = self.image.get_rect(topleft=(self.pos_x, self.pos_y))
-            print("loaded shield icon", self.pos_x, self.pos_y)
 
         if self.icon_type == "damage":
             self.damage_icon_white = pygame.image.load("graphics/icons/warning_white.png").convert_alpha()
@@ -372,7 +371,6 @@ class StatusIcon(pygame.sprite.Sprite):
             self.damage_icon_yellow = pygame.transform.scale(self.damage_icon_yellow, (self.width, self.height))
             self.image = self.damage_icon_white
             self.rect = self.image.get_rect(topleft=(self.pos_x, self.pos_y))
-            print("loaded damage icon", self.pos_x, self.pos_y)
 
     def update_shield_icon(self):
         if self.reference is not None:
