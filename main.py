@@ -102,6 +102,9 @@ class GameManager:
             # draw terrain
             graphics.draw_terrain(mission.terrain)
 
+            # draw objectives
+            game.mission.objectives.draw(screen)
+
             # draw mobile entities
             game.pilots.draw(screen)
             game.mission.enemies.draw(screen)
@@ -177,7 +180,7 @@ pilot_data = json.load(open("data/pilot_data.json", "r"))
 
 rose = pilot_module.PilotCharacter("Rose")
 rose.target["move"] = nav.Waypoint(screen_width*0.5, screen_height*0.5)
-rose.targeting_mode = "manual"
+# rose.targeting_mode = "manual"
 nasha = pilot_module.PilotCharacter("Nasha")
 # roger = pilot_module.PilotCharacter("Roger")
 game.pilots.add(rose)

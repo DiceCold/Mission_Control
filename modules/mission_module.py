@@ -52,6 +52,17 @@ class MissionManager:
         print(f"Adding enemy {enemy.name} to scene at ({enemy.pos_x}, {enemy.pos_y})")
         self.enemies.add(enemy)
 
+    def spawn_objective(self, name, pos_x="random", pos_y="random"):
+        # generate random positions if random
+        if pos_x == "random":
+            pos_x = random.randint(screen_width * 0.1, screen_width * 0.9)
+        if pos_y == "random":
+            pos_y = random.randint(screen_height * 0.1, screen_height * 0.9)
+        # create new entity
+        objective = pilot_module.MissionEntity(name, pos_x, pos_y, True)
+        print(f"Adding mission objective {name} to scene at {pos_x}, {pos_y}")
+        self.objectives.add(objective)
+
     def load_mission(self, mission_name, data_file):
         mission_data = data_file[mission_name]
         # load terrain
@@ -80,6 +91,10 @@ class MissionManager:
         self.waypoints.empty()
         self.terrain.empty()
 
+    def update_pilot_objectives(self):
+        for pilot in self.pilots:
+            pilot.target_list["objectives"] = self.objectives
+
     def run_combat(self):
         game = self.game
         # update ally and enemy pilots while game is running
@@ -93,6 +108,7 @@ class MissionManager:
             #     enemy.repel_pilot(self.enemies)
 
             # update ally and enemy pilots
+            self.update_pilot_objectives()
             self.pilots.update()
             self.enemies.update()
 

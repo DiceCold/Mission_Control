@@ -5,23 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="711c8494-9fd2-4d26-a466-16b6722da02b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/modules/sound_module.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/enemy_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/enemy_data.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/item_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/item_data.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/mission_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/mission_data.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dialogue_sandbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/dialogue_sandbox.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/effects/explosions/explosion_sprite_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/effects/explosions/explosion_sprite_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/effects/explosions/explosion_sprite_3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphics/effects/explosions/explosion_sprite_4.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/mission_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/mission_module.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/pilot_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/pilot_module.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/settings.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/ui_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/ui_module.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/vfx_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/vfx_module.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

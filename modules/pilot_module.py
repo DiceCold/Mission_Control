@@ -319,7 +319,7 @@ class PilotCharacter(MobileEntity):
         self.accuracy_score = data["accuracy_score"]
 
         self.on_mission = False
-        self.orders = "aggressive_focus"
+        self.orders = "objective"
         self.highlighted = False
         self.selected = False
         self.overcharge_system = {
@@ -370,6 +370,16 @@ class PilotCharacter(MobileEntity):
         else:
             self.speed_multiplier = 1
 
+    def update_targeting(self):
+        if self.targeting_mode == "automatic":
+            # find attack target
+            self.target["attack"] = self.find_target(self.target_list["enemies"])
+            # find movement target
+            if self.orders == "objective" and len(self.target_list["objectives"]) > 0:
+                self.target["move"] = self.find_target(self.target_list["objectives"])
+            else:
+                self.target["move"] = self.find_target(self.target_list["enemies"])
+
     def update(self):
         # change color from blue to white if highlighted
         if self.selected:
@@ -382,9 +392,7 @@ class PilotCharacter(MobileEntity):
         self.update_overcharge()
 
         # movement
-        if self.targeting_mode == "automatic":
-            self.target["move"] = self.find_target(self.target_list["enemies"])
-            self.target["attack"] = self.find_target(self.target_list["enemies"])
+        self.update_targeting()
         self.stay_in_bounds()
         self.maneuver()
 
@@ -410,6 +418,23 @@ class PilotCharacter(MobileEntity):
     #         self.spawn_waypoint(screen_width*1.2, screen_height*0.7)
     #         # spawn train
     #         self.spawn_train(screen_width*0.15, screen_height*0.15)
+
+
+class MissionEntity(MobileEntity):
+    def __init__(self, name, x, y, static=False, faction="vanguard"):
+        super().__init__(name, "mission_entity", faction)
+        self.name = name
+        self.pos_x = x
+        self.pos_y = y
+
+        # set max speed to 0 if entity is a stationary structure
+        if static:
+            self.max_speed = 0
+
+        if self.name == "radio_tower":
+            self.image = pygame.image.load("graphics/icons/radio_tower.png").convert_alpha()
+            self.image = pygame.transform.scale(self.image, (screen_width*0.05, screen_width*0.05))
+            self.rect = self.image.get_rect(center=(self.pos_x, self.pos_y))
 
 
 target_dummy = PilotCharacter("target_dummy")
